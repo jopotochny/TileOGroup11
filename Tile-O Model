@@ -1,9 +1,9 @@
 namespace tile-o;
 
 class GameDesigner {
-public Integer numPlayers;
-public Integer winningTileCoordinateX;
-public Integer winningTileCoordinateY;
+Integer numPlayers;
+Integer winningTileCoordinateX;
+Integer winningTileCoordinateY;
 
 1 <@>- * Rule;
 1 <@>- 2..4 Player;
@@ -16,19 +16,19 @@ public Integer winningTileCoordinateY;
 }
 
 class Player {
-public autounique Id;
+autounique Id;
 1 -> * Action;
 1 -> 1 PlayerPiece;
 1 -> 1 Goal;
 }
 
 class Goal {
-public Boolean discoveredHiddenTile;
+Boolean discoveredHiddenTile;
 
 }
 
 class Action {
-public String actualActions;
+String actualActions;
 1 -> * MovealbeElements;
 1 -> 1 Event;
 1 -> * Rule;
@@ -43,23 +43,23 @@ class Event {
 class Rule {
 
 rules {}; /*Do later */
-public LinkedList<Player> playerTurn;
+String playerTurn: Player [2..4];
 
 
 }
 
 class Board {
-public Integer numNormalTiles;
-public Integer numActionTiles;
-public Integer numConnectionPieces;
-public Integer size;
+Integer numNormalTiles;
+Integer numActionTiles;
+Integer numConnectionPieces;
+Integer size;
 
 1 <@>- * Tile;
 
 }
 
 class Deck {
-public Queue(Card) deck;
+Queue(Card) deck;
 1 <>- 0..32 Card;
 }
 
@@ -70,43 +70,43 @@ instructions { ExtraTurn, ConnectTile, RemoveConnection, MovePiece, LoseTurn };
 }
 
 class Tile {
-public autounique Id;
-public immutable Integer coordinateX;
-public immutable Integer coordinateY;
-public Boolean hasBeenDiscovered;
-public Integer numConnectedPieces;
+autounique Id;
+immutable Integer coordinateX;
+immutable Integer coordinateY;
+Boolean hasBeenDiscovered;
+Integer numConnectedPieces;
 1 -> 0..4 ConnectionPiece;
 
 }
 
 class NormalTile {
 isA Tile;
-public Color undiscoveredColor; /* look for color? */
-public Color discoveredColor; /* look for color? */
+Color undiscoveredColor; /* look for color? */
+Color discoveredColor; /* look for color? */
 
 }
 
 class ActionTile {
 isA Tile;
-public Color color;
-public immutable Integer numOfSleepingTurns;
+Color color;
+immutable Integer numOfSleepingTurns;
 1..* -> 1 Card;
 }
 
 class Dice {
-public Integer generatedNum;
+Integer generatedNum;
 
 }
 
 class PlayerPiece {
-public Integer coordinateX;
-public Integer coordinateY;
+Integer coordinateX;
+Integer coordinateY;
 1 -> 1 Player;
 }
 
 class ConnectionPiece {
-public Boolean isUsed;
-public lazy ArrayList<Tile> connectedTiles;
+Boolean isUsed;
+lazy connectedTiles:ArrayList<Tile>;
 
 0,2 -> 1 Tile;
 }
