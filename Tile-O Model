@@ -8,7 +8,7 @@ public Integer winningTileCoordinateY;
 1 <@>- * Rule;
 1 <@>- 2..4 Player;
 1 <@>- * Event;
-1 <@>- 1 MovableElements;
+1 <@>- 1 MoveableElements;
 1 <@>- 1 NonMoveableElements;
 1 <@>- 1 Board;
 
@@ -112,13 +112,13 @@ public lazy ArrayList<Tile> connectedTiles;
 }
 
 
-class MovableElements {
+class MoveableElements {
 
 1 -> 2..4 PlayerPiece;
 1 -> 32 ConnectionPiece;
 }
 
-class NonMovableElements {
+class NonMoveableElements {
 1 -> 1 Deck;
 1 -> * Tile;
 1 -> 1 Dice;
