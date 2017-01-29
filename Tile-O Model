@@ -29,7 +29,7 @@ Boolean discoveredHiddenTile;
 
 class Action {
 String actualActions;
-1 -> * MovealbeElements;
+1 -> * MoveableElements;
 1 -> 1 Event;
 1 -> * Rule;
 
@@ -106,7 +106,7 @@ Integer coordinateY;
 
 class ConnectionPiece {
 Boolean isUsed;
-lazy connectedTiles:ArrayList<Tile>;
+lazy connectedTiles: Tile [0,2];
 
 0,2 -> 1 Tile;
 }
