@@ -108,7 +108,7 @@ class ConnectionPiece {
 Boolean isUsed;
 //lazy connectedTiles: Tile [0,2];
 
-0,2 -> 1 Tile;
+0, 2 -> 1 Tile;
 }
 
 
