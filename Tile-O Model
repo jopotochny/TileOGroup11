@@ -1,0 +1,126 @@
+namespace tile-o;
+
+class GameDesigner {
+public Integer numPlayers;
+public Integer winningTileCoordinateX;
+public Integer winningTileCoordinateY;
+
+1 <@>- * Rule;
+1 <@>- 2..4 Player;
+1 <@>- * Event;
+1 <@>- 1 MovableElements;
+1 <@>- 1 NonMoveableElements;
+1 <@>- 1 Board;
+
+
+}
+
+class Player {
+public autounique Id;
+1 -> * Action;
+1 -> 1 PlayerPiece;
+1 -> 1 Goal;
+}
+
+class Goal {
+public Boolean discoveredHiddenTile;
+
+}
+
+class Action {
+public String actualActions;
+1 -> * MovealbeElements;
+1 -> 1 Event;
+1 -> * Rule;
+
+}
+
+class Event {
+0..1 -> 1 Board;
+
+}
+
+class Rule {
+
+rules {}; /*Do later */
+public LinkedList<Player> playerTurn;
+
+
+}
+
+class Board {
+public Integer numNormalTiles;
+public Integer numActionTiles;
+public Integer numConnectionPieces;
+public Integer size;
+
+1 <@>- * Tile;
+
+}
+
+class Deck {
+public Queue(Card) deck;
+1 <>- 0..32 Card;
+}
+
+class Card {
+instructions { ExtraTurn, ConnectTile, RemoveConnection, MovePiece, LoseTurn };
+1 -> 1 Action;
+
+}
+
+class Tile {
+public autounique Id;
+public immutable Integer coordinateX;
+public immutable Integer coordinateY;
+public Boolean hasBeenDiscovered;
+public Integer numConnectedPieces;
+1 -> 0..4 ConnectionPiece;
+
+}
+
+class NormalTile {
+isA Tile;
+public Color undiscoveredColor; /* look for color? */
+public Color discoveredColor; /* look for color? */
+
+}
+
+class ActionTile {
+isA Tile;
+public Color color;
+public immutable Integer numOfSleepingTurns;
+1..* -> 1 Card;
+}
+
+class Dice {
+public Integer generatedNum;
+
+}
+
+class PlayerPiece {
+public Integer coordinateX;
+public Integer coordinateY;
+1 -> 1 Player;
+}
+
+class ConnectionPiece {
+public Boolean isUsed;
+public lazy ArrayList<Tile> connectedTiles;
+
+0,2 -> 1 Tile;
+}
+
+
+class MovableElements {
+
+1 -> 2..4 PlayerPiece;
+1 -> 32 ConnectionPiece;
+}
+
+class NonMovableElements {
+1 -> 1 Deck;
+1 -> * Tile;
+1 -> 1 Dice;
+
+}
