@@ -16,7 +16,7 @@ Integer winningTileCoordinateY;
 }
 
 class Player {
-autounique Id;
+autounique id;
 1 -> * Action;
 1 -> 1 PlayerPiece;
 1 -> 1 Goal;
@@ -43,7 +43,7 @@ class Event {
 class Rule {
 
 rules {}; /*Do later */
-String playerTurn: Player [2..4];
+
 
 
 }
@@ -59,8 +59,8 @@ Integer size;
 }
 
 class Deck {
-Queue(Card) deck;
-1 <>- 0..32 Card;
+//list - :[!deck:\[\s * \]];
+1 <@>- 0..32 Card;
 }
 
 class Card {
@@ -70,7 +70,7 @@ instructions { ExtraTurn, ConnectTile, RemoveConnection, MovePiece, LoseTurn };
 }
 
 class Tile {
-autounique Id;
+autounique id;
 immutable Integer coordinateX;
 immutable Integer coordinateY;
 Boolean hasBeenDiscovered;
@@ -106,7 +106,7 @@ Integer coordinateY;
 
 class ConnectionPiece {
 Boolean isUsed;
-lazy connectedTiles: Tile [0,2];
+//lazy connectedTiles: Tile [0,2];
 
 0,2 -> 1 Tile;
 }
