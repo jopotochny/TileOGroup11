@@ -1,4 +1,4 @@
-namespace tile-o;
+namespace tileo;
 
 class GameDesigner {
 Integer numPlayers;
