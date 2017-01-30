@@ -6,8 +6,7 @@ Integer winningTileCoordinateX;
 Integer winningTileCoordinateY;
 
 1 <@>- 2..4 Player;
-1 <@>- 1 MoveableElements;
-1 <@>- 1 NonMoveableElements;
+1 <@>- * GameElement;
 1 <@>- 1 Board;
 
 
@@ -31,6 +30,7 @@ Integer size;
 }
 
 class Deck {
+isA GameElement;
 //list - :[!deck:\[\s * \]];
 1 <@>- 0..32 Card;
 }
@@ -65,6 +65,7 @@ String cardType = "LoseTurn";
 }
 
 class Tile {
+isA GameElement;
 autounique id;
 immutable Integer coordinateX;
 immutable Integer coordinateY;
@@ -85,31 +86,29 @@ class ActionTile {
 isA Tile;
 Color color;
 immutable Integer numOfSleepingTurns;
-1..* -> 1 Card;
 }
 
 class Dice {
+isA GameElement;
 Integer generatedNum;
 
 }
 
 class PlayerPiece {
+isA GameElement;
 Integer coordinateX;
 Integer coordinateY;
 1 -> 1 Player;
 }
 
 class ConnectionPiece {
+isA GameElement;
 Boolean isUsed;
 //lazy connectedTiles: Tile [0,2];
 
 0, 2 -> 1 Tile;
 }
 
-class GameElements{
-1 -> 2..4 PlayerPiece;
-1 -> 32 ConnectionPiece;
-1 -> 1 Deck;
-1 -> * Tile;
-1 -> 1 Dice;
+class GameElement{
+
 }
