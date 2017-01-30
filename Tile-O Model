@@ -5,9 +5,7 @@ Integer numPlayers;
 Integer winningTileCoordinateX;
 Integer winningTileCoordinateY;
 
-1 <@>- * Rule;
 1 <@>- 2..4 Player;
-1 <@>- * Event;
 1 <@>- 1 MoveableElements;
 1 <@>- 1 NonMoveableElements;
 1 <@>- 1 Board;
@@ -17,36 +15,10 @@ Integer winningTileCoordinateY;
 
 class Player {
 autounique id;
-1 -> * Action;
 1 -> 1 PlayerPiece;
-1 -> 1 Goal;
 }
 
-class Goal {
-Boolean discoveredHiddenTile;
 
-}
-
-class Action {
-String actualActions;
-1 -> * MoveableElements;
-1 -> 1 Event;
-1 -> * Rule;
-
-}
-
-class Event {
-0..1 -> 1 Board;
-
-}
-
-class Rule {
-
-rules {}; /*Do later */
-
-
-
-}
 
 class Board {
 Integer numNormalTiles;
@@ -64,9 +36,32 @@ class Deck {
 }
 
 class Card {
-instructions { ExtraTurn, ConnectTile, RemoveConnection, MovePiece, LoseTurn };
-1 -> 1 Action;
 
+}
+
+class ExtraTurnCard {
+isA Card;
+String cardType = "ExtraTurn";
+}
+
+class ConnectTileCard {
+isA Card;
+String cardType = "ConnectTile";
+}
+
+class RemoveConnectionCard {
+isA Card;
+String cardType = "RemoveConnection";
+}
+
+class MovePieceCard {
+isA Card;
+String cardType = "MovePiece";
+}
+
+class LoseTurnCard {
+isA Card;
+String cardType = "LoseTurn";
 }
 
 class Tile {
