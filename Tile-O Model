@@ -106,16 +106,10 @@ Boolean isUsed;
 0, 2 -> 1 Tile;
 }
 
-
-class MoveableElements {
-
+class GameElements{
 1 -> 2..4 PlayerPiece;
 1 -> 32 ConnectionPiece;
-}
-
-class NonMoveableElements {
 1 -> 1 Deck;
 1 -> * Tile;
 1 -> 1 Dice;
-
 }
