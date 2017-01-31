@@ -73,7 +73,7 @@ immutable Integer coordinateX;
 immutable Integer coordinateY;
 Integer numConnectedPieces;
 Color color;
-0..4 -- 0,2 ConnectionPiece;
+0..4 -- 0..2 ConnectionPiece;
 }
 
 class NormalTile {
