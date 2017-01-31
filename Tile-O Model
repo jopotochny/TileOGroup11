@@ -1,4 +1,4 @@
-namespace tile-o;
+namespace tileO;
 
 class Game {
 Integer numPlayers;
