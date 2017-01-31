@@ -1,29 +1,32 @@
-namespace tileo;
+namespace tile-o;
 
-class GameDesigner {
+class Game {
 Integer numPlayers;
 Integer winningTileCoordinateX;
 Integer winningTileCoordinateY;
+Integer numberOfTurns;
 
-1 <@>- 2..4 Player;
+1 -- 2..4 Player;
 1 <@>- * GameElement;
 1 <@>- 1 Board;
 
+}
+
+class GameElement {
 
 }
 
 class Player {
 autounique id;
-1 -> 1 PlayerPiece;
+1 -- 1 PlayingPiece;
 }
-
-
 
 class Board {
 Integer numNormalTiles;
 Integer numActionTiles;
 Integer numConnectionPieces;
-Integer size;
+Integer length;
+Integer width;
 
 1 <@>- * Tile;
 
@@ -31,8 +34,7 @@ Integer size;
 
 class Deck {
 isA GameElement;
-//list - :[!deck:\[\s * \]];
-1 <@>- 0..32 Card;
+1 -- 0..32 Card;
 }
 
 class Card {
@@ -69,46 +71,36 @@ isA GameElement;
 autounique id;
 immutable Integer coordinateX;
 immutable Integer coordinateY;
-Boolean hasBeenDiscovered;
 Integer numConnectedPieces;
-1 -> 0..4 ConnectionPiece;
-
+Color color;
+0..4 -- 0,2 ConnectionPiece;
 }
 
 class NormalTile {
 isA Tile;
-Color undiscoveredColor; /* look for color? */
-Color discoveredColor; /* look for color? */
-
 }
 
 class ActionTile {
 isA Tile;
-Color color;
 immutable Integer numOfSleepingTurns;
+Boolean active;
 }
 
 class Dice {
 isA GameElement;
-Integer generatedNum;
-
+Integer generatedNumber;
 }
 
-class PlayerPiece {
+class PlayingPiece {
 isA GameElement;
+Color color;
+autounique id;
 Integer coordinateX;
 Integer coordinateY;
-1 -> 1 Player;
 }
 
 class ConnectionPiece {
 isA GameElement;
-Boolean isUsed;
-//lazy connectedTiles: Tile [0,2];
-
-0..2 -> 1 Tile;
+Boolean used;
 }
 
-class GameElement{
-
-}
