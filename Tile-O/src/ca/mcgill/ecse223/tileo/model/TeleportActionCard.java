@@ -23,6 +23,45 @@ public class TeleportActionCard extends ActionCard
   //------------------------
   // INTERFACE
   //------------------------
+  
+  
+  public void play(Tile tile){
+		
+	  
+		 Deck deck = super.getDeck();
+		 
+		 Game game = deck.getGame();
+		 
+		 Player player = game.getCurrentPlayer();
+		 
+		 player.setCurrentTile(tile);
+		 
+		 
+			
+		if( tile instanceof ActionTile){
+			
+			ActionTile actionTile = (ActionTile) tile;
+			
+			actionTile.land();
+		
+			
+		}else if(tile instanceof WinTile){
+			
+			WinTile winTile = (WinTile) tile;
+			
+			winTile.land();
+			
+		}else if(tile instanceof NormalTile){
+			
+			NormalTile normalTile = (NormalTile) tile;		
+			
+			normalTile.land();
+		}
+		  
+		  
+		  
+	  }
+
 
   public Game.Mode getActionCardGameMode(){
 	  return Game.Mode.GAME_TELEPORTACTIONCARD;
