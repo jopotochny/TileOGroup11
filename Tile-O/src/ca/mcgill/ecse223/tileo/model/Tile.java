@@ -2,7 +2,9 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 // line 30 "../../../../../TileO.ump"
 public abstract class Tile
@@ -12,6 +14,13 @@ public abstract class Tile
   // MEMBER VARIABLES
   //------------------------
 
+	
+  // TODO remove this maybe	
+  ArrayList<Tile> children = new ArrayList<Tile>();
+  ArrayList<Tile> neighbours = new ArrayList<Tile>();
+	  
+	  
+	  
   //Tile Attributes
   private int x;
   private int y;
@@ -231,6 +240,85 @@ public abstract class Tile
     wasSet = true;
     return wasSet;
   }
+  
+  
+  
+  public List<Tile> getNeighbours(int number){
+	  
+	  //TODO Fix Bug where circular path isn't allowed 
+	  //TODO Not  going over children already passed
+	  //TODO even if it's not backtracking
+	  //-----------------------------------
+	  //TODO trim the double output children
+	  //TODO remove the starting position when roll is not 4 
+	  //TODO and there isn't a circular path
+	  
+	  
+	  
+	  // Add the first tile to the list of children so we can
+	  // Start the recursion
+	  if(!(children.contains(this))){
+	  children.add(this);	
+	  }
+	  
+	  //Base Case
+	  if(number == 0){
+		return children;  
+	  }else{
+	  
+	  // initialize a list of connections
+	  ArrayList<Connection> firstConnections = new ArrayList<Connection>();
+	  // for every time in the list of children
+	  for(Tile tileA : children){
+		  
+		 // add the tiles of Children to the list of neighbors
+		 // which contains all tiles ever visited
+		 neighbours.add(tileA);
+		 List<Connection> secondConnections = new ArrayList<Connection>();
+		 
+		 // for every tile in children , get their list of connections
+		 secondConnections = tileA.getConnections();
+
+		for (Connection connections : secondConnections){
+			// add these connections to the big list of connections
+			// which contains now every connections
+			// of the children tiles
+			firstConnections.add(connections);
+		}
+		
+		
+		
+	  }
+	 
+	  
+	  children.clear();
+	  
+	  //for every connection in the list
+	  for(Connection connection : firstConnections){
+		  // if the connection has tiles connected to it
+		 if(connection.hasTiles()){
+			 List<Tile> firstTiles = connection.getTiles();
+			 for(Tile tile : firstTiles){
+				 // if the current tile we're on has tiles connected
+				 // and have never been visited  
+				 if((tile != this) && !(neighbours.contains(tile))){
+				 // add it to the list of children
+				 children.add(tile);
+
+				 }
+			 }
+		 }
+	  }
+	 
+	   
+	  }
+	//return children;
+	  return getNeighbours(number-1);
+		 
+	  
+  }
+  
+  
   
   //abstract method
   public abstract void land();

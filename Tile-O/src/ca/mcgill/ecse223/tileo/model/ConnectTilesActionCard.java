@@ -23,6 +23,21 @@ public class ConnectTilesActionCard extends ActionCard
   //------------------------
   // INTERFACE
   //------------------------
+  
+  
+ public void play(Tile tile1 , Tile tile2) {
+	  
+	  Game game = super.getDeck().getGame();
+	  
+	  Connection connection = new Connection (game);
+	  
+	  game.addConnection(connection) ;  
+	  
+	  tile1.addConnection(connection);
+	  tile2.addConnection(connection);
+		  
+	  }
+ 
 
   public Game.Mode getActionCardGameMode(){
 	  return Game.Mode.GAME_CONNECTTILESACTIONCARD;

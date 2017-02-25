@@ -4,12 +4,16 @@ import java.util.List;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
 import ca.mcgill.ecse223.tileo.model.ActionTile;
+import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
+import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
+import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
+import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.model.WinTile;
@@ -134,18 +138,350 @@ public class PlayController {
 	}
 
 	public List<Tile> playRollDieActionCard() throws InvalidInputException{
-		return null;
+
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+		// get the deck of the current game
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		//check if the current card is a RollDieActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof RollDieActionCard)){
+
+
+			throw new InvalidInputException("The Current Card is not a RollDieActionCard.");
+		}
+
+
+		RollDieActionCard currentCard = (RollDieActionCard) currentDeck.getCurrentCard();
+		
+		//  TODO added play in RollDieActionCard
+		
+
+		List<Tile> listOfTiles = currentCard.play();
+
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+
+			currentDeck.shuffle();			
+
+		}
+		else {
+
+
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+
+		}
+
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);		
+
+
+		return listOfTiles;
+
 	}
 
 	public void playConnectTilesActionCard(Tile tile1, Tile tile2) throws InvalidInputException{
 
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+		List<Tile> tiles = currentGame.getTiles();
+
+		// check if both tiles passed in exist in the game
+
+		if(! tiles.contains(tile1)){
+			throw new InvalidInputException("tile1 is not found in the current game.");
+		}
+		if(! tiles.contains(tile2)){
+			throw new InvalidInputException("tile2 is not found in the current game.");
+		}
+
+
+		// check if the tiles are adjacent
+		// case1 if tile 1 and tile 2 have the same X , but Y's differ by 1
+		// case2 if tile 1 and tile 2 have the same Y , but X's differ by 1
+
+		if( ! ( (( tile1.getY() == tile2.getY() )  &&  (  ( tile1.getX() == tile2.getX() -1 ) || (tile1.getX() == tile2.getX() + 1)) )|| ( ( tile1.getX() == tile2.getX() )  &&  (  ( tile1.getY() == tile2.getY() -1 ) || (tile1.getY() == tile2.getY() + 1))))){
+
+			throw new InvalidInputException("tile1 and tile2 are not adjacent.");
+
+		}
+
+
+		if(currentGame.getCurrentConnectionPieces() <= 0 ){
+
+			throw new InvalidInputException("There are no connection pieces left.");
+
+		}
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a ConnectTilesActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof ConnectTilesActionCard)){
+
+
+			throw new InvalidInputException("The Current Card is not a ConnectTilesActionCard.");
+
+
+		}
+
+		ConnectTilesActionCard currentCard = (ConnectTilesActionCard) currentDeck.getCurrentCard();
+
+		// connect both tiles
+		
+		//  TODO added play in ConnectTilesActionCard
+
+		currentCard.play(tile1, tile2);
+
+
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = currentGame.numberOfPlayers();
+
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			Player firstPlayer = currentGame.getPlayer(0);
+
+			//setting the current player to the first player
+			currentGame.setCurrentPlayer(firstPlayer);
+		}else{
+			//get the next player
+			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+
+			//setting the current player to the next player
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
+
+
+
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+
+			currentDeck.shuffle();			
+
+		}
+		else {
+
+
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);		
+
+
+
 	}
 
+
 	public void playRemoveConnectionActionCard(Connection connection) throws InvalidInputException{
+
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+		List<Connection> connections = currentGame.getConnections();
+
+		// check if both tiles passed in exist in the game
+
+		if(! connections.contains(connection)){
+
+			throw new InvalidInputException("The connection is not found in the current game.");
+
+
+		}
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a RemoveConnectionActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof RemoveConnectionActionCard)){
+
+
+			throw new InvalidInputException("The Current Card is not a RemoveConnectionActionCard.");
+
+
+		}
+
+		RemoveConnectionActionCard currentCard = (RemoveConnectionActionCard) currentDeck.getCurrentCard();
+
+		// connect both tiles
+		
+		// TODO added play in RemoveConnectionActionCard
+
+		currentCard.play(connection);
+
+
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = currentGame.numberOfPlayers();
+
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			Player firstPlayer = currentGame.getPlayer(0);
+
+			//setting the current player to the first player
+			currentGame.setCurrentPlayer(firstPlayer);
+		}else{
+			//get the next player
+			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+
+			//setting the current player to the next player
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
+
+
+
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+
+			currentDeck.shuffle();			
+
+		}
+		else {
+
+
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);		
+
+
+
+
+
+
 
 	}
 
 	public void playTeleportActionCard(Tile tile) throws InvalidInputException{
+
+
+
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+		List<Tile> tiles = currentGame.getTiles();
+
+		// check if both tiles passed in exist in the game
+
+		if(! tiles.contains(tile)){
+			throw new InvalidInputException("The tile is not found in the current game.");
+		}
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a RemoveConnectionActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof TeleportActionCard)){
+
+
+			throw new InvalidInputException("The Current Card is not a TeleportActionCard.");
+
+
+		}
+
+		TeleportActionCard currentCard = (TeleportActionCard) currentDeck.getCurrentCard();
+
+		// teleport the player to the selected tile	
+		
+		// TODO added play in TeleportActionCard
+
+		currentCard.play(tile);
+
+
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = currentGame.numberOfPlayers();
+
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			Player firstPlayer = currentGame.getPlayer(0);
+
+			//setting the current player to the first player
+			currentGame.setCurrentPlayer(firstPlayer);
+		}else{
+			//get the next player
+			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+
+			//setting the current player to the next player
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
+
+
+
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+
+			currentDeck.shuffle();			
+
+		}
+		else {
+
+
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);		
+
 
 	}
 	

@@ -3,6 +3,8 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
+import java.util.List;
+
 // line 68 "../../../../../TileO.ump"
 public class RollDieActionCard extends ActionCard
 {
@@ -23,6 +25,34 @@ public class RollDieActionCard extends ActionCard
   //------------------------
   // INTERFACE
   //------------------------
+  
+  
+  public List<Tile> play() {
+	  
+	  
+		 //get the current game from the TileO application
+		  Game currentGame = super.getDeck().getGame();
+
+			//get die from the current game
+			Die die = currentGame.getDie();
+
+			//roll the die to generate a number
+
+			int number = die.roll();
+
+			//getting the current player from the current game
+			Player currentPlayer = currentGame.getCurrentPlayer();
+
+			//get the possible moves of the current player, depending on the generated number
+			// TODO implement the get possible moves method
+			List<Tile> tiles = currentPlayer.getPossibleMoves(number);
+
+			return tiles;
+		  
+
+		  
+	  }
+  
 
   public Game.Mode getActionCardGameMode(){
 	  return Game.Mode.GAME_ROLLDIEACTIONCARD;
