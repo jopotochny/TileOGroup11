@@ -46,8 +46,8 @@ public class TileOPage extends JFrame{
 	//board
 	private JLabel boardTitle;
 	private BoardVisualizer boardVisualizer;
-	private static final int WIDTH_BOARD_VISUALIZATION = 800;
-	private static final int HEIGHT_BOARD_VISUALIZATION = 400;
+	private static final int WIDTH_BOARD_VISUALIZATION = 600;
+	private static final int HEIGHT_BOARD_VISUALIZATION = 300;
 
 	//console
 	private JLabel consoleTitle;
@@ -68,7 +68,7 @@ public class TileOPage extends JFrame{
 
 	public void initComponents(){		
 		//set the size of the applet
-		this.setPreferredSize(new Dimension(1400, 700));
+		this.setSize(1400, 700);
 		
 		//set the initial mode of the game
 		mode = Game.Mode.GAME;
@@ -95,7 +95,6 @@ public class TileOPage extends JFrame{
 		consoleTitle = new JLabel();
 		console.setText("Player 1, please roll the die.");
 		console.setEditable(false);
-		//console.setPreferredSize(new Dimension(400, 200));
 		consoleTitle.setText("Console:");
 		
 		//remaining pieces
@@ -256,8 +255,7 @@ public class TileOPage extends JFrame{
 							)
 
 		);
-		
-		
+
 		pack();
 	}
 	
