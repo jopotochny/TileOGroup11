@@ -20,6 +20,7 @@
         <NormalTile id="8">
           <children id="9"/>
           <neighbours id="10"/>
+          <flag>false</flag>
           <x>0</x>
           <y>0</y>
           <hasBeenVisited>false</hasBeenVisited>
@@ -29,6 +30,7 @@
         <WinTile id="12">
           <children id="13"/>
           <neighbours id="14"/>
+          <flag>false</flag>
           <x>2</x>
           <y>2</y>
           <hasBeenVisited>false</hasBeenVisited>

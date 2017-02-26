@@ -566,7 +566,9 @@ public class Game
     winTile = null;
     TileO placeholderTileO = tileO;
     this.tileO = null;
+    if(placeholderTileO!=null){
     placeholderTileO.removeGame(this);
+    }
   }
 
 
