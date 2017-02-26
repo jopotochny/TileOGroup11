@@ -1,97 +1,124 @@
 package ca.mcgill.ecse223.tileo.persistence;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.sql.Date;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ca.mcgill.ecse223.tileo.application.TileOApplication;
-import ca.mcgill.ecse223.tileo.controller.PlayController;
-import ca.mcgill.ecse223.tileo.model.ActionCard;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
-import ca.mcgill.ecse223.tileo.model.Tile;
+import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
+import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.TileO;
-import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
+import ca.mcgill.ecse223.tileo.model.WinTile;
 
 
-public class PersistenceTest {
+public class PersistenceTest {	
 	
-	private static String filename = "testdata.Game";
-	private Game game;
 	private TileO tileo;
 	
 	@Before
 	public void setUp() throws Exception {
-		//creating a tileO application
-		TileO tileO = TileOApplication.getTileO();
+		 tileo = new TileO();
 		
+		//creating a number of connections
 		int numberOfConnectionPieces = 32;
 		
 		//creating a new game
-		Game currentGame = new Game(numberOfConnectionPieces, tileO);
+		Game currentGame = new Game(numberOfConnectionPieces, tileo);
+	
+	
+		tileo.setCurrentGame(currentGame);
+		
 		
 		//Create deck
-		Deck deck = new Deck(currentGame);
+		Deck deck = currentGame.getDeck();
 		
-		//Create connection
+		//Create a die
+		Die die = currentGame.getDie();
+		
+		
+		//Create a connection
 		Connection connection = new Connection(currentGame);
 		
-		//Create die
-		Die die = new Die(currentGame);
 		
 		//Create tiles
 		NormalTile tile = new NormalTile(0, 0, currentGame);
+		WinTile wintile = new WinTile(2 , 2, currentGame);
 		
-		//Create player
-		Player player = new Player(0, null);
+		//Create players
+		Player player1 = new Player(0, currentGame);
+		Player player2 = new Player(1, currentGame);
+		
+		
+		//Create an Action Card
+		RollDieActionCard rollActionCard = new RollDieActionCard("roll", deck);
+		TeleportActionCard teleportCard = new TeleportActionCard("teleport",deck);
 		
 		//setting current player and connection pieces
 		//adding the game to tileO and setting it to the current game
-		tileO.addGame(currentGame);
-		tileO.setCurrentGame(currentGame);
-		currentGame.setCurrentPlayer(player);
-		currentGame.setCurrentConnectionPieces(15);
-		deck.addCard("move up");
-		deck.addCard("move down");
-		tile.setX(5);
-		tile.setY(7);
+		
+		currentGame.setCurrentPlayer(player1);
+		
+		deck.addCard(rollActionCard);
+		deck.addCard(teleportCard);
+		
+		deck.setCurrentCard(rollActionCard);
 		
 		
 	}
 	@After
 	public void tearDown() throws Exception{
-		game.delete();
+		tileo.delete();
 	}
 	
 	@Test
-	public void testPersistence() throws ParseException {
+	public void test() throws ParseException {
+		
+		
 		// initialize model file
 	    PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
 	    
 	    // save model that is loaded during test setup
-	    if (!PersistenceXStream.saveToXMLwithXStream(game))
+	    if (!PersistenceXStream.saveToXMLwithXStream(tileo))
 	        fail("Could not save file.");
 	    
 	    //clear model in memory
-	    game.delete();
-	    assertEquals(0, game.getPlayers().size());
-	    assertEquals(0, game.getConnections().size());
-	    assertEquals(0, game.getTiles().size());
+	    tileo.delete();
+	    assertEquals(0, tileo.getGames().size());
+	    
+	   
+	    
+	    //load model
+	    tileo = (TileO) PersistenceXStream.loadFromXMLwithXStream();
+	    if (tileo == null)
+	    	fail("Could not load file.");
+	    
+	    //check game
+	    assertEquals(1, tileo.getGames().size());
+	    assertEquals(1, tileo.getCurrentGame().getConnections().size());
+	    
+	    //check deck
+	    assertEquals(2, tileo.getCurrentGame().getDeck().getCards().size());
+	    assertEquals("roll", tileo.getCurrentGame().getDeck().getCard(0).getInstructions());
+	    assertEquals("teleport", tileo.getCurrentGame().getDeck().getCard(1).getInstructions());
+
+	    
+	    //check players
+	    assertEquals(2, tileo.getCurrentGame().getPlayers().size());
+	    assertEquals(0, tileo.getCurrentGame().getPlayer(0).getNumber());
+	    assertEquals(1, tileo.getCurrentGame().getPlayer(1).getNumber());	    
+	    
+	    
 	}
 }
 	

@@ -1,9 +1,5 @@
 package ca.mcgill.ecse223.tileo.persistence;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -31,11 +27,11 @@ import com.thoughtworks.xstream.XStream;
 public class PersistenceXStream {
 
 	private static XStream xstream = new XStream();
-	private static String filename = "output.txt";
+	private static String filename = "tileo.txt";
 	
 	public static TileO initializeModelManager(String fileName){
 		//Initialization for persistence
-		TileO game;
+		TileO tileo;
 		setFilename(fileName);
 		setAlias("ActionCard", ActionCard.class);
 		setAlias("ActionTile", ActionTile.class);
@@ -57,7 +53,7 @@ public class PersistenceXStream {
 		// load model if exists, create otherwise
         File file = new File(fileName);
         if (file.exists()) {
-            game = (TileO) loadFromXMLwithXStream();
+            tileo = (TileO) loadFromXMLwithXStream();
         } else {
             try {
                 file.createNewFile();
@@ -65,10 +61,10 @@ public class PersistenceXStream {
                 e.printStackTrace();
                 System.exit(1);
             }
-            game = new TileO();
-            saveToXMLwithXStream(game);
+            tileo = new TileO();
+            saveToXMLwithXStream(tileo);
         }
-        return game;
+        return tileo;
 	}
 	
 	public static boolean saveToXMLwithXStream(Object obj) {
@@ -102,8 +98,8 @@ public class PersistenceXStream {
 		xstream.alias(xmlTagName, className);
 	}
 	
-	public static void setFilename(String newFilename) {
-		filename = newFilename;
+	public static void setFilename(String fn) {
+		filename = fn;
 	}
 
 }
