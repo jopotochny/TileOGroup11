@@ -3,8 +3,11 @@ package ca.mcgill.ecse223.tileo.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
@@ -16,18 +19,24 @@ import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.TileO;
+import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 
 public class TileODesignControllerTest {
 
 	private TileO tileO;
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
+	}
 	@Before
 	public void setUp() throws Exception {
-		tileO = TileOApplication.getTileO();
-		tileO.delete();
+		tileO = new TileO();
+		
 	}
 	
 	@After
 	public void tearDown() throws Exception {
+		tileO.delete();
 	}
 
 	@Test
@@ -258,9 +267,9 @@ public class TileODesignControllerTest {
 
 		String error = "";
 		NormalTile tile = new NormalTile(1, 1, game);
-		Player player1 = new Player(1, game);
+		Player player1 = new Player(15, game);
 		player1.setStartingTile(tile);
-		Player player2 = new Player(2, game);
+		Player player2 = new Player(25, game);
 
 		try {
 			controller.identifyStartTile(tile, 2);

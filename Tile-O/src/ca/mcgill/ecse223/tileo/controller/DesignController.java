@@ -3,10 +3,11 @@ import java.util.List;
 
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.model.*;
+import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 public class DesignController {
 	private TileO tileo;
-	public DesignController(TileO tileo){
-		this.tileo = tileo;
+	public DesignController(TileO tileO){
+		this.tileo = tileO;
 	}
 	public void addConnectionDuringDesign(Tile tileOne, Tile tileTwo) throws InvalidInputException{
 		if((this.tileo.getCurrentGame().indexOfTile(tileOne) == -1) || (this.tileo.getCurrentGame().indexOfTile(tileTwo) == -1)){
@@ -19,6 +20,7 @@ public class DesignController {
 		Connection theConnection = new Connection(this.tileo.getCurrentGame());	
 		theConnection.addTile(tileOne);
 		theConnection.addTile(tileTwo);
+		
 			
 	}
 	public void addTileToBoard(int X, int Y) throws InvalidInputException{
@@ -28,18 +30,21 @@ public class DesignController {
 			}
 		}
 		NormalTile theTile = new NormalTile(X, Y, this.tileo.getCurrentGame());
+		
 	}
 	public void removeConnectionDuringDesign(Connection theConnection)throws InvalidInputException{
 		if(this.tileo.getCurrentGame().indexOfConnection(theConnection) == -1 || theConnection ==  null){
 			throw new InvalidInputException("Connection does not exist");
 		}
 		theConnection.delete();
+		PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 	public void removeTileFromBoard(Tile theTile) throws InvalidInputException{
 		if(this.tileo.getCurrentGame().indexOfTile(theTile) == -1 || theTile == null){
 			throw new InvalidInputException("Could not remove tile as it does not exist");
 		}
 		theTile.delete();
+		
 	}
 	public void identifyWinTile(int x, int y) throws InvalidInputException {
 		Game game = tileo.getCurrentGame();
@@ -49,6 +54,7 @@ public class DesignController {
 			WinTile winTile = new WinTile(x, y, game);
 			game.setWinTile(winTile);
 		}
+		
 
 	}
 
@@ -63,6 +69,7 @@ public class DesignController {
 			}
 			ActionTile actionT = new ActionTile(x, y, game, inactivityPeriod);
 		}
+		
 
 	}
 
