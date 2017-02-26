@@ -185,14 +185,14 @@ public class Deck
   }
   
   public void shuffle(){
-	  
-	  Random random = new Random();
+	  Collections.shuffle(cards);
+	  /*Random random = new Random();
 	  int generatedNumber;
 	  
 	  for(ActionCard card : this.getCards()){
 		  generatedNumber = random.nextInt(32);
 		  this.addOrMoveCardAt(card, generatedNumber);
-	  }    
+	  }  */  
   }
 
   public void delete()

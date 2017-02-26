@@ -18,7 +18,7 @@ public abstract class Tile
   // TODO remove this maybe	
   ArrayList<Tile> children = new ArrayList<Tile>();
   ArrayList<Tile> neighbours = new ArrayList<Tile>();
-	  
+  boolean flag = false;
 	  
 	  
   //Tile Attributes
@@ -257,8 +257,9 @@ public abstract class Tile
 	  
 	  // Add the first tile to the list of children so we can
 	  // Start the recursion
-	  if(!(children.contains(this))){
-	  children.add(this);	
+	  if(!flag){
+	  children.add(this);
+	  flag = true;
 	  }
 	  
 	  //Base Case
@@ -301,7 +302,7 @@ public abstract class Tile
 			 for(Tile tile : firstTiles){
 				 // if the current tile we're on has tiles connected
 				 // and have never been visited  
-				 if((tile != this) && !(neighbours.contains(tile))){
+				 if(!(neighbours.contains(tile))){
 				 // add it to the list of children
 				 children.add(tile);
 
@@ -312,7 +313,7 @@ public abstract class Tile
 	 
 	   
 	  }
-	//return children;
+	  //rerun the test with the current children
 	  return getNeighbours(number-1);
 		 
 	  
