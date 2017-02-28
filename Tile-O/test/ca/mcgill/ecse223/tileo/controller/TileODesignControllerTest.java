@@ -30,13 +30,14 @@ public class TileODesignControllerTest {
 	}
 	@Before
 	public void setUp() throws Exception {
-		tileO = new TileO();
+		tileO = TileOApplication.getTileO();
+		tileO.delete();
 		
 	}
 	
 	@After
 	public void tearDown() throws Exception {
-		tileO.delete();
+		//tileO.delete();
 	}
 
 	@Test
@@ -293,9 +294,10 @@ public class TileODesignControllerTest {
 
 		String error = "";
 		NormalTile tile = new NormalTile(0, 0, game);
-		Player player1 = new Player(0, game);
-		player1.setStartingTile(tile);
+		//Player player1 = new Player(123456774, game);
+		//player1.setStartingTile(tile);
 		try {
+			controller.identifyStartTile(tile);
 			controller.identifyStartTile(tile);
 		} catch (InvalidInputException e) {
 			error += e.getMessage();
