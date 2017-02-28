@@ -4,6 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 // line 30 "../../../../../TileO.ump"
@@ -19,7 +20,8 @@ public abstract class Tile
   ArrayList<Tile> children = new ArrayList<Tile>();
   ArrayList<Tile> neighbours = new ArrayList<Tile>();
   boolean flag = false;
-	  
+  private ArrayList<Tile> endTiles;
+  private ArrayList<Tile> potentialTilesDFS;
 	  
   //Tile Attributes
   private int x;
@@ -316,6 +318,24 @@ public abstract class Tile
 	  //rerun the test with the current children
 	  return getNeighbours(number-1);
 		 
+	  
+  }
+  
+  public List<Tile> getNeighborsDFS(int num){
+	  
+	  ArrayList<Tile> path = new ArrayList<Tile>();
+	  path.add(this);
+	  for( Connection connection : this.getConnections()){
+		  if(connection.getTile(0) != this){
+			  path.add(connection.getTile(0));
+		  }
+		  else{
+			  path.add(connection.getTile(1));
+		  }
+	  }
+	  
+	  
+	return potentialTilesDFS;
 	  
   }
   

@@ -96,7 +96,7 @@ public class TestNeightbours {
 		
 		
 		
-		ArrayList<Tile> testingShit = (ArrayList<Tile>) L.getNeighbours(2);
+		ArrayList<Tile> testingShit = (ArrayList<Tile>) L.getNeighbours(3);
 	/*
 		 A==B==C==D 
 			|	  |	
