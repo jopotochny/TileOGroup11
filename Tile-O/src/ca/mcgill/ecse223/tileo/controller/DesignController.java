@@ -42,7 +42,7 @@ public class DesignController {
 		Connection theConnection = new Connection(this.tileo.getCurrentGame());	
 		theConnection.addTile(tileOne);
 		theConnection.addTile(tileTwo);
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 	public void addTileToBoard(int X, int Y) throws InvalidInputException{
 		for(Tile tile : this.tileo.getCurrentGame().getTiles()){
@@ -51,7 +51,7 @@ public class DesignController {
 			}
 		}
 		NormalTile theTile = new NormalTile(X, Y, this.tileo.getCurrentGame());
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 		//System.out.println("in the controller " + this.tileo.getCurrentGame().getTiles().size());
 	}
 	public void removeConnectionDuringDesign(Tile tileOne, Tile tileTwo)throws InvalidInputException{
@@ -67,7 +67,7 @@ public class DesignController {
 			throw new InvalidInputException("Connection does not exist");
 		}
 		theConnection.delete();
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 	public void removeTileFromBoard(Tile theTile) throws InvalidInputException{
 		
@@ -89,7 +89,7 @@ public class DesignController {
 			theTile.delete();
 
 		}
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 	public void identifyWinTile(int x, int y) throws InvalidInputException {
 		Game game = tileo.getCurrentGame();
@@ -101,7 +101,7 @@ public class DesignController {
 			game.setWinTile(winTile);
 		}
 		//System.out.println("has win tile in identify is " + this.tileo.getCurrentGame().hasWinTile());
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 	
 
@@ -119,7 +119,7 @@ public class DesignController {
 		}
 		System.out.println("im in action tile ***");
 		ActionTile actionT = new ActionTile(x, y, game, inactivityPeriod);
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 
 	public void identifyStartTile(Tile aStart) throws InvalidInputException {
@@ -155,7 +155,7 @@ public class DesignController {
 				newPlayer.setStartingTile(aStart);
 			}
 		}
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 
 	public void selectCards(int loseTurn, int connect, int rollDie, int remove, int teleport)
@@ -187,6 +187,6 @@ public class DesignController {
 		for (int i = 1; i <= teleport; i++) {
 			TeleportActionCard teleportCard = new TeleportActionCard("Move to any tile", deck);
 		}
-		PersistenceXStream.saveToXMLwithXStream(tileo);
+		//PersistenceXStream.saveToXMLwithXStream(tileo);
 	}
 }

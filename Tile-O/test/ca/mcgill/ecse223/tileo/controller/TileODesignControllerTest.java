@@ -26,7 +26,7 @@ public class TileODesignControllerTest {
 	private TileO tileO;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
+		//PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
 	}
 	@Before
 	public void setUp() throws Exception {
@@ -248,7 +248,7 @@ public class TileODesignControllerTest {
 
 		//Player player = new Player(0, game);
 
-		NormalTile tile = new NormalTile(1, 2, game);
+		NormalTile tile = new NormalTile(0, 0, game);
 
 		tileO.addGame(game);
 		tileO.setCurrentGame(game);
@@ -269,10 +269,10 @@ public class TileODesignControllerTest {
 
 		String error = "";
 		NormalTile tile = new NormalTile(1, 1, game);
-		Player player1 = new Player(0, game);
-		Player player2 = new Player(1, game);
-		Player player3 = new Player(2, game);
-		Player player4 = new Player(3, game);
+		Player player1 = new Player(1837671, game);
+		Player player2 = new Player(1201937, game);
+		Player player3 = new Player(1384829, game);
+		Player player4 = new Player(1398746826, game);
 		//player1.setStartingTile(tile);
 		//Player player2 = new Player(25, game);
 
@@ -292,9 +292,9 @@ public class TileODesignControllerTest {
 		tileO.setCurrentGame(game);
 
 		String error = "";
-		NormalTile tile = new NormalTile(1, 1, game);
+		NormalTile tile = new NormalTile(0, 0, game);
 		Player player1 = new Player(0, game);
-		Player player2 = new Player(1, game);
+		player1.setStartingTile(tile);
 		try {
 			controller.identifyStartTile(tile);
 		} catch (InvalidInputException e) {
