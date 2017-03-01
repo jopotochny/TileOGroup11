@@ -23,7 +23,7 @@ public class TeleportActionCard extends ActionCard
   //------------------------
   // INTERFACE
   //------------------------
-  
+
   
   public void play(Tile tile){
 		
@@ -62,7 +62,7 @@ public class TeleportActionCard extends ActionCard
 		  
 	  }
 
-
+  
   public Game.Mode getActionCardGameMode(){
 	  return Game.Mode.GAME_TELEPORTACTIONCARD;
   }

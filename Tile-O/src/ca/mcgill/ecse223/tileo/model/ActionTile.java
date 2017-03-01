@@ -69,6 +69,7 @@ public class ActionTile extends Tile
 	  ActionCard currentCard = deck.getCurrentCard();
 	  
 	  Game.Mode mode;
+
 	  //if the type of the card is roll die, get the mode and set it in the current game
 	  if(currentCard instanceof RollDieActionCard){
 		  RollDieActionCard rollDieActionCard = (RollDieActionCard) currentCard;
@@ -88,11 +89,17 @@ public class ActionTile extends Tile
 		  currentGame.setMode(mode);
 	  }
 	  //if the type of the card is lost turn, get the mode and set it in the current game
-	  else if(currentCard instanceof LoseTurnActionCard){
+	  /*else if(currentCard instanceof LoseTurnActionCard){
 		  LoseTurnActionCard loseTurnActionCard = (LoseTurnActionCard) currentCard;
 		  mode = loseTurnActionCard.getActionCardGameMode();
 		  currentGame.setMode(mode);
+		  System.out.println("mode after action tile is:" + currentGame.getMode() + "  should be: " + mode);
+	  }*/else if(currentCard instanceof TeleportActionCard){
+		  TeleportActionCard loseTurnActionCard = (TeleportActionCard) currentCard;
+		  mode = loseTurnActionCard.getActionCardGameMode();
+		  currentGame.setMode(mode);
 	  }
+	  
 	  
   }
 

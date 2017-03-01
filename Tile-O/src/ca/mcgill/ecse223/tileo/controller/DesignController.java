@@ -2,32 +2,32 @@ package ca.mcgill.ecse223.tileo.controller;
 import java.util.List;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
-import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.model.ActionTile;
 import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
+import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
-import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
+import ca.mcgill.ecse223.tileo.model.Player.Color;
 import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
 import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
 import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.model.WinTile;
-import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
-import ca.mcgill.ecse223.tileo.model.*;
 public class DesignController {
 		private TileO tileo;
+		private int maxPlayers = 4;
 		public DesignController(TileO tileo){
 			this.tileo = tileo;
 		}
 		
-		public void createGame(){
+		public Game createGame(){
 			Game game = new Game(32, tileo);
 			tileo.setCurrentGame(game);
+			return game;
 		}
 		
 		public void addConnectionDuringDesign(Tile tileOne, Tile tileTwo) throws InvalidInputException{
@@ -55,7 +55,7 @@ public class DesignController {
 			}
 			NormalTile theTile = new NormalTile(X, Y, this.tileo.getCurrentGame());
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
-			//System.out.println("in the controller " + this.tileo.getCurrentGame().getTiles().size());
+			
 		}
 		public void removeConnectionDuringDesign(Tile tileOne, Tile tileTwo)throws InvalidInputException{
 			Connection theConnection = null;
@@ -84,7 +84,7 @@ public class DesignController {
 				if(theTile.getX() == tileo.getCurrentGame().getWinTile().getX() && theTile.getY() == tileo.getCurrentGame().getWinTile().getY()){
 					this.tileo.getCurrentGame().getWinTile().delete();
 					this.tileo.getCurrentGame().setWinTile(null);
-					//System.out.println("has win tile in remove is " + this.tileo.getCurrentGame().hasWinTile());
+					
 					
 				} 
 			}
@@ -97,21 +97,20 @@ public class DesignController {
 		public void identifyWinTile(int x, int y) throws InvalidInputException {
 			Game game = tileo.getCurrentGame();
 			if (game.hasWinTile() == true) {
-				System.out.println(game.getWinTile().getX() + " ***** " + game.getWinTile().getY());
+				
 				throw new InvalidInputException("The win tile has already been set");
 			} else {
 				WinTile winTile = new WinTile(x, y, game);
 				game.setWinTile(winTile);
 			}
-			//System.out.println("has win tile in identify is " + this.tileo.getCurrentGame().hasWinTile());
-			//PersistenceXStream.saveToXMLwithXStream(tileo);
+			
 		}
 		
 
 
 		public void identifyActionTile(int x, int y, int inactivityPeriod) throws InvalidInputException {
 			Game game = tileo.getCurrentGame();
-			System.out.println("in action tiles");
+			
 			List<Tile> tiles = game.getTiles();
 
 			for (Tile t : tiles) {
@@ -120,30 +119,32 @@ public class DesignController {
 				}
 				
 			}
-			System.out.println("im in action tile ***");
+			
 			ActionTile actionT = new ActionTile(x, y, game, inactivityPeriod);
-			//PersistenceXStream.saveToXMLwithXStream(tileo);
+			
 		}
 
 		public void identifyStartTile(Tile aStart) throws InvalidInputException {
 			Game game = tileo.getCurrentGame();
 			boolean conflictingStart = false;
-			if(game.getPlayers().size() == 4){
-				throw new InvalidInputException("There are already 4 players");
+			if(game.getPlayers().size() == this.maxPlayers){
+				throw new InvalidInputException("There are already " + this.maxPlayers + " players");
 			}
 			
 			if(game.getPlayers().size() == 0){
 				Player newPlayer = new Player(game.getPlayers().size()+1, game);
+				newPlayer.setColor(Color.values()[0]);
 				newPlayer.setStartingTile(aStart);
 			}else {
 				
-			//System.out.println("the x is " + game.getPlayer(0).getStartingTile().getY());
-				for (int i = 0; i < game.getPlayers().size()-1; i++) {
-					//if(p == null) continue;
-					//if(game.getPlayers().size() > 1){
+				
+			
+				for (int i = 0; i < game.getPlayers().size(); i++) { //changed from getplayers.size to getplayers.size -1
+					
+					
 						Tile startingTile = game.getPlayer(i).getStartingTile();
 						//if(startingTile == null) continue;
-						//System.out.println("succ");
+						System.out.println(startingTile.getX());
 						if (startingTile.getX() == aStart.getX() && startingTile.getY() == aStart.getY()) {
 							conflictingStart = true;
 							break;
@@ -151,28 +152,28 @@ public class DesignController {
 						}
 					
 				}
+				
 				if(conflictingStart){
 					throw new InvalidInputException("A player already exists at this tile");
 				} else {
+					
 					Player newPlayer = new Player(game.getPlayers().size()+1, game);
+					newPlayer.setColor(Color.values()[game.getPlayers().size()-1]);
 					newPlayer.setStartingTile(aStart);
 				}
 			}
-			//PersistenceXStream.saveToXMLwithXStream(tileo);
+			
 		}
 
-		public void selectCards(int loseTurn, int connect, int rollDie, int remove, int teleport)
+		public void selectCards(int connect, int rollDie, int remove, int teleport)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
 
 			Deck deck = game.getDeck(); 
 
-			if ((loseTurn + connect + rollDie + remove + teleport) != 32) {
+			if (( connect + rollDie + remove + teleport) != 32) {
 				throw new InvalidInputException("The amount of cards chosen is not 32");
-			}
-			for (int i = 1; i <= loseTurn; i++) {
-				LoseTurnActionCard loseCard = new LoseTurnActionCard("Lose your turn", deck);
 			}
 
 			for (int i = 1; i <= connect; i++) {
@@ -194,14 +195,14 @@ public class DesignController {
 		}
 	
 	// Create a game which also creates deck and die
-	public Game createGame(int numberOfPlayers) throws InvalidInputException{
-		int numberOfConnectionPieces = 32;
+	public void createGame(int numberOfPlayers) {
+		/*int numberOfConnectionPieces = 32;
 		Game currentGame = new Game(numberOfConnectionPieces, tileo);
 		tileo.setCurrentGame(currentGame);
 		for(int i=1;i<numberOfPlayers+1;i++){
-			Player player = new Player(i, currentGame);
-		}
-		return currentGame;
+			Player player = new Player(i, currentGame);*/
+		this.maxPlayers = numberOfPlayers;
+		//return currentGame;
 	}
 	
 	// Create Deck
@@ -235,7 +236,8 @@ public class DesignController {
 	
 	// Load Design mode
 	public static Game loadDesign(int index){
-		TileOApplication.load();
-		return TileOApplication.getGame(index);
+		TileO tileo = TileOApplication.load();
+		Game game = tileo.getGame(index);
+		return game;
 	}
 }

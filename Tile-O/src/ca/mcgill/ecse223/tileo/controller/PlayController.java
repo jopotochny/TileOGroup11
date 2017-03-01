@@ -17,6 +17,7 @@ import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.model.WinTile;
+import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 
 
 public class PlayController {
@@ -55,9 +56,10 @@ public class PlayController {
 		tileOApplication.setCurrentGame(selectedGame);
 
 		//get the deck of the current game
-
 		Deck currentDeck = selectedGame.getDeck();
 		currentDeck.shuffle();
+
+		currentDeck.setCurrentCard(currentDeck.getCard(0));
 
 		//set all the tiles in the current game to not visited
 		List<Tile> tiles = selectedGame.getTiles();
@@ -80,6 +82,7 @@ public class PlayController {
 		//set the current connection pieces to the spare connection pieces
 		selectedGame.setCurrentConnectionPieces(selectedGame.SpareConnectionPieces);
 
+		System.out.println("setting the mode game to GAME");
 		//set the mode of the current game to GAME
 		selectedGame.setMode(Game.Mode.GAME);	
 
@@ -95,13 +98,13 @@ public class PlayController {
 		//roll the die to generate a number
 
 		int number = die.roll();
+		System.out.println("generated number: " + number);
 
 		//getting the current player from the current game
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
 		//get the possible moves of the current player, depending on the generated number
-		// TODO implement the get possible moves method
-		List<Tile> tiles = currentPlayer.getPossibleMoves(number);
+		List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), number);
 
 		return tiles;
 	}
@@ -123,11 +126,13 @@ public class PlayController {
 			//setting pointer of type normalTile pointing tile
 			NormalTile normalTile = (NormalTile) tile;
 			normalTile.land();
+			currentGame.setMode(Game.Mode.GAME);
 		}
 		//if the tile is of type WinTile
 		else if(tile instanceof WinTile){
 			WinTile winTile = (WinTile) tile;
 			winTile.land();
+			currentGame.setMode(Game.Mode.GAME_WON);
 		}
 		//if the tile is of type ActionTile
 		else if(tile instanceof ActionTile){
@@ -158,9 +163,8 @@ public class PlayController {
 
 
 		RollDieActionCard currentCard = (RollDieActionCard) currentDeck.getCurrentCard();
-		
-		//  TODO added play in RollDieActionCard
-		
+
+
 
 		List<Tile> listOfTiles = currentCard.play();
 
@@ -170,17 +174,17 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-
+		System.out.println("Roll die action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-
+			System.out.println("shuffling");
 			currentDeck.shuffle();			
-
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
 
-
+			System.out.println("Play roll die: " + currentDeck.getCurrentCard());
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-
+			System.out.println("Play roll die: " + currentDeck.getCurrentCard());
 		}
 
 
@@ -214,7 +218,7 @@ public class PlayController {
 		// case1 if tile 1 and tile 2 have the same X , but Y's differ by 1
 		// case2 if tile 1 and tile 2 have the same Y , but X's differ by 1
 
-		if( ! ( (( tile1.getY() == tile2.getY() )  &&  (  ( tile1.getX() == tile2.getX() -1 ) || (tile1.getX() == tile2.getX() + 1)) )|| ( ( tile1.getX() == tile2.getX() )  &&  (  ( tile1.getY() == tile2.getY() -1 ) || (tile1.getY() == tile2.getY() + 1))))){
+		if( ! ( (( tile1.getY() == tile2.getY() )  &&  (  ( tile1.getX() == tile2.getX() -40 ) || (tile1.getX() == tile2.getX() + 40)) )|| ( ( tile1.getX() == tile2.getX() )  &&  (  ( tile1.getY() == tile2.getY() -40 ) || (tile1.getY() == tile2.getY() + 40))))){
 
 			throw new InvalidInputException("tile1 and tile2 are not adjacent.");
 
@@ -246,9 +250,6 @@ public class PlayController {
 		ConnectTilesActionCard currentCard = (ConnectTilesActionCard) currentDeck.getCurrentCard();
 
 		// connect both tiles
-		
-		//  TODO added play in ConnectTilesActionCard
-
 		currentCard.play(tile1, tile2);
 
 
@@ -281,23 +282,20 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-
+		System.out.println("connect tiles action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-
-			currentDeck.shuffle();			
-
+			System.out.println("shuffling");
+			currentDeck.shuffle();
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
-
-
+			System.out.println("Play connect tiles: " + currentDeck.getCurrentCard());
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-
+			System.out.println("Play connect tiles: " + currentDeck.getCurrentCard());
 		}
 
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);		
-
-
 
 	}
 
@@ -337,8 +335,8 @@ public class PlayController {
 		RemoveConnectionActionCard currentCard = (RemoveConnectionActionCard) currentDeck.getCurrentCard();
 
 		// connect both tiles
-		
-		// TODO added play in RemoveConnectionActionCard
+
+
 
 		currentCard.play(connection);
 
@@ -365,40 +363,29 @@ public class PlayController {
 		}
 
 
-
-
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-
+		System.out.println("remove connection action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-
-			currentDeck.shuffle();			
-
+			System.out.println("shuffling");
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
-
-
+			System.out.println("remove connection tiles: " + currentDeck.getCurrentCard());
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-
+			System.out.println("remove connection tiles: " + currentDeck.getCurrentCard());
 		}
 
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);		
 
-
-
-
-
-
-
 	}
 
 	public void playTeleportActionCard(Tile tile) throws InvalidInputException{
-
-
 
 		// get the current game
 
@@ -431,8 +418,8 @@ public class PlayController {
 		TeleportActionCard currentCard = (TeleportActionCard) currentDeck.getCurrentCard();
 
 		// teleport the player to the selected tile	
-		
-		// TODO added play in TeleportActionCard
+
+
 
 		currentCard.play(tile);
 
@@ -466,46 +453,100 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-
+		System.out.println("teleport action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-
-			currentDeck.shuffle();			
+			System.out.println("shuffling");
+			currentDeck.shuffle();	
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
 
 		}
 		else {
-
-
+			System.out.println("Play teleport: " + currentDeck.getCurrentCard());
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-
+			System.out.println("Play teleport: " + currentDeck.getCurrentCard());
 		}
 
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);		
+	}
 
+	/*
+	 * this method takes care of 1 case: when the player is stuck on a tile in which
+	 * he can move nowhere. We should not let him move
+	 */
+	public void noMoves(){
+		System.out.println("changing the current player to the next one");
+		Game currentGame = tileO.getCurrentGame();
+		//getting the current player
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = currentGame.numberOfPlayers();
+		System.out.println("current player beforre: " + currentPlayer);
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			System.out.println("changing to plauer 1");
+			//getting the first player
+			Player firstPlayer = currentGame.getPlayer(0);
+
+			//setting the current player to the first player
+			currentGame.setCurrentPlayer(firstPlayer);
+		}else{
+			System.out.println("changing to next plauer");
+			//get the next player
+			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+			System.out.println("next Player: " + nextPlayer);
+			//setting the current player to the next player
+			System.out.println(currentGame.setCurrentPlayer(nextPlayer));
+		}
+
+		System.out.println("current player after: " + currentGame.getCurrentPlayer());
+
+		//set the mode of game of GAME
+		currentGame.setMode(Game.Mode.GAME);	
 
 	}
-	
+
+	//check if the chose is a valid move for the player
+	public Boolean isValidMove(List<Tile> possibleMoves, Tile tile){
+		for(Tile acceptableTile : possibleMoves){
+			if( (acceptableTile.getX() == tile.getX()) && (acceptableTile.getY() == tile.getY()) ){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//get games from the model
 	public List<Game> getGames(){
-		return TileOApplication.getTileO().getGames();
+		return tileO.getGames();
 	}
-	
-	
+
+	public Game.Mode getGameMode(){
+		return tileO.getCurrentGame().getMode();
+	}
+
+
 	//get the current player from the current game
 	public Player getCurrentPlayer(){
-		return TileOApplication.getTileO().getCurrentGame().getCurrentPlayer();
+		return tileO.getCurrentGame().getCurrentPlayer();
 	}
-	
-	// Save design mode
-	public static void saveGame(){
+
+	public int getCurrentPlayerIndex(){
+		return tileO.getCurrentGame().indexOfPlayer(tileO.getCurrentGame().getCurrentPlayer());
+
+	}
+
+	public void saveGame(){
 		TileOApplication.save();
 	}
-		
-	// Load Design mode
+
+	// Load Game in Play Mode
 	public static Game loadGame(int index){
-		TileOApplication.load();
-		return TileOApplication.getGame(index);
+		TileO tileo = TileOApplication.load();
+		Game game = tileo.getGame(index);
+		return game;
 	}
-	
 
 }

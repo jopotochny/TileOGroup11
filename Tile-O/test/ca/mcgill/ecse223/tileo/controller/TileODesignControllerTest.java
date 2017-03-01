@@ -1,25 +1,20 @@
+
 package ca.mcgill.ecse223.tileo.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import java.io.File;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ca.mcgill.ecse223.tileo.application.TileOApplication;
-import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
-import ca.mcgill.ecse223.tileo.controller.DesignController;
 import ca.mcgill.ecse223.tileo.model.ActionTile;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.TileO;
-import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 
 public class TileODesignControllerTest {
 
@@ -30,7 +25,7 @@ public class TileODesignControllerTest {
 	}
 	@Before
 	public void setUp() throws Exception {
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 		tileO.delete();
 		
 	}
@@ -345,14 +340,14 @@ public class TileODesignControllerTest {
 		tileO.setCurrentGame(game);
 
 		int remove, connect, teleport, roll, lose;
-		remove = 5;
-		connect = 5;
-		teleport = 5;
-		roll = 9;
-		lose = 8;
+		remove = 8;
+		connect = 8;
+		teleport = 8;
+		roll = 8;
+		//lose = 8;
 
 		try {
-			controller.selectCards(remove, connect, teleport, roll, lose);
+			controller.selectCards( connect, teleport, roll, remove);
 		} catch (InvalidInputException e) {
 			fail();
 		}
@@ -368,14 +363,12 @@ public class TileODesignControllerTest {
 		tileO.addGame(game);
 		tileO.setCurrentGame(game);
 		int remove, connect, teleport, roll, lose;
-		remove = 5;
+		remove = 20;
 		connect = 5;
 		teleport = 5;
-		roll = 12;
-		lose = 7;
-
+		roll = 5;
 		try {
-			controller.selectCards(remove, connect, teleport, roll, lose);
+			controller.selectCards(connect, teleport, roll, remove);
 		} catch (InvalidInputException e) {
 			error += e.getMessage();
 
@@ -383,20 +376,5 @@ public class TileODesignControllerTest {
 
 		assertEquals("The amount of cards chosen is not 32", error);
 	}
-	
-	@Test
-	public void testPlayerCreation() throws InvalidInputException{
-		//Game game = new Game(32, tileO);
-		//tileO.addGame(game);
-		//tileO.setCurrentGame(game);
-		DesignController tc = new DesignController(tileO);
-		Game game = tc.createGame(3);
-		TileOApplication.reinitializeUniqueNumber(game.getPlayers());
-		//Player player1 = new Player(1, game);
-		assertEquals(game.hasPlayers(), true);
-		assertEquals(game.numberOfPlayers(), 3);
-	}
 		
 }
-
-

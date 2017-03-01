@@ -189,9 +189,165 @@ public class Player
     return wasSet;
   }
   
-  public List<Tile> getPossibleMoves(int number){
-	  return null;
+  public List<Tile> getPossibleMoves(Tile startTile , int moves){
+	  
+	  ArrayList<ArrayList<Tile>> pastVisits = new ArrayList<ArrayList<Tile>>();
+	  	  
+	  boolean flag = true;
+	
+	  
+	  ArrayList<ArrayList<Tile>> children = new ArrayList<ArrayList<Tile>>();
+	  
+	  // at first , add the first tile to the list of visited tiles
+	 
+	  // while the number of moves hasn't been reached
+	  while (moves > 0){
+		  
+		  ArrayList<ArrayList<Tile>> childrenTwo = new ArrayList<ArrayList<Tile>>();
+		  ArrayList<ArrayList<Tile>> duplicates = new ArrayList<ArrayList<Tile>>();
+
+		  
+		  ArrayList<Tile> visitedTiles = new ArrayList<Tile>();
+		  if(flag == true){
+			  
+		  ArrayList<Tile> visitedTilesBaseCase = new ArrayList<Tile>();
+		  visitedTilesBaseCase.add(startTile);
+		  
+		  pastVisits.add(visitedTilesBaseCase);
+		  flag = false;
+		  }
+		  
+		  // loop through every previously visited Tile
+		  for (Tile tile : pastVisits.get(pastVisits.size()-1)){
+			  
+			  
+			  
+			  ArrayList<Tile> tempChildren = new ArrayList<Tile>();
+			  // get the neighbors of every child
+			  
+			  for( Tile tiles : tile.getNeighbours()){	
+				 
+				  	tempChildren.add(tiles);	  
+				 }
+			  
+
+			  children.add(tempChildren);
+			  
+		  }
+		  
+		  
+		  //we passed over every visited tile , we can clear the list
+		  //now we have every neighbor , we want to check if they are
+		  //contained in the last array of the pastVisited array of arrays
+		  
+		  
+		  //but first we have to check for duplicate sets
+		  //if there are any , take of them and put it in the list of children
+		  
+		  
+		  //checking for duplicate sets , adding them directly to our final list of next children
+		  int checkOne = 0;
+		 
+		  for(ArrayList<Tile> tileList : children){
+			  int checkTwo = 0;
+			  
+			  for(ArrayList<Tile> tileListTwo : children){
+				  
+				  if((tileList.containsAll(tileListTwo))&&(tileListTwo.containsAll(tileList)) ){
+
+					 if( checkOne != checkTwo){
+
+						  for(Tile tilesTest : tileList){
+
+						if(!duplicates.contains(tileList)){
+					  duplicates.add(tileList);
+						}
+					  }
+					 }
+				  }
+				  
+				  
+				  checkTwo++;
+			  }		  
+			  checkOne++;
+		  }
+		  
+		  //for every list of child , only keep the ones that do not appear in the last visited set
+
+		  int lastElementIndex = pastVisits.size();
+		  if(lastElementIndex >= 2){
+			 
+
+			  ArrayList<Tile> checker = pastVisits.get(pastVisits.size()-2);
+
+			 
+		  for(ArrayList<Tile> tileListAgain : children){
+			  ArrayList<Tile> temp = new ArrayList<Tile>();
+			  for(Tile tile : tileListAgain){
+				  
+				  if(!checker.contains(tile)){
+					  
+					  temp.add(tile);
+					  
+				  }
+			  }
+			  
+			  childrenTwo.add(temp);
+			  
+		  }
+		  
+		  //for the base case since there is no previous visited tile
+		  }else{
+
+
+			  for(ArrayList<Tile> tileListAgainTwo : children){
+				  ArrayList<Tile> tempTwo = new ArrayList<Tile>();
+
+				  for(Tile tile : tileListAgainTwo){	
+					  
+
+						  tempTwo.add(tile);
+						  			  
+			  }
+
+			  childrenTwo.add(tempTwo);
+		  }
+			  
+			  
+		  }	  
+		children.clear();
+		visitedTiles.clear();
+		
+		for(ArrayList<Tile> moreLists : childrenTwo){
+			for(Tile tilesOfChildrenTwo : moreLists){
+
+				visitedTiles.add(tilesOfChildrenTwo);
+			}
+		}
+		for(ArrayList<Tile> moreListsTwo : duplicates){
+			for(Tile tilesOfDuplicates : moreListsTwo){
+
+				visitedTiles.add(tilesOfDuplicates);
+			}
+		}
+			
+		  // once we finish with the visited tiles
+		  // we add them to the hashset of previously visited
+		  // and clear the list of visited tiles
+		  pastVisits.add(visitedTiles);
+
+		  	  
+		  moves-- ;
+		  
   }
+	  
+
+	  return pastVisits.get(pastVisits.size()-1);
+
+  }
+  
+  
+  
 
   public void delete()
   {

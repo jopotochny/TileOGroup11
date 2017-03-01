@@ -25,8 +25,7 @@ public class RollDieActionCard extends ActionCard
   //------------------------
   // INTERFACE
   //------------------------
-  
-  
+
   public List<Tile> play() {
 	  
 	  
@@ -44,16 +43,15 @@ public class RollDieActionCard extends ActionCard
 			Player currentPlayer = currentGame.getCurrentPlayer();
 
 			//get the possible moves of the current player, depending on the generated number
-			// TODO implement the get possible moves method
-			List<Tile> tiles = currentPlayer.getPossibleMoves(number);
+			List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), number);
 
 			return tiles;
 		  
 
 		  
 	  }
-  
 
+  
   public Game.Mode getActionCardGameMode(){
 	  return Game.Mode.GAME_ROLLDIEACTIONCARD;
   }

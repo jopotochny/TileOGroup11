@@ -192,7 +192,7 @@ public class Deck
 	  for(ActionCard card : this.getCards()){
 		  generatedNumber = random.nextInt(32);
 		  this.addOrMoveCardAt(card, generatedNumber);
-	  }  */  
+	  }    */
   }
 
   public void delete()

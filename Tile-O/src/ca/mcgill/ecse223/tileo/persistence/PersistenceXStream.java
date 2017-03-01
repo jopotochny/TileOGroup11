@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.thoughtworks.xstream.XStream;
+
 import ca.mcgill.ecse223.tileo.model.ActionCard;
 import ca.mcgill.ecse223.tileo.model.ActionTile;
 import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
@@ -21,8 +23,6 @@ import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.model.WinTile;
-
-import com.thoughtworks.xstream.XStream;
 
 public class PersistenceXStream {
 

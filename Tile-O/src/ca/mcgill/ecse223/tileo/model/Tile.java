@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+
 
 // line 30 "../../../../../TileO.ump"
 public abstract class Tile
@@ -17,11 +21,13 @@ public abstract class Tile
 
 	
   // TODO remove this maybe	
-  ArrayList<Tile> children = new ArrayList<Tile>();
-  ArrayList<Tile> neighbours = new ArrayList<Tile>();
+ // ArrayList<Tile> children = new ArrayList<Tile>();
+ // ArrayList<Tile> neighbours = new ArrayList<Tile>();
+//  ArrayList<Tile> toBeDeleted = new ArrayList<Tile>();
+//  ArrayList<Tile> coveredHashKey = new ArrayList<Tile>();
+//  Map<Tile, List<Tile>> backTracker = new HashMap<Tile, List<Tile>>();
   boolean flag = false;
-  private ArrayList<Tile> endTiles;
-  private ArrayList<Tile> potentialTilesDFS;
+	  
 	  
   //Tile Attributes
   private int x;
@@ -245,102 +251,29 @@ public abstract class Tile
   
   
   
-  public List<Tile> getNeighbours(int number){
-	  
-	  //TODO Fix Bug where circular path isn't allowed 
-	  //TODO Not  going over children already passed
-	  //TODO even if it's not backtracking
-	  //-----------------------------------
-	  //TODO trim the double output children
-	  //TODO remove the starting position when roll is not 4 
-	  //TODO and there isn't a circular path
+  
+  
+  public List<Tile> getNeighbours(){
+	  List<Tile> neighbours = new ArrayList<Tile>();
 	  
 	  
+	  List<Connection> currentTileConnections = this.getConnections();
 	  
-	  // Add the first tile to the list of children so we can
-	  // Start the recursion
-	  if(!flag){
-	  children.add(this);
-	  flag = true;
-	  }
-	  
-	  //Base Case
-	  if(number == 0){
-		return children;  
-	  }else{
-	  
-	  // initialize a list of connections
-	  ArrayList<Connection> firstConnections = new ArrayList<Connection>();
-	  // for every time in the list of children
-	  for(Tile tileA : children){
+	  for(Connection connection : currentTileConnections){
 		  
-		 // add the tiles of Children to the list of neighbors
-		 // which contains all tiles ever visited
-		 neighbours.add(tileA);
-		 List<Connection> secondConnections = new ArrayList<Connection>();
-		 
-		 // for every tile in children , get their list of connections
-		 secondConnections = tileA.getConnections();
-
-		for (Connection connections : secondConnections){
-			// add these connections to the big list of connections
-			// which contains now every connections
-			// of the children tiles
-			firstConnections.add(connections);
+		for(Tile connectedTiles : connection.getTiles()){
+			if (connectedTiles != this){
+				neighbours.add(connectedTiles);
+			}
 		}
-		
-		
-		
+		  
 	  }
-	 
 	  
-	  children.clear();
 	  
-	  //for every connection in the list
-	  for(Connection connection : firstConnections){
-		  // if the connection has tiles connected to it
-		 if(connection.hasTiles()){
-			 List<Tile> firstTiles = connection.getTiles();
-			 for(Tile tile : firstTiles){
-				 // if the current tile we're on has tiles connected
-				 // and have never been visited  
-				 if(!(neighbours.contains(tile))){
-				 // add it to the list of children
-				 children.add(tile);
-
-				 }
-			 }
-		 }
-	  }
-	 
-	   
-	  }
-	  //rerun the test with the current children
-	  return getNeighbours(number-1);
-		 
-	  
+	  return neighbours;
   }
   
-  public List<Tile> getNeighborsDFS(int num){
-	  
-	  ArrayList<Tile> path = new ArrayList<Tile>();
-	  path.add(this);
-	  for( Connection connection : this.getConnections()){
-		  if(connection.getTile(0) != this){
-			  path.add(connection.getTile(0));
-		  }
-		  else{
-			  path.add(connection.getTile(1));
-		  }
-	  }
-	  
-	  
-	return potentialTilesDFS;
-	  
-  }
-  
-  
-  
+ 
   //abstract method
   public abstract void land();
 

@@ -26,17 +26,19 @@ public class RemoveConnectionActionCard extends ActionCard
   // INTERFACE
   //------------------------
 
+  //TODO check if this the right way to do it
 public void play(Connection connection){
 	  
-	  List<Tile> connectedTiles = connection.getTiles();
+	  /*List<Tile> connectedTiles = connection.getTiles();
 	  
 	  for(Tile tile: connectedTiles){
-		  connection.removeTile(tile);
-	  }
+		  System.out.println(connection.removeTile(tile));
+	  }*/
+	
+	 connection.delete();
 	 
-	  
   }
-
+  
   public Game.Mode getActionCardGameMode(){
 	  return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
   }

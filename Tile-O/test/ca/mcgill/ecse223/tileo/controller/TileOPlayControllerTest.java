@@ -38,7 +38,7 @@ public class TileOPlayControllerTest {
 	@Before
 	public void setUp() throws Exception {
 		// clear all data
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 		tileO.delete();
 	}
 
@@ -52,7 +52,7 @@ public class TileOPlayControllerTest {
 
 		String error = null;
 		//creating a tileO application
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 
 		//setting the controller
 		PlayController pc = new PlayController(tileO);
@@ -108,7 +108,7 @@ public class TileOPlayControllerTest {
 
 		String error = null;
 		//creating a tileO application
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 
 		//setting the controller
 		PlayController pc = new PlayController(tileO);
@@ -125,7 +125,7 @@ public class TileOPlayControllerTest {
 		currentGame.setWinTile(wintile);
 
 		//creating to new players
-		Player player1 = new Player(678987, currentGame);
+		Player player1 = new Player(0, currentGame);
 		Player player2 = new Player(346, currentGame);
 
 		//adding the players to the current game
@@ -154,7 +154,7 @@ public class TileOPlayControllerTest {
 	public void testStartGameNoWinTile() {
 		String error = null;
 		//creating a tileO application
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 
 		//setting the controller
 		PlayController pc = new PlayController(tileO);
@@ -208,7 +208,7 @@ public class TileOPlayControllerTest {
 	public void testStartGameStartingPlayerTileNotDefined() {
 		String error = null;
 		//creating a tileO application
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 
 		//setting the controller
 		PlayController pc = new PlayController(tileO);
@@ -252,7 +252,7 @@ public class TileOPlayControllerTest {
 	public void testLandSuccess(){
 		String error = null;
 		//creating a tileO application
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 
 		//setting the controller
 		PlayController pc = new PlayController(tileO);
@@ -274,7 +274,7 @@ public class TileOPlayControllerTest {
 		currentGame.addTile(tile4);
 
 		//creating to new players
-		Player player1 = new Player(999964, currentGame);
+		Player player1 = new Player(0, currentGame);
 		Player player2 = new Player(5666, currentGame);
 
 		//adding the players to the current game
@@ -299,7 +299,7 @@ public class TileOPlayControllerTest {
 	public void testLandTileNotInList(){
 		String error = null;
 		//creating a tileO application
-		tileO = TileOApplication.getTileO();
+		tileO = new TileO();
 
 		//setting the controller
 		PlayController pc = new PlayController(tileO);
@@ -358,15 +358,21 @@ public class TileOPlayControllerTest {
 		
 		Deck deck = game.getDeck();
 		
+		NormalTile tile = new NormalTile(0 , 0, game);
+		
 		RollDieActionCard drawnCard = new RollDieActionCard(instruction , deck);
 		for(int i = 0 ; i < 32 ; i++){
 			deck.addCard(drawnCard);
 		}
 		deck.setCurrentCard(drawnCard);
 		
+		
 		Player player = new Player(19 , game);
+		
 		game.addPlayer(player);
 		game.setCurrentPlayer(player);
+		
+		player.setCurrentTile(tile);
 		
 		// create a game
 		// test if the playRollDieActionCard passes the test
@@ -583,7 +589,7 @@ public class TileOPlayControllerTest {
 		//add them to the current game list of tiles
 		NormalTile tile1 = new NormalTile ( 0 , 0 , game);
 		game.addTile(tile1);
-		NormalTile tile2 = new NormalTile ( 1 , 0 , game);
+		NormalTile tile2 = new NormalTile ( 40 , 0 , game);
 		game.addTile(tile2);
 		
 		PlayController pc = new PlayController(tileO);
@@ -622,7 +628,7 @@ public class TileOPlayControllerTest {
 		//add them to the current game list of tiles
 		NormalTile tile1 = new NormalTile ( 0 , 0 , game);
 		game.addTile(tile1);
-		NormalTile tile2 = new NormalTile ( 0 , 1 , game);
+		NormalTile tile2 = new NormalTile ( 0 , 40 , game);
 		game.addTile(tile2);
 		
 		PlayController pc = new PlayController(tileO);
