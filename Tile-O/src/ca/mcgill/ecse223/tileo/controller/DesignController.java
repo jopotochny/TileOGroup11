@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.tileo.controller;
 import java.util.List;
 
+import ca.mcgill.ecse223.tileo.application.TileOApplication;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.model.*;
 public class DesignController {
@@ -112,5 +113,51 @@ public class DesignController {
 		for (int i = 1; i <= teleport; i++) {
 			TeleportActionCard teleportCard = new TeleportActionCard("Move to any tile", deck);
 		}
+	}
+	
+	// Create a game which also creates deck and die
+	public Game createGame(int numberOfPlayers) throws InvalidInputException{
+		int numberOfConnectionPieces = 32;
+		Game currentGame = new Game(numberOfConnectionPieces, tileo);
+		tileo.setCurrentGame(currentGame);
+		for(int i=1;i<numberOfPlayers+1;i++){
+			Player player = new Player(i, currentGame);
+		}
+		return currentGame;
+	}
+	
+	// Create Deck
+	public void createDeck() throws InvalidInputException {
+		Game currentGame = TileOApplication.getGame();
+		try {
+			Deck deck = currentGame.getDeck();
+
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+	}
+	
+	// Create Dice
+	public void createDice() throws InvalidInputException {
+		Game currentGame = TileOApplication.getGame();
+		try {
+			Die die = currentGame.getDie();
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+	
+	}
+	
+	// Save design mode
+	public static void saveDesign(){
+		TileOApplication.save();
+	}
+	
+	// Load Design mode
+	public static Game loadDesign(int index){
+		TileOApplication.load();
+		return TileOApplication.getGame(index);
 	}
 }

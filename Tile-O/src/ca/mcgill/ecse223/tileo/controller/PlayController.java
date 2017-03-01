@@ -496,5 +496,16 @@ public class PlayController {
 		return TileOApplication.getTileO().getCurrentGame().getCurrentPlayer();
 	}
 	
+	// Save design mode
+	public static void saveGame(){
+		TileOApplication.save();
+	}
+		
+	// Load Design mode
+	public static Game loadGame(int index){
+		TileOApplication.load();
+		return TileOApplication.getGame(index);
+	}
+	
 
 }
