@@ -45,7 +45,15 @@ public class PlayController {
 
 		List<Player> players = selectedGame.getPlayers();
 
+		if(players.isEmpty() || players.size() == 1){
+
+			throw new InvalidInputException("2 or more players must be defined.");
+
+		}
+
 		for(Player player: players){
+
+
 			if(player.hasStartingTile() == false){
 				throw new InvalidInputException("The starting tile of each player is not defined.");
 			}
@@ -75,14 +83,12 @@ public class PlayController {
 		}
 
 		//setting player 1
-		if(selectedGame.setCurrentPlayer(selectedGame.getPlayers().get(0))){
+		selectedGame.setCurrentPlayer(selectedGame.getPlayers().get(0));
 
-		}
 
 		//set the current connection pieces to the spare connection pieces
 		selectedGame.setCurrentConnectionPieces(selectedGame.SpareConnectionPieces);
 
-		System.out.println("setting the mode game to GAME");
 		//set the mode of the current game to GAME
 		selectedGame.setMode(Game.Mode.GAME);	
 
@@ -98,7 +104,6 @@ public class PlayController {
 		//roll the die to generate a number
 
 		int number = die.roll();
-		System.out.println("generated number: " + number);
 
 		//getting the current player from the current game
 		Player currentPlayer = currentGame.getCurrentPlayer();
@@ -174,17 +179,14 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-		System.out.println("Roll die action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			System.out.println("shuffling");
 			currentDeck.shuffle();			
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
 
-			System.out.println("Play roll die: " + currentDeck.getCurrentCard());
+
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-			System.out.println("Play roll die: " + currentDeck.getCurrentCard());
 		}
 
 
@@ -282,16 +284,16 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-		System.out.println("connect tiles action card");
+
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			System.out.println("shuffling");
+
 			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
-			System.out.println("Play connect tiles: " + currentDeck.getCurrentCard());
+
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-			System.out.println("Play connect tiles: " + currentDeck.getCurrentCard());
+
 		}
 
 		// set the mode of the current game to GAME
@@ -368,16 +370,12 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-		System.out.println("remove connection action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			System.out.println("shuffling");
 			currentDeck.shuffle();		
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
-			System.out.println("remove connection tiles: " + currentDeck.getCurrentCard());
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-			System.out.println("remove connection tiles: " + currentDeck.getCurrentCard());
 		}
 
 		// set the mode of the current game to GAME
@@ -453,17 +451,13 @@ public class PlayController {
 		// if the current card is the last card of the deck
 		// shuffle the deck
 
-		System.out.println("teleport action card");
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			System.out.println("shuffling");
 			currentDeck.shuffle();	
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 
 		}
 		else {
-			System.out.println("Play teleport: " + currentDeck.getCurrentCard());
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-			System.out.println("Play teleport: " + currentDeck.getCurrentCard());
 		}
 
 		// set the mode of the current game to GAME
@@ -475,7 +469,6 @@ public class PlayController {
 	 * he can move nowhere. We should not let him move
 	 */
 	public void noMoves(){
-		System.out.println("changing the current player to the next one");
 		Game currentGame = tileO.getCurrentGame();
 		//getting the current player
 		Player currentPlayer = currentGame.getCurrentPlayer();
@@ -483,25 +476,19 @@ public class PlayController {
 		//getting the index of current player, and the number of total players
 		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
 		int numberOfPlayers = currentGame.numberOfPlayers();
-		System.out.println("current player beforre: " + currentPlayer);
 		//if the current player is the last player
 		if(indexOfPlayer == numberOfPlayers - 1){
-			System.out.println("changing to plauer 1");
 			//getting the first player
 			Player firstPlayer = currentGame.getPlayer(0);
 
 			//setting the current player to the first player
 			currentGame.setCurrentPlayer(firstPlayer);
 		}else{
-			System.out.println("changing to next plauer");
 			//get the next player
 			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-			System.out.println("next Player: " + nextPlayer);
 			//setting the current player to the next player
-			System.out.println(currentGame.setCurrentPlayer(nextPlayer));
+			currentGame.setCurrentPlayer(nextPlayer);
 		}
-
-		System.out.println("current player after: " + currentGame.getCurrentPlayer());
 
 		//set the mode of game of GAME
 		currentGame.setMode(Game.Mode.GAME);	

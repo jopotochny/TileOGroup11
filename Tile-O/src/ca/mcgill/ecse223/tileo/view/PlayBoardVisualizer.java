@@ -137,8 +137,10 @@ public class PlayBoardVisualizer extends JPanel {
 			int numberOfPlayers = game.numberOfPlayers();
 			int tracker=0;
 			List<Player> listOfPlayers = game.getPlayers();
-
+			
+			//loop through all the tiles, and for each one draw a rectangle with a specific color
 			for(Tile tile : currentTiles){
+				
 				g2d.setStroke(thinStroke);
 				Rectangle2D rectangle = new Rectangle2D.Float(tile.getX(), tile.getY(), RECTWIDTH, RECTHEIGHT);
 				rectangles.add(rectangle);
@@ -155,7 +157,7 @@ public class PlayBoardVisualizer extends JPanel {
 
 
 
-				//if the player has to move, color in blue the possible moves the player can take
+				//if the player has to move, color in light gray the possible moves the player can take
 				if(possibleMoves != null){
 					for(Tile blueTile : possibleMoves){
 						if( (blueTile.getX() == tile.getX()) && (blueTile.getY() == tile.getY()) ){
@@ -167,7 +169,6 @@ public class PlayBoardVisualizer extends JPanel {
 				}
 
 				//setting the position of each player				
-				// TODO change starting tile to current Tile !!!!
 				for(Player player : listOfPlayers){
 					Tile playerTile = player.getCurrentTile();
 					if(playerTile.getX() == tile.getX() && playerTile.getY() == tile.getY()){
@@ -191,7 +192,8 @@ public class PlayBoardVisualizer extends JPanel {
 				}
 
 
-				//if the player clicks on any tile, color it in yellow 
+				//if the player clicks on any tile, color it in Cyan
+				//first if, for a selection of 1 tile. and the else is for a selection of two tiles
 				if((selectedTile != null) && (tile.getX() == selectedTile.getX() && tile.getY() == selectedTile.getY())){
 					g2d.setColor(Color.CYAN);
 					g2d.fill(rectangle);
@@ -202,9 +204,6 @@ public class PlayBoardVisualizer extends JPanel {
 					}else if((selectedTile2 != null) && (tile.getX() == selectedTile2.getX() && tile.getY() == selectedTile2.getY())){
 						g2d.setColor(Color.CYAN);
 						g2d.fill(rectangle);
-					}else if ( !(g2d.getColor().equals(Color.LIGHT_GRAY))  ){
-						//g2d.setColor(Color.WHITE);
-						//g2d.fill(rectangle);
 					}
 				}
 
@@ -242,6 +241,7 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 	}
 
+	
 	public void setPossibleMoves(List<Tile> listOfTiles){
 		possibleMoves = listOfTiles;
 		repaint();
@@ -250,9 +250,9 @@ public class PlayBoardVisualizer extends JPanel {
 	public List<Tile> getPossibleMoves(){
 		return possibleMoves;
 	}
-
+	
+	//return the tile selected by the player
 	public Tile getSelectedTile(){
-		//addMouseListeners();
 		if(selectedTile1 != null && selectedTile2 != null){
 			return null;
 		}else if(selectedTile1 != null){
@@ -262,9 +262,9 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 
 	}
-
+	
+	//return the two tiles selected by the player
 	public List<Tile> getSelectedTiles(){
-		//addMouseListeners();
 		if(selectedTile1 != null && selectedTile2 != null){
 			ArrayList<Tile> selectedTiles = new ArrayList<Tile>();
 			selectedTiles.add(selectedTile1);
@@ -278,7 +278,6 @@ public class PlayBoardVisualizer extends JPanel {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		//addMouseListeners();
 		doDrawing(g);
 	}
 

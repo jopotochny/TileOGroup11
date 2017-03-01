@@ -18,47 +18,43 @@
       </players>
       <tiles id="7">
         <NormalTile id="8">
-          <children id="9"/>
-          <neighbours id="10"/>
           <flag>false</flag>
           <x>0</x>
           <y>0</y>
           <hasBeenVisited>false</hasBeenVisited>
-          <connections id="11"/>
+          <connections id="9"/>
           <game reference="3"/>
         </NormalTile>
-        <WinTile id="12">
-          <children id="13"/>
-          <neighbours id="14"/>
+        <WinTile id="10">
           <flag>false</flag>
           <x>2</x>
           <y>2</y>
           <hasBeenVisited>false</hasBeenVisited>
-          <connections id="15"/>
+          <connections id="11"/>
           <game reference="3"/>
         </WinTile>
       </tiles>
-      <connections id="16">
-        <Connection id="17">
+      <connections id="12">
+        <Connection id="13">
           <game reference="3"/>
-          <tiles id="18"/>
+          <tiles id="14"/>
         </Connection>
       </connections>
-      <deck id="19">
-        <cards id="20">
-          <RollDieActionCard id="21">
+      <deck id="15">
+        <cards id="16">
+          <RollDieActionCard id="17">
             <instructions>roll</instructions>
-            <deck reference="19"/>
+            <deck reference="15"/>
           </RollDieActionCard>
-          <TeleportActionCard id="22">
+          <TeleportActionCard id="18">
             <instructions>teleport</instructions>
-            <deck reference="19"/>
+            <deck reference="15"/>
           </TeleportActionCard>
         </cards>
-        <currentCard class="RollDieActionCard" reference="21"/>
+        <currentCard class="RollDieActionCard" reference="17"/>
         <game reference="3"/>
       </deck>
-      <die id="23">
+      <die id="19">
         <game reference="3"/>
       </die>
       <currentPlayer reference="5"/>

@@ -21,10 +21,8 @@ import ca.mcgill.ecse223.tileo.controller.PlayController;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Game.Mode;
-import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
-import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 
 public class PlayTileOPage extends JFrame{
 
@@ -36,10 +34,7 @@ public class PlayTileOPage extends JFrame{
 
 	//save and load game
 	private JButton saveGame;
-	private JButton loadGame;
-	private JComboBox<Integer> loadGameComboBox;
 	private JLabel player;
-	private Integer selectedGame;
 
 	//actions
 	private JTextField deck;
@@ -64,9 +59,6 @@ public class PlayTileOPage extends JFrame{
 	//data elements
 	private String error = null;
 
-	//load game visualization
-	private HashMap<Integer, Game> availableGames;
-
 	private TileO tileO;
 
 	public PlayTileOPage(TileO tileO) {
@@ -83,10 +75,8 @@ public class PlayTileOPage extends JFrame{
 		errorMessage = new JLabel();
 		errorMessage.setForeground(Color.RED);
 
-		//save and load game
+		//save game
 		saveGame = new JButton();
-		loadGame = new JButton();
-		loadGameComboBox = new JComboBox<Integer>();
 		player = new JLabel();
 
 		//board 
@@ -109,7 +99,6 @@ public class PlayTileOPage extends JFrame{
 
 		//global settings and listeners
 		saveGame.setText("Save");
-		loadGame.setText("Load Game");
 
 		//player
 		player.setText("Player 1");
@@ -149,8 +138,6 @@ public class PlayTileOPage extends JFrame{
 
 				.addGroup(layout.createParallelGroup()
 						.addComponent(saveGame)
-						.addComponent(loadGameComboBox)
-						.addComponent(loadGame)
 						.addComponent(player)
 						)
 				.addGroup(layout.createParallelGroup()
@@ -179,7 +166,7 @@ public class PlayTileOPage extends JFrame{
 
 		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {rollDie, connectTiles});
 		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {moveTo, removeConnection});
-		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {saveGame, loadGameComboBox});
+		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {saveGame});
 		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {rollDie, moveTo, teleportTo, remainingPieces});
 		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {connectTiles, removeConnection});
 
@@ -187,8 +174,6 @@ public class PlayTileOPage extends JFrame{
 				layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(saveGame)
-						.addComponent(loadGameComboBox)
-						.addComponent(loadGame)
 						.addComponent(player)
 						)
 				.addGroup(layout.createSequentialGroup()
@@ -221,20 +206,6 @@ public class PlayTileOPage extends JFrame{
 			}
 		});
 
-		loadGameComboBox.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				JComboBox<Integer> cb = (JComboBox<Integer>) evt.getSource();
-				selectedGame = cb.getSelectedIndex();
-			}
-		});
-
-		//load the game selected by the player
-		loadGame.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				Game game =  tileO.getGame(selectedGame);
-				tileO.setCurrentGame(game);
-			}
-		});
 
 		//setting action listeners for die
 		rollDie.addActionListener(new java.awt.event.ActionListener() {
@@ -289,26 +260,15 @@ public class PlayTileOPage extends JFrame{
 			
 			//redraw the board 
 			boardVisualizer.redraw();
-
-			// load game
-			Integer index = 0;
-			availableGames = new HashMap<Integer, Game>();
-			loadGameComboBox.removeAllItems();
-			for(Game game : pc.getGames()){
-				availableGames.put(index, game);
-				loadGameComboBox.addItem(game.getTileO().indexOfGame(game));
-				index++;
-			}
-
-			selectedGame = -1;
-			loadGameComboBox.setSelectedIndex(selectedGame);
+			
 			//console
 			console.setText("");
 
 			//get the player index in order to update the player JLabel
 			int playerIndex = pc.getCurrentPlayerIndex() + 1;
 			String playerLabel = "Player " + playerIndex;
-
+			player.setText(playerLabel);
+			
 			//update the mode of the game
 			mode = pc.getGameMode();
 
@@ -328,7 +288,6 @@ public class PlayTileOPage extends JFrame{
 		removeConnection.setEnabled(false);
 		teleportTo.setEnabled(false);
 
-		System.out.println("game mode in activity: " + tileO.getCurrentGame().getMode());
 		if(mode.equals(Game.Mode.GAME)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
@@ -346,6 +305,7 @@ public class PlayTileOPage extends JFrame{
 		}else if(mode.equals(Game.Mode.GAME_ROLLDIEACTIONCARD)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
+			deck.setText("You got another turn! please roll the die");
 		}else if(mode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
 			teleportTo.setEnabled(true);
 			deck.setText("Teleport to any tile");
@@ -356,7 +316,7 @@ public class PlayTileOPage extends JFrame{
 			teleportTo.setEnabled(false);
 			removeConnection.setEnabled(false);
 			connectTiles.setEnabled(false);
-			console.setText("Congratulation!!! Player " + pc.getCurrentPlayerIndex() + " won the game!");
+			console.setText("Congratulation!!! Player " + (pc.getCurrentPlayerIndex()+1) + " won the game!");
 		}
 
 	}
@@ -383,7 +343,6 @@ public class PlayTileOPage extends JFrame{
 			pc.noMoves();
 			refreshData();
 		}else{
-			// TODO is it good to put it here?
 			//setting the roll die to inactive, so that the player can't roll die more than 1 time
 			rollDie.setEnabled(false);
 		}		
@@ -403,10 +362,7 @@ public class PlayTileOPage extends JFrame{
 		 * third we check if the user chose a tile, if so call the controller and move
 		 * else, the user either chose more than 1 tile, or no tile at all
 		 */
-		
-		System.out.println("possibleMoves: " + possibleMoves);
-		System.out.println("tile: " + tile);
-		
+
 		if(possibleMoves == null){
 			error = "Please roll the die before moving to a new tile";
 		}else if( tile == null){
@@ -465,11 +421,6 @@ public class PlayTileOPage extends JFrame{
 				}
 			}
 			
-			System.out.println(tile1.indexOfConnection(connectionToBeRemoved));
-			System.out.println(tile2.indexOfConnection(connectionToBeRemoved));
-			
-			System.out.println("connection to be removed: " + connectionToBeRemoved);
-			
 			PlayController pc = new PlayController(tileO);
 			try{
 			pc.playRemoveConnectionActionCard(connectionToBeRemoved);
@@ -485,7 +436,7 @@ public class PlayTileOPage extends JFrame{
 
 
 	public void teleportTo(){
-		System.out.println("mode before teleport to: " + tileO.getCurrentGame().getMode());
+
 		Tile tile = boardVisualizer.getSelectedTile();
 		if(tile != null){
 			PlayController pc = new PlayController(tileO);
@@ -497,7 +448,7 @@ public class PlayTileOPage extends JFrame{
 		}else{
 			error = "Please select 1 tile from the board";
 		}
-		System.out.println("mode after teleport to: " + tileO.getCurrentGame().getMode());
+		
 		refreshData();
 	}
 

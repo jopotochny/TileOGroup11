@@ -94,6 +94,7 @@ public class HomePage extends JFrame {
 	layout.setHorizontalGroup(
 			layout.createParallelGroup()
 				.addComponent(welcomeMessage)
+				.addComponent(errorLabel)
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(gotoCreateGame)
 						.addGroup(layout.createParallelGroup()
@@ -115,6 +116,7 @@ public class HomePage extends JFrame {
 	layout.setVerticalGroup(
 			layout.createSequentialGroup()
 				.addComponent(welcomeMessage)
+				.addComponent(errorLabel)
 				.addGroup(layout.createParallelGroup()
 						.addComponent(gotoCreateGame)
 						.addGroup(layout.createSequentialGroup()
@@ -155,6 +157,7 @@ public class HomePage extends JFrame {
 	}
 	
 	public void creatNewGame(){
+		//redirect to the create game page
 		dispose();
 		new DesignTileOPage(tileO).setVisible(true);
 	}
@@ -163,6 +166,7 @@ public class HomePage extends JFrame {
 	public void loadGame(){
 		PlayController pc = new PlayController(tileO);
 		Game game = TileOApplication.getGame(selectedGame);
+		tileO.setCurrentGame(game);
 		try {
 			pc.startGame(tileO.getCurrentGame());
 			dispose();
