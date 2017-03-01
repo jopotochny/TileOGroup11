@@ -3,8 +3,11 @@ package ca.mcgill.ecse223.tileo.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
@@ -16,18 +19,25 @@ import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.TileO;
+import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 
 public class TileODesignControllerTest {
 
 	private TileO tileO;
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		//PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
+	}
 	@Before
 	public void setUp() throws Exception {
 		tileO = TileOApplication.getTileO();
 		tileO.delete();
+		
 	}
 	
 	@After
 	public void tearDown() throws Exception {
+		//tileO.delete();
 	}
 
 	@Test
@@ -35,14 +45,16 @@ public class TileODesignControllerTest {
 		Game theCurrentGame = new Game(32, tileO);
 		tileO.setCurrentGame(theCurrentGame);
 		DesignController tc = new DesignController(tileO);
-		NormalTile theTile1 = new NormalTile( 1, 1, tileO.getCurrentGame());
-		NormalTile theTile2 = new NormalTile( 1, 2, tileO.getCurrentGame());
+		NormalTile theTile1 = new NormalTile( 0, 40, tileO.getCurrentGame());
+		NormalTile theTile2 = new NormalTile( 0, 80, tileO.getCurrentGame());
 		String error = null;
 		try {
 			tc.addConnectionDuringDesign(theTile1, theTile2);
 		} catch (InvalidInputException e) {
+			//error = e.getMessage();
 			fail();
 		}
+		//System.out.println(error);
 		
 		
 	}
@@ -128,7 +140,7 @@ public class TileODesignControllerTest {
 		theConnection.addTile(theTile2);
 		assertEquals(1, tileO.getCurrentGame().numberOfConnections());
 		try {
-			tc.removeConnectionDuringDesign(theConnection);
+			tc.removeConnectionDuringDesign(theTile1, theTile2);
 		} catch (InvalidInputException e) {
 			fail();
 		}
@@ -153,7 +165,7 @@ public class TileODesignControllerTest {
 		theConnection.addTile(testTile2);
 		assertEquals(0, tileO.getCurrentGame().numberOfConnections());
 		try {
-			tc.removeConnectionDuringDesign(theConnection);
+			tc.removeConnectionDuringDesign(testTile1, testTile2);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
 		}
@@ -235,22 +247,22 @@ public class TileODesignControllerTest {
 		DesignController controller = new DesignController(tileO);
 		Game game = new Game(32, tileO);
 
-		Player player = new Player(0, game);
+		//Player player = new Player(0, game);
 
-		NormalTile tile = new NormalTile(1, 2, game);
+		NormalTile tile = new NormalTile(0, 0, game);
 
 		tileO.addGame(game);
 		tileO.setCurrentGame(game);
 		try {
-			controller.identifyStartTile(tile, 0);
+			controller.identifyStartTile(tile);
 		} catch (InvalidInputException e) {
 			fail();
 		}
-		assertEquals(true, player.hasStartingTile());
+		assertEquals(1, game.getPlayers().size());
 	}
 
 	@Test
-	public void testConflictingStart() {
+	public void testToManyPlayers() {
 		DesignController controller = new DesignController(tileO);
 		Game game = new Game(32, tileO);
 		tileO.addGame(game);
@@ -258,19 +270,40 @@ public class TileODesignControllerTest {
 
 		String error = "";
 		NormalTile tile = new NormalTile(1, 1, game);
-		Player player1 = new Player(1, game);
-		player1.setStartingTile(tile);
-		Player player2 = new Player(2, game);
+		Player player1 = new Player(1837671, game);
+		Player player2 = new Player(1201937, game);
+		Player player3 = new Player(1384829, game);
+		Player player4 = new Player(1398746826, game);
+		//player1.setStartingTile(tile);
+		//Player player2 = new Player(25, game);
 
 		try {
-			controller.identifyStartTile(tile, 2);
+			controller.identifyStartTile(tile);
 		} catch (InvalidInputException e) {
 			error += e.getMessage();
 		}
 
-		assertEquals("There is already a player on this starting tile", error);
+		assertEquals("There are already 4 players", error);
 	}
+	@Test
+	public void testPlayerAlreadyExists(){
+		DesignController controller = new DesignController(tileO);
+		Game game = new Game(32, tileO);
+		tileO.addGame(game);
+		tileO.setCurrentGame(game);
 
+		String error = "";
+		NormalTile tile = new NormalTile(0, 0, game);
+		//Player player1 = new Player(123456774, game);
+		//player1.setStartingTile(tile);
+		try {
+			controller.identifyStartTile(tile);
+			controller.identifyStartTile(tile);
+		} catch (InvalidInputException e) {
+			error += e.getMessage();
+		}
+		assertEquals("A player already exists at this tile", error);
+	}
 	@Test
 	public void testConflictingActionTile() {
 		String error = "";

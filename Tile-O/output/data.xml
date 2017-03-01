@@ -4,13 +4,13 @@
       <currentConnectionPieces>32</currentConnectionPieces>
       <players id="4">
         <Player id="5">
-          <number>0</number>
+          <number>111222</number>
           <turnsUntilActive>0</turnsUntilActive>
           <color>RED</color>
           <game reference="3"/>
         </Player>
         <Player id="6">
-          <number>1</number>
+          <number>111223</number>
           <turnsUntilActive>0</turnsUntilActive>
           <color>RED</color>
           <game reference="3"/>

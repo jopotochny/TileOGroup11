@@ -125,7 +125,7 @@ public class TileOPlayControllerTest {
 		currentGame.setWinTile(wintile);
 
 		//creating to new players
-		Player player1 = new Player(0, currentGame);
+		Player player1 = new Player(678987, currentGame);
 		Player player2 = new Player(346, currentGame);
 
 		//adding the players to the current game
@@ -274,7 +274,7 @@ public class TileOPlayControllerTest {
 		currentGame.addTile(tile4);
 
 		//creating to new players
-		Player player1 = new Player(0, currentGame);
+		Player player1 = new Player(999964, currentGame);
 		Player player2 = new Player(5666, currentGame);
 
 		//adding the players to the current game

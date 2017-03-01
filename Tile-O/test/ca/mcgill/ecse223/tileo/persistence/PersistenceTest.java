@@ -56,8 +56,8 @@ public class PersistenceTest {
 		WinTile wintile = new WinTile(2 , 2, currentGame);
 		
 		//Create players
-		Player player1 = new Player(0, currentGame);
-		Player player2 = new Player(1, currentGame);
+		Player player1 = new Player(111222, currentGame);
+		Player player2 = new Player(111223, currentGame);
 		
 		
 		//Create an Action Card
@@ -115,8 +115,8 @@ public class PersistenceTest {
 	    
 	    //check players
 	    assertEquals(2, tileo.getCurrentGame().getPlayers().size());
-	    assertEquals(0, tileo.getCurrentGame().getPlayer(0).getNumber());
-	    assertEquals(1, tileo.getCurrentGame().getPlayer(1).getNumber());	    
+	    assertEquals(111222, tileo.getCurrentGame().getPlayer(0).getNumber());
+	    assertEquals(111223, tileo.getCurrentGame().getPlayer(1).getNumber());	    
 	    
 	    
 	}
