@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
+import ca.mcgill.ecse223.tileo.controller.DesignController;
 import ca.mcgill.ecse223.tileo.controller.PlayController;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.TileO;
@@ -108,7 +109,7 @@ public class TileOPage extends JFrame{
 		// TODO
 		saveGame.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-		        
+		        //PlayController.saveGame();
 			}
 		});
 		
@@ -116,7 +117,7 @@ public class TileOPage extends JFrame{
 		// TODO
 		loadGame.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-		        
+				//PlayController.loadGame(selectedGame);
 			}
 		});
 		

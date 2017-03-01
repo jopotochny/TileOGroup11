@@ -350,6 +350,19 @@ public class TileODesignControllerTest {
 
 		assertEquals("The amount of cards chosen is not 32", error);
 	}
+	
+	@Test
+	public void testPlayerCreation() throws InvalidInputException{
+		//Game game = new Game(32, tileO);
+		//tileO.addGame(game);
+		//tileO.setCurrentGame(game);
+		DesignController tc = new DesignController(tileO);
+		Game game = tc.createGame(3);
+		TileOApplication.reinitializeUniqueNumber(game.getPlayers());
+		//Player player1 = new Player(1, game);
+		assertEquals(game.hasPlayers(), true);
+		assertEquals(game.numberOfPlayers(), 3);
+	}
 		
 }
 
