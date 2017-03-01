@@ -1,11 +1,7 @@
 package ca.mcgill.ecse223.tileo.application;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import ca.mcgill.ecse223.tileo.model.Game;
-import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
 import ca.mcgill.ecse223.tileo.view.HomePage;

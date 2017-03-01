@@ -50,7 +50,11 @@ public class PlayController {
 			throw new InvalidInputException("2 or more players must be defined.");
 
 		}
-
+		
+		if(selectedGame.numberOfConnections() > 32){
+			throw new InvalidInputException("The game should have more than 32 connection tiles.");
+		}
+		
 		for(Player player: players){
 
 
@@ -527,6 +531,10 @@ public class PlayController {
 
 	public void saveGame(){
 		TileOApplication.save();
+	}
+	
+	public int getNumberRemainingPieces(){
+		return Game.SpareConnectionPieces - tileO.getCurrentGame().numberOfConnections();
 	}
 
 	// Load Game in Play Mode

@@ -29,7 +29,6 @@ public class PlayBoardVisualizer extends JPanel {
 	private static final int RECTWIDTH = 30;
 	private static final int RECTHEIGHT = 30;
 	private static final int SPACING = 10;
-	private static final int MAXIMUMNUMBEROFTILESSHOWN  = 196;
 
 	//data elements
 	private TileO tileO;
@@ -134,8 +133,6 @@ public class PlayBoardVisualizer extends JPanel {
 
 			numberOfTiles = game.getTiles().size();
 			List<Tile> currentTiles = game.getTiles();
-			int numberOfPlayers = game.numberOfPlayers();
-			int tracker=0;
 			List<Player> listOfPlayers = game.getPlayers();
 			
 			//loop through all the tiles, and for each one draw a rectangle with a specific color

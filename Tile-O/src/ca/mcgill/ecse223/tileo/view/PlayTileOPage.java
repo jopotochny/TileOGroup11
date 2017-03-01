@@ -3,13 +3,11 @@ package ca.mcgill.ecse223.tileo.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -95,7 +93,7 @@ public class PlayTileOPage extends JFrame{
 
 		//remaining pieces
 		remainingPieces = new JLabel();
-		remainingPieces.setText("Remaining pieces: 32");
+		remainingPieces.setText("");
 
 		//global settings and listeners
 		saveGame.setText("Save");
@@ -269,6 +267,11 @@ public class PlayTileOPage extends JFrame{
 			String playerLabel = "Player " + playerIndex;
 			player.setText(playerLabel);
 			
+			//setting the remaining connection pieces
+			int nbOfConnections = pc.getNumberRemainingPieces();
+			String connectionPieces = "Remaining pieces: " + nbOfConnections;
+			remainingPieces.setText(connectionPieces);
+			
 			//update the mode of the game
 			mode = pc.getGameMode();
 
@@ -291,7 +294,7 @@ public class PlayTileOPage extends JFrame{
 		if(mode.equals(Game.Mode.GAME)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deck.setText("");
+			deck.setText("Roll the die, and move to a tile");
 		}else if(mode.equals(Game.Mode.GAME_CONNECTTILESACTIONCARD)){
 			connectTiles.setEnabled(true);
 			deck.setText("Connect Two Tiles");
