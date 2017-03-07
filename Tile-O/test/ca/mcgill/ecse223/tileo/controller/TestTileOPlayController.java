@@ -13,6 +13,7 @@ import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Game;
+import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
@@ -55,6 +56,9 @@ public class TestTileOPlayController {
 		tileO.addGame(game);
 		tileO.setCurrentGame(game);
 		
+		NormalTile tile1 = new NormalTile ( 0 , 0 , game);
+		
+		
 		Deck deck = game.getDeck();
 		
 		RollDieActionCard drawnCard = new RollDieActionCard(instruction , deck);
@@ -64,6 +68,7 @@ public class TestTileOPlayController {
 		deck.setCurrentCard(drawnCard);
 		
 		Player player = new Player(19 , game);
+		player.setCurrentTile(tile1);
 		game.addPlayer(player);
 		game.setCurrentPlayer(player);
 		
@@ -282,7 +287,7 @@ public class TestTileOPlayController {
 		//add them to the current game list of tiles
 		NormalTile tile1 = new NormalTile ( 0 , 0 , game);
 		game.addTile(tile1);
-		NormalTile tile2 = new NormalTile ( 1 , 0 , game);
+		NormalTile tile2 = new NormalTile ( 40 , 0 , game);
 		game.addTile(tile2);
 		
 		PlayController pc = new PlayController(tileO);
@@ -325,7 +330,7 @@ public class TestTileOPlayController {
 		//add them to the current game list of tiles
 		NormalTile tile1 = new NormalTile ( 0 , 0 , game);
 		game.addTile(tile1);
-		NormalTile tile2 = new NormalTile ( 0 , 1 , game);
+		NormalTile tile2 = new NormalTile ( 0 , 40 , game);
 		game.addTile(tile2);
 		
 		PlayController pc = new PlayController(tileO);
@@ -592,8 +597,81 @@ public class TestTileOPlayController {
 	}
 	
 	
+	@Test
+	public void testLoseTurnActionCardSuccess(){
+		
+		
+		String error = null;
+		String instruction ="loseNextTurn";
+		
+		Game game = new Game  (32 , tileO);
+		tileO.addGame(game);
+		tileO.setCurrentGame(game);
+		
+		Deck deck = game.getDeck();
+		
+		LoseTurnActionCard drawnCard = new LoseTurnActionCard(instruction , deck);
+		for(int i = 0 ; i < 32 ; i++){
+			deck.addCard(drawnCard);
+		}
+		deck.setCurrentCard(drawnCard);
+		
+		Player player = new Player(19897 , game);
+		game.addPlayer(player);
+		game.setCurrentPlayer(player);
+		
+		// create a game
+		// test if the playRollDieActionCard passes the test
+		
+		PlayController pc = new PlayController(tileO);
+		
+		try{
+			pc.playLoseTurnActionCard();
+		}catch (InvalidInputException e){
+		    error = e.getMessage();
+
+		}
+		
+		
+	}
+	
+	@Test
+	public void testLoseTurnActionCardWrongType(){
+		
+		String error = null;
+		String instruction ="losenextTurn";
+		
+		Game game = new Game  (32 , tileO);
+		tileO.addGame(game);
+		tileO.setCurrentGame(game);
+		
+		Deck deck = game.getDeck();
+		
+		TeleportActionCard drawnWrongCard = new TeleportActionCard(instruction , deck);
+		deck.setCurrentCard(drawnWrongCard);
+		
+		// create a game
+		// test if the playRollDieActionCard passes the test
+		
+		PlayController pc = new PlayController(tileO);
+		
+		try{
+			pc.playLoseTurnActionCard();
+		}catch (InvalidInputException e){
+		    error = e.getMessage();
+
+		}
+		
+		// check error
+		  assertEquals("The Current Card is not a LoseTurnActionCard.", error);
+	
+		
+			
+		
+		
 	
 	
+	}
 
 	
 	

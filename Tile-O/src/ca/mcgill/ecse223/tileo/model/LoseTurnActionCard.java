@@ -32,4 +32,18 @@ public class LoseTurnActionCard extends ActionCard
     super.delete();
   }
 
+public void play() {
+	
+	
+	
+	 //get the current game from the TileO application
+	  Game currentGame = super.getDeck().getGame();
+	  
+	//getting the current player from the current game
+	Player currentPlayer = currentGame.getCurrentPlayer();
+	
+	currentPlayer.setTurnsUntilActive(1);
+	
+}
+
 }

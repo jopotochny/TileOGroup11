@@ -9,6 +9,7 @@ import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
+import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
@@ -50,11 +51,11 @@ public class PlayController {
 			throw new InvalidInputException("2 or more players must be defined.");
 
 		}
-		
+
 		if(selectedGame.numberOfConnections() > 32){
 			throw new InvalidInputException("The game should have more than 32 connection tiles.");
 		}
-		
+
 		for(Player player: players){
 
 
@@ -407,7 +408,7 @@ public class PlayController {
 		Deck currentDeck = currentGame.getDeck();
 
 
-		// check if the current card is a RemoveConnectionActionCard
+		// check if the current card is a TeleportActionCard
 
 		if (!(currentDeck.getCurrentCard() instanceof TeleportActionCard)){
 
@@ -467,6 +468,83 @@ public class PlayController {
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);		
 	}
+
+	public void playLoseTurnActionCard() throws InvalidInputException{
+
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof LoseTurnActionCard)){
+
+
+			throw new InvalidInputException("The Current Card is not a LoseTurnActionCard.");
+
+
+		}
+
+		LoseTurnActionCard currentCard = (LoseTurnActionCard) currentDeck.getCurrentCard();
+
+		// the player that drew the card loses his Next turn
+
+
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		currentCard.play();
+
+
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = currentGame.numberOfPlayers();
+
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			Player firstPlayer = currentGame.getPlayer(0);
+
+			//setting the current player to the first player
+			currentGame.setCurrentPlayer(firstPlayer);
+		}else{
+			//get the next player
+			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+
+			//setting the current player to the next player
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
+
+
+
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();	
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);	
+
+
+
+
+	}
+
 
 	/*
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
@@ -532,7 +610,7 @@ public class PlayController {
 	public void saveGame(){
 		TileOApplication.save();
 	}
-	
+
 	public int getNumberRemainingPieces(){
 		return Game.SpareConnectionPieces - tileO.getCurrentGame().numberOfConnections();
 	}
