@@ -8,6 +8,7 @@ import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
+import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.Player.Color;
@@ -193,7 +194,7 @@ public class DesignController {
 			}
 			
 			for (int i = 1; i <= lose; i++) {
-				TeleportActionCard loseTurnCard = new TeleportActionCard("Lose next turn", deck);
+				LoseTurnActionCard loseTurnCard = new LoseTurnActionCard("Lose next turn", deck);
 			}
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 		}
