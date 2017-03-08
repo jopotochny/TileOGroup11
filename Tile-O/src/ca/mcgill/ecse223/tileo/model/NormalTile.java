@@ -35,20 +35,45 @@ public class NormalTile extends Tile
 	  int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
 	  int numberOfPlayers = currentGame.numberOfPlayers();
 	  
-	  //if the current player is the last player
-	  if(indexOfPlayer == numberOfPlayers - 1){
-		  //getting the first player
-		  Player firstPlayer = currentGame.getPlayer(0);
-		  
-		  //setting the current player to the first player
-		  currentGame.setCurrentPlayer(firstPlayer);
-	  }else{
-		  //get the next player
-		  Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-		  
-		  //setting the current player to the next player
-		  currentGame.setCurrentPlayer(nextPlayer);
-	  }
+	  Player nextPlayer = null;
+		
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			nextPlayer = currentGame.getPlayer(0);
+
+		}else{
+			//get the next player
+			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+		}
+		
+		// checking for player inactivity
+		if(nextPlayer.getTurnsUntilActive() != 0){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getTurnsUntilActive() != 0){
+				
+				nextPlayer.setTurnsUntilActive(0);
+				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
+
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = currentGame.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+				}
+			}
+			
+			//found the next active player
+			currentGame.setCurrentPlayer(nextPlayer);
+			
+		}else{
+			//if the next player is active, directly set it to the current one
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
 	  
 	  //set the current tile to has been visited
 	  this.setHasBeenVisited(true);

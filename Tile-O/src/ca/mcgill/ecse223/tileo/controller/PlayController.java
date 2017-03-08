@@ -262,27 +262,53 @@ public class PlayController {
 
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
+
+
+
 		//getting the index of current player, and the number of total players
 		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
 		int numberOfPlayers = currentGame.numberOfPlayers();
 
+		Player nextPlayer = null;
+
 		//if the current player is the last player
 		if(indexOfPlayer == numberOfPlayers - 1){
 			//getting the first player
-			Player firstPlayer = currentGame.getPlayer(0);
+			nextPlayer = currentGame.getPlayer(0);
 
-			//setting the current player to the first player
-			currentGame.setCurrentPlayer(firstPlayer);
 		}else{
 			//get the next player
-			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
 
-			//setting the current player to the next player
-			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
+		// checking for player inactivity
+		if(nextPlayer.getTurnsUntilActive() != 0){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getTurnsUntilActive() != 0){
 
+				nextPlayer.setTurnsUntilActive(0);
+				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
 
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = currentGame.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+				}
+			}
+
+			//found the next active player
+			currentGame.setCurrentPlayer(nextPlayer);
+
+		}else{
+			//if the next player is active, directly set it to the current one
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -354,18 +380,44 @@ public class PlayController {
 		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
 		int numberOfPlayers = currentGame.numberOfPlayers();
 
+		Player nextPlayer = null;
+
 		//if the current player is the last player
 		if(indexOfPlayer == numberOfPlayers - 1){
 			//getting the first player
-			Player firstPlayer = currentGame.getPlayer(0);
+			nextPlayer = currentGame.getPlayer(0);
 
-			//setting the current player to the first player
-			currentGame.setCurrentPlayer(firstPlayer);
 		}else{
 			//get the next player
-			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
 
-			//setting the current player to the next player
+		}
+
+		// checking for player inactivity
+		if(nextPlayer.getTurnsUntilActive() != 0){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getTurnsUntilActive() != 0){
+
+				nextPlayer.setTurnsUntilActive(0);
+				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
+
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = currentGame.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+				}
+			}
+
+			//found the next active player
+			currentGame.setCurrentPlayer(nextPlayer);
+
+		}else{
+			//if the next player is active, directly set it to the current one
 			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
@@ -422,8 +474,6 @@ public class PlayController {
 
 		// teleport the player to the selected tile	
 
-
-
 		currentCard.play(tile);
 
 
@@ -433,23 +483,46 @@ public class PlayController {
 		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
 		int numberOfPlayers = currentGame.numberOfPlayers();
 
+		Player nextPlayer = null;
+
 		//if the current player is the last player
 		if(indexOfPlayer == numberOfPlayers - 1){
 			//getting the first player
-			Player firstPlayer = currentGame.getPlayer(0);
+			nextPlayer = currentGame.getPlayer(0);
 
-			//setting the current player to the first player
-			currentGame.setCurrentPlayer(firstPlayer);
 		}else{
 			//get the next player
-			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
 
-			//setting the current player to the next player
-			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
+		// checking for player inactivity
+		if(nextPlayer.getTurnsUntilActive() != 0){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getTurnsUntilActive() != 0){
 
+				nextPlayer.setTurnsUntilActive(0);
+				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
 
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = currentGame.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+				}
+			}
+
+			//found the next active player
+			currentGame.setCurrentPlayer(nextPlayer);
+
+		}else{
+			//if the next player is active, directly set it to the current one
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -469,6 +542,7 @@ public class PlayController {
 		currentGame.setMode(Game.Mode.GAME);		
 	}
 
+
 	public void playLoseTurnActionCard() throws InvalidInputException{
 
 		// get the current game
@@ -484,11 +558,7 @@ public class PlayController {
 		// check if the current card is a LoseTurnActionCard
 
 		if (!(currentDeck.getCurrentCard() instanceof LoseTurnActionCard)){
-
-
 			throw new InvalidInputException("The Current Card is not a LoseTurnActionCard.");
-
-
 		}
 
 		LoseTurnActionCard currentCard = (LoseTurnActionCard) currentDeck.getCurrentCard();
@@ -505,21 +575,46 @@ public class PlayController {
 		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
 		int numberOfPlayers = currentGame.numberOfPlayers();
 
+		Player nextPlayer = null;
+
 		//if the current player is the last player
 		if(indexOfPlayer == numberOfPlayers - 1){
 			//getting the first player
-			Player firstPlayer = currentGame.getPlayer(0);
+			nextPlayer = currentGame.getPlayer(0);
 
-			//setting the current player to the first player
-			currentGame.setCurrentPlayer(firstPlayer);
 		}else{
 			//get the next player
-			Player nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
 
-			//setting the current player to the next player
-			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
+		// checking for player inactivity
+		if(nextPlayer.getTurnsUntilActive() != 0){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getTurnsUntilActive() != 0){
+
+				nextPlayer.setTurnsUntilActive(0);
+				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
+
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = currentGame.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+				}
+			}
+
+			//found the next active player
+			currentGame.setCurrentPlayer(nextPlayer);
+
+		}else{
+			//if the next player is active, directly set it to the current one
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
 
 
 

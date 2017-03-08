@@ -7,43 +7,41 @@ package ca.mcgill.ecse223.tileo.model;
 public class LoseTurnActionCard extends ActionCard
 {
 
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
+	//------------------------
+	// MEMBER VARIABLES
+	//------------------------
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
+	//------------------------
+	// CONSTRUCTOR
+	//------------------------
 
-  public LoseTurnActionCard(String aInstructions, Deck aDeck)
-  {
-    super(aInstructions, aDeck);
-  }
+	public LoseTurnActionCard(String aInstructions, Deck aDeck)
+	{
+		super(aInstructions, aDeck);
+	}
 
-  //------------------------
-  // INTERFACE
-  //------------------------
-  public Game.Mode getActionCardGameMode(){
-	  return Game.Mode.GAME_LOSETURNACTIONCARD;
-  }
-  
-  public void delete()
-  {
-    super.delete();
-  }
+	//------------------------
+	// INTERFACE
+	//------------------------
+	public Game.Mode getActionCardGameMode(){
+		return Game.Mode.GAME_LOSETURNACTIONCARD;
+	}
 
-public void play() {
-	
-	
-	
-	 //get the current game from the TileO application
-	  Game currentGame = super.getDeck().getGame();
-	  
-	//getting the current player from the current game
-	Player currentPlayer = currentGame.getCurrentPlayer();
-	
-	currentPlayer.setTurnsUntilActive(1);
-	
-}
+	public void delete()
+	{
+		super.delete();
+	}
+
+	public void play() {
+
+		//get the current game from the TileO application
+		Game currentGame = super.getDeck().getGame();
+
+		//getting the current player from the current game
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		currentPlayer.setTurnsUntilActive(1);
+
+	}
 
 }
