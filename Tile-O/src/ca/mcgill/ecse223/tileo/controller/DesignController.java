@@ -165,14 +165,14 @@ public class DesignController {
 			
 		}
 
-		public void selectCards(int connect, int rollDie, int remove, int teleport)
+		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
 
 			Deck deck = game.getDeck(); 
 
-			if (( connect + rollDie + remove + teleport) != 32) {
+			if (( connect + rollDie + remove + teleport + lose) != 32) {
 				throw new InvalidInputException("The amount of cards chosen is not 32");
 			}
 
@@ -190,6 +190,10 @@ public class DesignController {
 
 			for (int i = 1; i <= teleport; i++) {
 				TeleportActionCard teleportCard = new TeleportActionCard("Move to any tile", deck);
+			}
+			
+			for (int i = 1; i <= lose; i++) {
+				TeleportActionCard loseTurnCard = new TeleportActionCard("Lose next turn", deck);
 			}
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 		}

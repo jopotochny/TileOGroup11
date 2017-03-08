@@ -239,7 +239,7 @@ public class DesignBoardVisualizer extends JPanel {
 						descont.addTileToBoard((int)Math.round(rect.getX()), (int)Math.round(rect.getY()));
 					} catch (InvalidInputException e1) {
 						// TODO Auto-generated catch block
-						errorMsg += e1.getMessage();
+						errorMsg = e1.getMessage();
 						e1.printStackTrace();
 					}
 					tiles.put(rect, game.getTile(game.getTiles().size() - 1));
@@ -288,7 +288,7 @@ public class DesignBoardVisualizer extends JPanel {
 			try{
 				descont.removeTileFromBoard(tile);
 			}catch(InvalidInputException e1){
-				errorMsg += e1.getMessage();
+				errorMsg = e1.getMessage();
 				e1.printStackTrace();
 			}
 			if(!errorMsg.trim().equals("")){
@@ -323,7 +323,7 @@ public class DesignBoardVisualizer extends JPanel {
 			try{
 				descont.identifyWinTile((int)Math.round(rect.getX()), (int)Math.round(rect.getY()));;
 			} catch(InvalidInputException e1){
-				errorMsg += e1.getMessage();			
+				errorMsg = e1.getMessage();			
 			}
 			tiles.put(rect, game.getTile(game.getTiles().size()-1));
 			
@@ -366,7 +366,7 @@ public class DesignBoardVisualizer extends JPanel {
 			} catch (InvalidInputException e2) {
 				// TODO: handle exception
 				wasConnected++;
-				errorMsg += e2.getMessage();				
+				errorMsg = e2.getMessage();				
 			}
 			
 			if(wasConnected == 0)
@@ -417,7 +417,7 @@ public class DesignBoardVisualizer extends JPanel {
 			} catch (InvalidInputException e2) {
 				// TODO: handle exception
 				wasConnected++;
-				errorMsg += e2.getMessage();
+				errorMsg = e2.getMessage();
 				
 			}
 			
@@ -452,7 +452,7 @@ public class DesignBoardVisualizer extends JPanel {
 						descont.identifyStartTile(start);
 					} catch (InvalidInputException e1) {
 						// TODO Auto-generated catch block
-						errorMsg += e1.getMessage();
+						errorMsg = e1.getMessage();
 						break;
 					}
 					
@@ -484,7 +484,7 @@ public class DesignBoardVisualizer extends JPanel {
 						try{
 							descont.identifyActionTile((int)Math.round(rect.getX()), (int)Math.round(rect.getY()), inactivity);
 						}catch(InvalidInputException e1){
-							errorMsg += e1.getMessage();
+							errorMsg = e1.getMessage();
 						}
 						
 						tiles.put(rect, game.getTile(game.getTiles().size()-1));
