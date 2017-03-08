@@ -165,7 +165,7 @@ public class DesignController {
 			
 		}
 
-		public void selectCards(int connect, int rollDie, int remove, int teleport,int lose)
+		public void selectCards(int connect, int rollDie, int remove, int teleport)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
@@ -190,10 +190,6 @@ public class DesignController {
 
 			for (int i = 1; i <= teleport; i++) {
 				TeleportActionCard teleportCard = new TeleportActionCard("Move to any tile", deck);
-			}
-			
-			for (int i = 1; i <= lose; i++) {
-				TeleportActionCard loseTurnCard = new TeleportActionCard("Lose next turn", deck);
 			}
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 		}
@@ -240,7 +236,8 @@ public class DesignController {
 	
 	// Load Design mode
 	public static Game loadDesign(int index){
-		TileOApplication.load();
-		return TileOApplication.getGame(index);
+		TileO tileo = TileOApplication.load();
+		Game game = tileo.getGame(index);
+		return game;
 	}
 }
