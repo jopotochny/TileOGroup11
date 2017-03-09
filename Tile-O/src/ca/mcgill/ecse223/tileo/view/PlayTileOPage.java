@@ -56,6 +56,7 @@ public class PlayTileOPage extends JFrame{
 
 	//data elements
 	private String error = null;
+	private String deckText = "";
 
 	private TileO tileO;
 
@@ -281,9 +282,12 @@ public class PlayTileOPage extends JFrame{
 		setButtonActivity();
 		
 		error = "";
+		deckText = "";
 	}
 
 	private void setButtonActivity(){
+		
+		PlayController pc = new PlayController(tileO);
 		
 		rollDie.setEnabled(false);
 		moveTo.setEnabled(false);
@@ -294,26 +298,32 @@ public class PlayTileOPage extends JFrame{
 		if(mode.equals(Game.Mode.GAME)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deck.setText("Roll the die, and move to a tile");
+			deckText += " Roll the die, and move to a tile";
+			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_CONNECTTILESACTIONCARD)){
 			connectTiles.setEnabled(true);
-			deck.setText("Connect Two Tiles");
+			deckText += "Connect Two Tiles";
+			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_LOSETURNACTIONCARD)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deck.setText("Sorry, you lost your turn");
+			deckText += "Sorry, you lost your turn. Please player " + (pc.getCurrentPlayerIndex() + 1) + " roll a die.";
+			deck.setText(deckText);
+			loseTurn();
 		}else if(mode.equals(Game.Mode.GAME_REMOVECONNECTIONACTIONCARD)){
 			removeConnection.setEnabled(true);
-			deck.setText("Please remove a connection from the board");
+			deckText += "Please remove a connection from the board";
+			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_ROLLDIEACTIONCARD)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deck.setText("You got another turn! please roll the die");
+			deckText += "You got another turn! please roll the die";
+			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
 			teleportTo.setEnabled(true);
-			deck.setText("Teleport to any tile");
+			deckText += "Teleport to any tile";
+			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_WON)){
-			PlayController pc = new PlayController(tileO);
 			rollDie.setEnabled(false);
 			moveTo.setEnabled(false);
 			teleportTo.setEnabled(false);
@@ -404,7 +414,18 @@ public class PlayTileOPage extends JFrame{
 		refreshData();
 	}
 
-
+	private void loseTurn(){
+		PlayController pc = new PlayController(tileO);
+		try {
+			pc.playLoseTurnActionCard();
+		} catch (InvalidInputException e) {
+			
+			error = e.getMessage();
+		}
+		
+		refreshData();
+	}
+	
 	private void removeConnectionBetweenTiles(){
 
 		List<Tile> tilesToConnect = boardVisualizer.getSelectedTiles();

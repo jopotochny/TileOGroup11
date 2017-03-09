@@ -119,6 +119,8 @@ public class PlayController {
 		return tiles;
 	}
 
+
+	//TODO check if it's necessary to set the mode here (already set in the model)
 	public void land(Tile tile) throws InvalidInputException{
 		//getting the current game
 		Game currentGame = tileO.getCurrentGame();
@@ -147,9 +149,12 @@ public class PlayController {
 		//if the tile is of type ActionTile
 		else if(tile instanceof ActionTile){
 			ActionTile actionTile = (ActionTile) tile;
+
+			//if the action tile is active, call the land of the action tile and set the inactivity period
+			//otherwise, it acts like a normal tile
+
 			actionTile.land();
 		}
-
 	}
 
 	public List<Tile> playRollDieActionCard() throws InvalidInputException{
@@ -310,6 +315,10 @@ public class PlayController {
 			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
+		//decrement the inactivity period of inactive action tiles
+		decrementInactiveActionTiles();
+
+
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
 		// if the current card is the last card of the deck
@@ -421,6 +430,8 @@ public class PlayController {
 			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
+		//decrement the inactivity period of inactive action tiles
+		decrementInactiveActionTiles();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -524,6 +535,10 @@ public class PlayController {
 			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
+
+		//decrement the inactivity period of inactive action tiles
+		decrementInactiveActionTiles();
+
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
 		// if the current card is the last card of the deck
@@ -590,6 +605,7 @@ public class PlayController {
 
 		// checking for player inactivity
 		if(nextPlayer.getTurnsUntilActive() != 0){
+			System.out.println("player: " + nextPlayer.getNumber() + " is inactive");
 			//getting the next player that is active (while loop to take care 
 			//of cases where more than two players are inactive)
 			while(nextPlayer.getTurnsUntilActive() != 0){
@@ -607,16 +623,19 @@ public class PlayController {
 					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
 				}
 			}
-
+			
+			System.out.println("setting the next player" + nextPlayer.getNumber() + " in 'inactive' player");
 			//found the next active player
 			currentGame.setCurrentPlayer(nextPlayer);
 
 		}else{
 			//if the next player is active, directly set it to the current one
+			System.out.println("setting the next player in 'active' player");
 			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
-
+		//decrement the inactivity period of inactive action tiles
+		decrementInactiveActionTiles();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -635,11 +654,9 @@ public class PlayController {
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);	
 
-
-
-
 	}
 
+	// TODO
 
 	/*
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
@@ -681,6 +698,25 @@ public class PlayController {
 		}
 		return false;
 	}
+
+	//decrement the inactivity of the inactive action tiles
+	private void decrementInactiveActionTiles(){
+		for( Tile tile : tileO.getCurrentGame().getTiles() ){
+			if( tile instanceof ActionTile){
+				ActionTile actionTile = (ActionTile) tile;
+
+				//decrement the inactivity period if it's bigger than 0
+				if(actionTile.getTurnsUntilActive() != 0){
+					actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
+				}
+			}
+		}
+	}
+
+	private void updatePlayers(){
+
+	}
+
 
 	//get games from the model
 	public List<Game> getGames(){
