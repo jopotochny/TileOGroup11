@@ -353,7 +353,6 @@ public class DesignBoardVisualizer extends JPanel {
 			for(Rectangle2D r : connectableList){
 				if(r.contains(x,y)){
 					connectArray[count] = tiles.get(r);
-					System.out.println("count is " + count);
 					count++;
 				}
 			}
