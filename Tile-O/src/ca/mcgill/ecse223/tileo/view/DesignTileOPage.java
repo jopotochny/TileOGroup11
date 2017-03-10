@@ -404,7 +404,13 @@ public class DesignTileOPage extends JFrame{
 				//check if its been clicked once or twice
 				//set boolean accordingly				
 				if(counter1%2 == 0){
-					inactivity = Integer.parseInt(inactivityText.getText());
+					if(!inactivityText.getText().isEmpty())
+						inactivity = Integer.parseInt(inactivityText.getText());
+						
+					else{
+						console.setText("There is no inactivity value");
+						return;
+					}
 					boardVisualizer.inactivity = inactivity;
 
 					boardVisualizer.setEnable6(true);

@@ -37,6 +37,17 @@ public class DesignController {
 
 		public void addConnectionDuringDesign(Tile tileOne, Tile tileTwo) throws InvalidInputException{
 			//System.out.println("tile one coordinates " + tileOne.getX() + " " + tileOne.getY() + " tile2 coords " + tileTwo.getX() + " " + tileTwo.getY());
+			System.out.println("the nuber of connections is " + tileo.getCurrentGame().getConnections().size());
+			
+			for(Connection c : tileo.getCurrentGame().getConnections()){
+			
+				System.out.println(c.getTile(0).getX() + " " +  c.getTile(0).getY() + " nother " + c.getTile(1).getX() + " " + c.getTile(1).getY());
+				if((c.getTile(0) == tileOne && c.getTile(1) == tileTwo) || (c.getTile(1) == tileOne && c.getTile(0) == tileTwo)){
+					
+					throw new InvalidInputException("This connection already exists");
+					
+				}
+			}
 			if((this.tileo.getCurrentGame().indexOfTile(tileOne) == -1) || (this.tileo.getCurrentGame().indexOfTile(tileTwo) == -1)){
 				
 				throw new InvalidInputException("One or more of the tiles do not exist");
