@@ -212,6 +212,16 @@ public class DesignTileOPage extends JFrame{
 			}
 		});
 
+		saveGame.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				cont.saveGame();
+				
+			}
+		});
+		
 		removeConnection.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				//check if its been clicked once or twice

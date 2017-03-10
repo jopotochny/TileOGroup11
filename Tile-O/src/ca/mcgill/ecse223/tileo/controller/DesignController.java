@@ -31,6 +31,10 @@ public class DesignController {
 			return game;
 		}
 		
+		public void saveGame(){
+			TileOApplication.save();
+		}
+
 		public void addConnectionDuringDesign(Tile tileOne, Tile tileTwo) throws InvalidInputException{
 			//System.out.println("tile one coordinates " + tileOne.getX() + " " + tileOne.getY() + " tile2 coords " + tileTwo.getX() + " " + tileTwo.getY());
 			if((this.tileo.getCurrentGame().indexOfTile(tileOne) == -1) || (this.tileo.getCurrentGame().indexOfTile(tileTwo) == -1)){
