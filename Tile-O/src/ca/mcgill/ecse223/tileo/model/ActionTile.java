@@ -62,7 +62,6 @@ public class ActionTile extends Tile
 		//set the current tile to has been visited
 		this.setHasBeenVisited(true);
 
-		System.out.println("turns until active: " + this.getTurnsUntilActive()); 
 		if(this.getTurnsUntilActive() == 0){
 
 			//get the current deck
@@ -78,33 +77,28 @@ public class ActionTile extends Tile
 				RollDieActionCard rollDieActionCard = (RollDieActionCard) currentCard;
 				mode = rollDieActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
-				System.out.println("mode after action tile is:" + currentGame.getMode() + "  should be: " + mode);
 			}
 			//if the type of the card is connect tiles, get the mode and set it in the current game
 			else if(currentCard instanceof ConnectTilesActionCard){
 				ConnectTilesActionCard connectTilesActionCard = (ConnectTilesActionCard) currentCard;
 				mode = connectTilesActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
-				System.out.println("mode after action tile is:" + currentGame.getMode() + "  should be: " + mode);
 			}
 			//if the type of the card is remove connection, get the mode and set it in the current game
 			else if(currentCard instanceof RemoveConnectionActionCard){
 				RemoveConnectionActionCard removeConnectionActionCard = (RemoveConnectionActionCard) currentCard;
 				mode = removeConnectionActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
-				System.out.println("mode after action tile is:" + currentGame.getMode() + "  should be: " + mode);
 			}
 			//if the type of the card is lost turn, get the mode and set it in the current game
 			else if(currentCard instanceof LoseTurnActionCard){
 				LoseTurnActionCard loseTurnActionCard = (LoseTurnActionCard) currentCard;
 				mode = loseTurnActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
-				System.out.println("mode after action tile is:" + currentGame.getMode() + "  should be: " + mode);
 			}else if(currentCard instanceof TeleportActionCard){
 				TeleportActionCard loseTurnActionCard = (TeleportActionCard) currentCard;
 				mode = loseTurnActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
-				System.out.println("mode after action tile is:" + currentGame.getMode() + "  should be: " + mode);
 			}
 			
 			this.setTurnsUntilActive( this.getInactivityPeriod() + 1 );

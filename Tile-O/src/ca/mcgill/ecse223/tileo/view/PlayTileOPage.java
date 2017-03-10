@@ -298,30 +298,32 @@ public class PlayTileOPage extends JFrame{
 		if(mode.equals(Game.Mode.GAME)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deckText += " Roll the die, and move to a tile";
+			if(deckText.equals("")){
+				deckText = " Roll the die, and move to a tile";
+			}
 			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_CONNECTTILESACTIONCARD)){
 			connectTiles.setEnabled(true);
-			deckText += "Connect Two Tiles";
+			deckText = "Connect Two Tiles";
 			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_LOSETURNACTIONCARD)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deckText += "Sorry, you lost your turn. Please player " + (pc.getCurrentPlayerIndex() + 1) + " roll a die.";
+			deckText = "Sorry, you lost your turn. Please next player roll a die.";
 			deck.setText(deckText);
 			loseTurn();
 		}else if(mode.equals(Game.Mode.GAME_REMOVECONNECTIONACTIONCARD)){
 			removeConnection.setEnabled(true);
-			deckText += "Please remove a connection from the board";
+			deckText = "Please remove a connection from the board";
 			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_ROLLDIEACTIONCARD)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
-			deckText += "You got another turn! please roll the die";
+			deckText = "You got another turn! please roll the die";
 			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
 			teleportTo.setEnabled(true);
-			deckText += "Teleport to any tile";
+			deckText = "Teleport to any tile";
 			deck.setText(deckText);
 		}else if(mode.equals(Game.Mode.GAME_WON)){
 			rollDie.setEnabled(false);

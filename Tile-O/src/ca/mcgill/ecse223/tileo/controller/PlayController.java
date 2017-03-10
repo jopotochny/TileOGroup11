@@ -605,7 +605,6 @@ public class PlayController {
 
 		// checking for player inactivity
 		if(nextPlayer.getTurnsUntilActive() != 0){
-			System.out.println("player: " + nextPlayer.getNumber() + " is inactive");
 			//getting the next player that is active (while loop to take care 
 			//of cases where more than two players are inactive)
 			while(nextPlayer.getTurnsUntilActive() != 0){
@@ -624,13 +623,11 @@ public class PlayController {
 				}
 			}
 			
-			System.out.println("setting the next player" + nextPlayer.getNumber() + " in 'inactive' player");
 			//found the next active player
 			currentGame.setCurrentPlayer(nextPlayer);
 
 		}else{
 			//if the next player is active, directly set it to the current one
-			System.out.println("setting the next player in 'active' player");
 			currentGame.setCurrentPlayer(nextPlayer);
 		}
 
