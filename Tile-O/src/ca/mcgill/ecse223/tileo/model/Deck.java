@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 57 "../../../../../TileO.ump"
+// line 442 "../../../../../TileO.ump"
 public class Deck
 {
 
@@ -107,8 +107,8 @@ public class Deck
     {
       return new ActionCard(aInstructions, this);
     }
-  }*/
-
+  }
+*/
   public boolean addCard(ActionCard aCard)
   {
     boolean wasAdded = false;
@@ -183,17 +183,6 @@ public class Deck
     wasSet = true;
     return wasSet;
   }
-  
-  public void shuffle(){
-	  Collections.shuffle(cards);
-	  /*Random random = new Random();
-	  int generatedNumber;
-	  
-	  for(ActionCard card : this.getCards()){
-		  generatedNumber = random.nextInt(32);
-		  this.addOrMoveCardAt(card, generatedNumber);
-	  }    */
-  }
 
   public void delete()
   {
@@ -211,6 +200,11 @@ public class Deck
     {
       existingGame.delete();
     }
+  }
+
+  // line 447 "../../../../../TileO.ump"
+   public void shuffle(){
+    Collections.shuffle(cards);
   }
 
 }

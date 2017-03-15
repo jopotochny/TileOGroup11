@@ -5,58 +5,59 @@ package ca.mcgill.ecse223.tileo.model;
 
 import java.util.Random;
 
-// line 88 "../../../../../TileO.ump"
+// line 590 "../../../../../TileO.ump"
 public class Die
 {
 
-	//------------------------
-	// MEMBER VARIABLES
-	//------------------------
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
 
-	//Die Associations
-	private Game game;
+  //Die Associations
+  private Game game;
 
-	//------------------------
-	// CONSTRUCTOR
-	//------------------------
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
 
-	public Die(Game aGame)
-	{
-		if (aGame == null || aGame.getDie() != null)
-		{
-			throw new RuntimeException("Unable to create Die due to aGame");
-		}
-		game = aGame;
-	}
+  public Die(Game aGame)
+  {
+    if (aGame == null || aGame.getDie() != null)
+    {
+      throw new RuntimeException("Unable to create Die due to aGame");
+    }
+    game = aGame;
+  }
 
-	public Die(int aCurrentConnectionPiecesForGame, Deck aDeckForGame, TileO aTileOForGame)
-	{
-		game = new Game(aCurrentConnectionPiecesForGame, aDeckForGame, this, aTileOForGame);
-	}
+  public Die(int aCurrentConnectionPiecesForGame, Deck aDeckForGame, TileO aTileOForGame)
+  {
+    game = new Game(aCurrentConnectionPiecesForGame, aDeckForGame, this, aTileOForGame);
+  }
 
-	//------------------------
-	// INTERFACE
-	//------------------------
+  //------------------------
+  // INTERFACE
+  //------------------------
 
-	public Game getGame()
-	{
-		return game;
-	}
+  public Game getGame()
+  {
+    return game;
+  }
 
-	public int roll(){
-		Random random = new Random();
+  public void delete()
+  {
+    Game existingGame = game;
+    game = null;
+    if (existingGame != null)
+    {
+      existingGame.delete();
+    }
+  }
+
+  // line 593 "../../../../../TileO.ump"
+   public int roll(){
+    Random random = new Random();
 		int generatedNumber = random.nextInt(6) + 1;
 		return generatedNumber;
-	}
-
-	public void delete()
-	{
-		Game existingGame = game;
-		game = null;
-		if (existingGame != null)
-		{
-			existingGame.delete();
-		}
-	}
+  }
 
 }

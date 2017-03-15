@@ -4,29 +4,35 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 50 "../../../../../TileO.ump"
+// line 424 "../../../../../TileO.ump"
 public class WinTile extends Tile
 {
 
-	//------------------------
-	// MEMBER VARIABLES
-	//------------------------
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
 
-	//------------------------
-	// CONSTRUCTOR
-	//------------------------
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
 
-	public WinTile(int aX, int aY, Game aGame)
-	{
-		super(aX, aY, aGame);
-	}
+  public WinTile(int aX, int aY, Game aGame)
+  {
+    super(aX, aY, aGame);
+  }
 
-	//------------------------
-	// INTERFACE
-	//------------------------
+  //------------------------
+  // INTERFACE
+  //------------------------
 
-	public void land(){
-		//getting the current game for which the tile belongs to
+  public void delete()
+  {
+    super.delete();
+  }
+
+  // line 428 "../../../../../TileO.ump"
+   public void land(){
+    //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();
 
 		//set the current tile to has been visited
@@ -34,11 +40,6 @@ public class WinTile extends Tile
 
 		//set the mode of game of GAME
 		currentGame.setMode(Game.Mode.GAME_WON);
-	}
-
-	public void delete()
-	{
-		super.delete();
-	}
+  }
 
 }

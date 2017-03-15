@@ -3,9 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-import java.util.List;
-
-// line 76 "../../../../../TileO.ump"
+// line 510 "../../../../../TileO.ump"
 public class RemoveConnectionActionCard extends ActionCard
 {
 
@@ -26,26 +24,19 @@ public class RemoveConnectionActionCard extends ActionCard
   // INTERFACE
   //------------------------
 
-  //TODO check if this the right way to do it
-public void play(Connection connection){
-	  
-	  /*List<Tile> connectedTiles = connection.getTiles();
-	  
-	  for(Tile tile: connectedTiles){
-		  System.out.println(connection.removeTile(tile));
-	  }*/
-	
-	 connection.delete();
-	 
-  }
-  
-  public Game.Mode getActionCardGameMode(){
-	  return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
-  }
-  
   public void delete()
   {
     super.delete();
+  }
+
+  // line 515 "../../../../../TileO.ump"
+   public void play(Connection connection){
+    connection.delete();
+  }
+
+  // line 520 "../../../../../TileO.ump"
+   public Game.Mode getActionCardGameMode(){
+    return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
   }
 
 }

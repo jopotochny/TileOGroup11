@@ -2,16 +2,9 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.*;
 
-
-
-// line 30 "../../../../../TileO.ump"
+// line 188 "../../../../../TileO.ump"
 public abstract class Tile
 {
 
@@ -19,16 +12,6 @@ public abstract class Tile
   // MEMBER VARIABLES
   //------------------------
 
-	
-  // TODO remove this maybe	
- // ArrayList<Tile> children = new ArrayList<Tile>();
- // ArrayList<Tile> neighbours = new ArrayList<Tile>();
-//  ArrayList<Tile> toBeDeleted = new ArrayList<Tile>();
-//  ArrayList<Tile> coveredHashKey = new ArrayList<Tile>();
-//  Map<Tile, List<Tile>> backTracker = new HashMap<Tile, List<Tile>>();
-  boolean flag = false;
-	  
-	  
   //Tile Attributes
   private int x;
   private int y;
@@ -248,34 +231,6 @@ public abstract class Tile
     wasSet = true;
     return wasSet;
   }
-  
-  
-  
-  
-  
-  public List<Tile> getNeighbours(){
-	  List<Tile> neighbours = new ArrayList<Tile>();
-	  
-	  
-	  List<Connection> currentTileConnections = this.getConnections();
-	  
-	  for(Connection connection : currentTileConnections){
-		  
-		for(Tile connectedTiles : connection.getTiles()){
-			if (connectedTiles != this){
-				neighbours.add(connectedTiles);
-			}
-		}
-		  
-	  }
-	  
-	  
-	  return neighbours;
-  }
-  
- 
-  //abstract method
-  public abstract void land();
 
   public void delete()
   {
@@ -297,6 +252,28 @@ public abstract class Tile
     placeholderGame.removeTile(this);
   }
 
+  // line 197 "../../../../../TileO.ump"
+   public List<Tile> getNeighbours(){
+    List<Tile> neighbours = new ArrayList<Tile>();
+	  
+	  
+	  List<Connection> currentTileConnections = this.getConnections();
+	  
+	  for(Connection connection : currentTileConnections){
+		  
+		for(Tile connectedTiles : connection.getTiles()){
+			if (connectedTiles != this){
+				neighbours.add(connectedTiles);
+			}
+		}
+		  
+	  }
+	  
+	  
+	  return neighbours;
+  }
+
+   public abstract void land();
 
   public String toString()
   {

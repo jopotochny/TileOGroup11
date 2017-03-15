@@ -25,6 +25,164 @@ class Player {
   0..4 -> 0..1 Tile currentTile;
   unique Integer number;
   Integer turnsUntilActive = 0;
+  
+  public List<Tile> getPossibleMoves(Tile startTile , int moves){
+	  
+	  ArrayList<ArrayList<Tile>> pastVisits = new ArrayList<ArrayList<Tile>>();
+	  	  
+	  boolean flag = true;
+	
+	  
+	  ArrayList<ArrayList<Tile>> children = new ArrayList<ArrayList<Tile>>();
+	  
+	  // at first , add the first tile to the list of visited tiles
+	 
+	  // while the number of moves hasn't been reached
+	  while (moves > 0){
+		  
+		  ArrayList<ArrayList<Tile>> childrenTwo = new ArrayList<ArrayList<Tile>>();
+		  ArrayList<ArrayList<Tile>> duplicates = new ArrayList<ArrayList<Tile>>();
+
+		  
+		  ArrayList<Tile> visitedTiles = new ArrayList<Tile>();
+		  if(flag == true){
+			  
+		  ArrayList<Tile> visitedTilesBaseCase = new ArrayList<Tile>();
+		  visitedTilesBaseCase.add(startTile);
+		  
+		  pastVisits.add(visitedTilesBaseCase);
+		  flag = false;
+		  }
+		  
+		  // loop through every previously visited Tile
+		  for (Tile tile : pastVisits.get(pastVisits.size()-1)){
+			  
+			  
+			  
+			  ArrayList<Tile> tempChildren = new ArrayList<Tile>();
+			  // get the neighbors of every child
+			  
+			  for( Tile tiles : tile.getNeighbours()){	
+				 
+				  	tempChildren.add(tiles);	  
+				 }
+			  
+
+			  children.add(tempChildren);
+			  
+		  }
+		  
+		  
+		  //we passed over every visited tile , we can clear the list
+		  //now we have every neighbor , we want to check if they are
+		  //contained in the last array of the pastVisited array of arrays
+		  
+		  
+		  //but first we have to check for duplicate sets
+		  //if there are any , take of them and put it in the list of children
+		  
+		  
+		  //checking for duplicate sets , adding them directly to our final list of next children
+		  int checkOne = 0;
+		 
+		  for(ArrayList<Tile> tileList : children){
+			  int checkTwo = 0;
+			  
+			  for(ArrayList<Tile> tileListTwo : children){
+				  
+				  if((tileList.containsAll(tileListTwo))&&(tileListTwo.containsAll(tileList)) ){
+
+					 if( checkOne != checkTwo){
+
+						  for(Tile tilesTest : tileList){
+
+						if(!duplicates.contains(tileList)){
+					  duplicates.add(tileList);
+						}
+					  }
+					 }
+				  }
+				  
+				  
+				  checkTwo++;
+			  }		  
+			  checkOne++;
+		  }
+		  
+		  //for every list of child , only keep the ones that do not appear in the last visited set
+
+		  int lastElementIndex = pastVisits.size();
+		  if(lastElementIndex >= 2){
+			 
+
+			  ArrayList<Tile> checker = pastVisits.get(pastVisits.size()-2);
+
+			 
+		  for(ArrayList<Tile> tileListAgain : children){
+			  ArrayList<Tile> temp = new ArrayList<Tile>();
+			  for(Tile tile : tileListAgain){
+				  
+				  if(!checker.contains(tile)){
+					  
+					  temp.add(tile);
+					  
+				  }
+			  }
+			  
+			  childrenTwo.add(temp);
+			  
+		  }
+		  
+		  //for the base case since there is no previous visited tile
+		  }else{
+
+
+			  for(ArrayList<Tile> tileListAgainTwo : children){
+				  ArrayList<Tile> tempTwo = new ArrayList<Tile>();
+
+				  for(Tile tile : tileListAgainTwo){	
+					  
+
+						  tempTwo.add(tile);
+						  			  
+			  }
+
+			  childrenTwo.add(tempTwo);
+		  }
+			  
+			  
+		  }	  
+		children.clear();
+		visitedTiles.clear();
+		
+		for(ArrayList<Tile> moreLists : childrenTwo){
+			for(Tile tilesOfChildrenTwo : moreLists){
+
+				visitedTiles.add(tilesOfChildrenTwo);
+			}
+		}
+		for(ArrayList<Tile> moreListsTwo : duplicates){
+			for(Tile tilesOfDuplicates : moreListsTwo){
+
+				visitedTiles.add(tilesOfDuplicates);
+			}
+		}
+			
+		  // once we finish with the visited tiles
+		  // we add them to the hashset of previously visited
+		  // and clear the list of visited tiles
+		  pastVisits.add(visitedTiles);
+
+		  	  
+		  moves-- ;
+		  
+  }
+	  
+
+	  return pastVisits.get(pastVisits.size()-1);
+
+  }
+  
 }
 
 class Tile {
@@ -34,6 +192,30 @@ class Tile {
   Integer x;
   Integer y;
   Boolean hasBeenVisited = false;
+  
+  public List<Tile> getNeighbours(){
+	  List<Tile> neighbours = new ArrayList<Tile>();
+	  
+	  
+	  List<Connection> currentTileConnections = this.getConnections();
+	  
+	  for(Connection connection : currentTileConnections){
+		  
+		for(Tile connectedTiles : connection.getTiles()){
+			if (connectedTiles != this){
+				neighbours.add(connectedTiles);
+			}
+		}
+		  
+	  }
+	  
+	  
+	  return neighbours;
+  }
+  
+  public abstract void land();
+  
+  
 }
 
 class ActionTile {
@@ -41,14 +223,217 @@ class ActionTile {
 
   immutable Integer inactivityPeriod;
   Integer turnsUntilActive= 0;
+  
+  public void land(){
+		//getting the current game for which the tile belongs to
+		Game currentGame = this.getGame();
+
+		//getting the current player
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		//setting the current tile of the player to this tile
+		currentPlayer.setCurrentTile(this);
+
+		//set the current tile to has been visited
+		this.setHasBeenVisited(true);
+
+		if(this.getTurnsUntilActive() == 0){
+
+			//get the current deck
+			Deck deck = currentGame.getDeck();
+
+			//get the current card from the top of the deck
+			ActionCard currentCard = deck.getCurrentCard();
+
+			Game.Mode mode;
+
+			//if the type of the card is roll die, get the mode and set it in the current game
+			if(currentCard instanceof RollDieActionCard){
+				RollDieActionCard rollDieActionCard = (RollDieActionCard) currentCard;
+				mode = rollDieActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
+			}
+			//if the type of the card is connect tiles, get the mode and set it in the current game
+			else if(currentCard instanceof ConnectTilesActionCard){
+				ConnectTilesActionCard connectTilesActionCard = (ConnectTilesActionCard) currentCard;
+				mode = connectTilesActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
+			}
+			//if the type of the card is remove connection, get the mode and set it in the current game
+			else if(currentCard instanceof RemoveConnectionActionCard){
+				RemoveConnectionActionCard removeConnectionActionCard = (RemoveConnectionActionCard) currentCard;
+				mode = removeConnectionActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
+			}
+			//if the type of the card is lost turn, get the mode and set it in the current game
+			else if(currentCard instanceof LoseTurnActionCard){
+				LoseTurnActionCard loseTurnActionCard = (LoseTurnActionCard) currentCard;
+				mode = loseTurnActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
+			}else if(currentCard instanceof TeleportActionCard){
+				TeleportActionCard loseTurnActionCard = (TeleportActionCard) currentCard;
+				mode = loseTurnActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
+			}
+			
+			this.setTurnsUntilActive( this.getInactivityPeriod() + 1 );
+		}else{
+			//getting the index of current player, and the number of total players
+			int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+			int numberOfPlayers = currentGame.numberOfPlayers();
+
+			Player nextPlayer = null;
+
+			//if the current player is the last player
+			if(indexOfPlayer == numberOfPlayers - 1){
+				//getting the first player
+				nextPlayer = currentGame.getPlayer(0);
+
+			}else{
+				//get the next player
+				nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+			}
+
+			// checking for player inactivity
+			if(nextPlayer.getTurnsUntilActive() != 0){
+				//getting the next player that is active (while loop to take care 
+				//of cases where more than two players are inactive)
+				while(nextPlayer.getTurnsUntilActive() != 0){
+
+					nextPlayer.setTurnsUntilActive(0);
+					indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
+
+					//if the current player is the last player
+					if(indexOfPlayer == numberOfPlayers - 1){
+						//getting the first player
+						nextPlayer = currentGame.getPlayer(0);
+
+					}else{
+						//get the next player
+						nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+					}
+				}
+
+				//found the next active player
+				currentGame.setCurrentPlayer(nextPlayer);
+
+			}else{
+				//if the next player is active, directly set it to the current one
+				currentGame.setCurrentPlayer(nextPlayer);
+			}
+			
+			
+			//decrement the inactivity of action tiles
+			for( Tile tile : currentGame.getTiles() ){
+				if( tile instanceof ActionTile){
+					ActionTile actionTile = (ActionTile) tile;
+
+					//decrement the inactivity period if it's bigger than 0
+					if(actionTile.getTurnsUntilActive() != 0){
+						actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
+					}
+				}
+			}
+
+			//set the mode of game of GAME
+			currentGame.setMode(Game.Mode.GAME);
+		}
+	}
+  
 }
 
 class NormalTile {
   isA Tile;
+  
+  public void land(){
+		//getting the current game for which the tile belongs to
+		Game currentGame = this.getGame();
+
+		//getting the current player
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		//setting the current tile of the player to this tile
+		currentPlayer.setCurrentTile(this);
+		
+		//set the current tile to has been visited
+		this.setHasBeenVisited(true);
+
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = currentGame.numberOfPlayers();
+
+		Player nextPlayer = null;
+
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			nextPlayer = currentGame.getPlayer(0);
+
+		}else{
+			//get the next player
+			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+		}
+
+		// checking for player inactivity
+		if(nextPlayer.getTurnsUntilActive() != 0){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getTurnsUntilActive() != 0){
+
+				nextPlayer.setTurnsUntilActive(0);
+				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
+
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = currentGame.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
+				}
+			}
+
+			//found the next active player
+			currentGame.setCurrentPlayer(nextPlayer);
+
+		}else{
+			//if the next player is active, directly set it to the current one
+			currentGame.setCurrentPlayer(nextPlayer);
+		}
+		
+		
+		//decrement the inactivity of action tiles
+		for( Tile tile : currentGame.getTiles() ){
+			if( tile instanceof ActionTile){
+				ActionTile actionTile = (ActionTile) tile;
+
+				//decrement the inactivity period if it's bigger than 0
+				if(actionTile.getTurnsUntilActive() != 0){
+					actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
+				}
+			}
+		}
+
+		//set the mode of game of GAME
+		currentGame.setMode(Game.Mode.GAME);	
+	}
+  
 }
 
 class WinTile {
   isA Tile;
+  
+  public void land(){
+		//getting the current game for which the tile belongs to
+		Game currentGame = this.getGame();
+
+		//set the current tile to has been visited
+		this.setHasBeenVisited(true);
+
+		//set the mode of game of GAME
+		currentGame.setMode(Game.Mode.GAME_WON);
+	}
 }
 
 class Connection {
@@ -57,33 +442,157 @@ class Connection {
 class Deck {
   1 <@>- 0..32 ActionCard cards;
   1 -> 0..1 ActionCard currentCard;
+  
+   public void shuffle(){
+	  Collections.shuffle(cards);
+	  
+  }
 }
 
 class ActionCard {
   abstract;
 
   immutable String instructions;
+  public abstract Game.Mode getActionCardGameMode();
 }
 
 class RollDieActionCard {
   isA ActionCard;
+  public List<Tile> play() {
+	  
+	  
+		 //get the current game from the TileO application
+		  Game currentGame = super.getDeck().getGame();
+
+			//get die from the current game
+			Die die = currentGame.getDie();
+
+			//roll the die to generate a number
+
+			int number = die.roll();
+
+			//getting the current player from the current game
+			Player currentPlayer = currentGame.getCurrentPlayer();
+
+			//get the possible moves of the current player, depending on the generated number
+			List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), number);
+
+			return tiles;
+	  }
+
+  
+  public Game.Mode getActionCardGameMode(){
+	  return Game.Mode.GAME_ROLLDIEACTIONCARD;
+  }
 }
 
 class ConnectTilesActionCard {
   isA ActionCard;
+  
+  public void play(Tile tile1 , Tile tile2) {
+	  
+	  Game game = super.getDeck().getGame();
+	  
+	  Connection connection = new Connection (game);
+	  
+	  game.addConnection(connection) ;  
+	  
+	  tile1.addConnection(connection);
+	  tile2.addConnection(connection);
+		  
+	  }
+  
+  public Game.Mode getActionCardGameMode(){
+	  return Game.Mode.GAME_CONNECTTILESACTIONCARD;
+  }
 }
 
 class RemoveConnectionActionCard {
   isA ActionCard;
+  
+  public void play(Connection connection){
+	  	
+	 connection.delete();
+	 
+  }
+  
+  public Game.Mode getActionCardGameMode(){
+	  return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
+  }
 }
 
 class TeleportActionCard {
   isA ActionCard;
+  public void play(Tile tile){
+		
+	  
+		 Deck deck = super.getDeck();
+		 
+		 Game game = deck.getGame();
+		 
+		 Player player = game.getCurrentPlayer();
+		 
+		 player.setCurrentTile(tile);
+		 
+		 
+			
+		if( tile instanceof ActionTile){
+			
+			ActionTile actionTile = (ActionTile) tile;
+			
+			actionTile.land();
+		
+			
+		}else if(tile instanceof WinTile){
+			
+			WinTile winTile = (WinTile) tile;
+			
+			winTile.land();
+			
+		}else if(tile instanceof NormalTile){
+			
+			NormalTile normalTile = (NormalTile) tile;		
+			
+			normalTile.land();
+		}
+		  
+		  
+		  
+	  }
+
+  
+  public Game.Mode getActionCardGameMode(){
+	  return Game.Mode.GAME_TELEPORTACTIONCARD;
+  }
 }
 
 class LoseTurnActionCard {
   isA ActionCard;
+  
+  public void play() {
+
+		//get the current game from the TileO application
+		Game currentGame = super.getDeck().getGame();
+
+		//getting the current player from the current game
+		Player currentPlayer = currentGame.getCurrentPlayer();
+
+		currentPlayer.setTurnsUntilActive(1);
+
+	}
+	
+	public Game.Mode getActionCardGameMode(){
+	  return Game.Mode.GAME_LOSETURNACTIONCARD;
+  }
+	
 }
 
 class Die {
+
+public int roll(){
+		Random random = new Random();
+		int generatedNumber = random.nextInt(6) + 1;
+		return generatedNumber;
+	}
+
 }

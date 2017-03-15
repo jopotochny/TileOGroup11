@@ -4,25 +4,35 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 46 "../../../../../TileO.ump"
+// line 345 "../../../../../TileO.ump"
 public class NormalTile extends Tile
 {
 
-	//------------------------
-	// MEMBER VARIABLES
-	//------------------------
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
 
-	//------------------------
-	// CONSTRUCTOR
-	//------------------------
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
 
-	public NormalTile(int aX, int aY, Game aGame)
-	{
-		super(aX, aY, aGame);
-	}
+  public NormalTile(int aX, int aY, Game aGame)
+  {
+    super(aX, aY, aGame);
+  }
 
-	public void land(){
-		//getting the current game for which the tile belongs to
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public void delete()
+  {
+    super.delete();
+  }
+
+  // line 349 "../../../../../TileO.ump"
+   public void land(){
+    //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();
 
 		//getting the current player
@@ -92,16 +102,7 @@ public class NormalTile extends Tile
 		}
 
 		//set the mode of game of GAME
-		currentGame.setMode(Game.Mode.GAME);	
-	}
-
-	//------------------------
-	// INTERFACE
-	//------------------------
-
-	public void delete()
-	{
-		super.delete();
-	}
+		currentGame.setMode(Game.Mode.GAME);
+  }
 
 }

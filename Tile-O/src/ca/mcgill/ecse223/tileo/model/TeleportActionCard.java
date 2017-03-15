@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 80 "../../../../../TileO.ump"
+// line 524 "../../../../../TileO.ump"
 public class TeleportActionCard extends ActionCard
 {
 
@@ -24,11 +24,14 @@ public class TeleportActionCard extends ActionCard
   // INTERFACE
   //------------------------
 
-  
-  public void play(Tile tile){
-		
-	  
-		 Deck deck = super.getDeck();
+  public void delete()
+  {
+    super.delete();
+  }
+
+  // line 529 "../../../../../TileO.ump"
+   public void play(Tile tile){
+    Deck deck = super.getDeck();
 		 
 		 Game game = deck.getGame();
 		 
@@ -57,19 +60,11 @@ public class TeleportActionCard extends ActionCard
 			
 			normalTile.land();
 		}
-		  
-		  
-		  
-	  }
-
-  
-  public Game.Mode getActionCardGameMode(){
-	  return Game.Mode.GAME_TELEPORTACTIONCARD;
   }
-  
-  public void delete()
-  {
-    super.delete();
+
+  // line 565 "../../../../../TileO.ump"
+   public Game.Mode getActionCardGameMode(){
+    return Game.Mode.GAME_TELEPORTACTIONCARD;
   }
 
 }

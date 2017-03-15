@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 72 "../../../../../TileO.ump"
+// line 489 "../../../../../TileO.ump"
 public class ConnectTilesActionCard extends ActionCard
 {
 
@@ -23,10 +23,15 @@ public class ConnectTilesActionCard extends ActionCard
   //------------------------
   // INTERFACE
   //------------------------
-  
-public void play(Tile tile1 , Tile tile2) {
-	  
-	  Game game = super.getDeck().getGame();
+
+  public void delete()
+  {
+    super.delete();
+  }
+
+  // line 494 "../../../../../TileO.ump"
+   public void play(Tile tile1, Tile tile2){
+    Game game = super.getDeck().getGame();
 	  
 	  Connection connection = new Connection (game);
 	  
@@ -34,16 +39,11 @@ public void play(Tile tile1 , Tile tile2) {
 	  
 	  tile1.addConnection(connection);
 	  tile2.addConnection(connection);
-		  
-	  }
-  
-  public Game.Mode getActionCardGameMode(){
-	  return Game.Mode.GAME_CONNECTTILESACTIONCARD;
   }
-  
-  public void delete()
-  {
-    super.delete();
+
+  // line 506 "../../../../../TileO.ump"
+   public Game.Mode getActionCardGameMode(){
+    return Game.Mode.GAME_CONNECTTILESACTIONCARD;
   }
 
 }

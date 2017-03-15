@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.tileo.model;
 
 import java.util.List;
 
-// line 68 "../../../../../TileO.ump"
+// line 459 "../../../../../TileO.ump"
 public class RollDieActionCard extends ActionCard
 {
 
@@ -26,10 +26,14 @@ public class RollDieActionCard extends ActionCard
   // INTERFACE
   //------------------------
 
-  public List<Tile> play() {
-	  
-	  
-		 //get the current game from the TileO application
+  public void delete()
+  {
+    super.delete();
+  }
+
+  // line 464 "../../../../../TileO.ump"
+   public List<Tile> play(){
+    //get the current game from the TileO application
 		  Game currentGame = super.getDeck().getGame();
 
 			//get die from the current game
@@ -46,19 +50,11 @@ public class RollDieActionCard extends ActionCard
 			List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), number);
 
 			return tiles;
-		  
-
-		  
-	  }
-
-  
-  public Game.Mode getActionCardGameMode(){
-	  return Game.Mode.GAME_ROLLDIEACTIONCARD;
   }
-  
-  public void delete()
-  {
-    super.delete();
+
+  // line 485 "../../../../../TileO.ump"
+   public Game.Mode getActionCardGameMode(){
+    return Game.Mode.GAME_ROLLDIEACTIONCARD;
   }
 
 }

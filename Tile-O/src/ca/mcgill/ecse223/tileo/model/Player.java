@@ -188,10 +188,20 @@ public class Player
     wasSet = true;
     return wasSet;
   }
-  
-  public List<Tile> getPossibleMoves(Tile startTile , int moves){
-	  
-	  ArrayList<ArrayList<Tile>> pastVisits = new ArrayList<ArrayList<Tile>>();
+
+  public void delete()
+  {
+    playersByNumber.remove(getNumber());
+    startingTile = null;
+    currentTile = null;
+    Game placeholderGame = game;
+    this.game = null;
+    placeholderGame.removePlayer(this);
+  }
+
+  // line 31 "../../../../../TileO.ump"
+   public List<Tile> getPossibleMoves(Tile startTile, int moves){
+    ArrayList<ArrayList<Tile>> pastVisits = new ArrayList<ArrayList<Tile>>();
 	  	  
 	  boolean flag = true;
 	
@@ -343,20 +353,6 @@ public class Player
 	  
 
 	  return pastVisits.get(pastVisits.size()-1);
-
-  }
-  
-  
-  
-
-  public void delete()
-  {
-    playersByNumber.remove(getNumber());
-    startingTile = null;
-    currentTile = null;
-    Game placeholderGame = game;
-    this.game = null;
-    placeholderGame.removePlayer(this);
   }
 
 

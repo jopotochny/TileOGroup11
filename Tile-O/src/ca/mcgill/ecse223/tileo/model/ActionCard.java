@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 62 "../../../../../TileO.ump"
+// line 452 "../../../../../TileO.ump"
 public abstract class ActionCard
 {
 
@@ -75,9 +75,6 @@ public abstract class ActionCard
     wasSet = true;
     return wasSet;
   }
-  
-  //abstract method
-  public abstract Game.Mode getActionCardGameMode();
 
   public void delete()
   {
@@ -86,6 +83,7 @@ public abstract class ActionCard
     placeholderDeck.removeCard(this);
   }
 
+   public abstract Game.Mode getActionCardGameMode();
 
   public String toString()
   {
