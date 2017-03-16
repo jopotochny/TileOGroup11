@@ -4,7 +4,8 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 22 "../../../../../TileO.ump"
+// line 21 "../../../../../TileOStates.ump"
+// line 25 "../../../../../TileO.ump"
 public class Player
 {
 
@@ -23,6 +24,8 @@ public class Player
   private int turnsUntilActive;
 
   //Player State Machines
+  public enum PlayerStatus { Active, Inactive }
+  private PlayerStatus playerStatus;
   public enum Color { RED, BLUE, GREEN, YELLOW }
   private Color color;
 
@@ -47,6 +50,7 @@ public class Player
     {
       throw new RuntimeException("Unable to create player due to game");
     }
+    setPlayerStatus(PlayerStatus.Active);
     setColor(Color.RED);
   }
 
@@ -98,15 +102,97 @@ public class Player
     return turnsUntilActive;
   }
 
+  public String getPlayerStatusFullName()
+  {
+    String answer = playerStatus.toString();
+    return answer;
+  }
+
   public String getColorFullName()
   {
     String answer = color.toString();
     return answer;
   }
 
+  public PlayerStatus getPlayerStatus()
+  {
+    return playerStatus;
+  }
+
   public Color getColor()
   {
     return color;
+  }
+
+  public boolean loseTurns(int n)
+  {
+    boolean wasEventProcessed = false;
+    
+    PlayerStatus aPlayerStatus = playerStatus;
+    switch (aPlayerStatus)
+    {
+      case Active:
+        if (n>0)
+        {
+        // line 24 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(getTurnsUntilActive() + n);
+          setPlayerStatus(PlayerStatus.Inactive);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      case Inactive:
+        if (n>0)
+        {
+        // line 35 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(getTurnsUntilActive() + n);
+          setPlayerStatus(PlayerStatus.Inactive);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean takeTurn()
+  {
+    boolean wasEventProcessed = false;
+    
+    PlayerStatus aPlayerStatus = playerStatus;
+    switch (aPlayerStatus)
+    {
+      case Inactive:
+        if (getTurnsUntilActive()>1)
+        {
+        // line 29 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(getTurnsUntilActive() - 1);
+          setPlayerStatus(PlayerStatus.Inactive);
+          wasEventProcessed = true;
+          break;
+        }
+        if (getTurnsUntilActive()<=1)
+        {
+        // line 32 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(0);
+          setPlayerStatus(PlayerStatus.Active);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setPlayerStatus(PlayerStatus aPlayerStatus)
+  {
+    playerStatus = aPlayerStatus;
   }
 
   public boolean setColor(Color aColor)
@@ -199,7 +285,7 @@ public class Player
     placeholderGame.removePlayer(this);
   }
 
-  // line 31 "../../../../../TileO.ump"
+  // line 34 "../../../../../TileO.ump"
    public List<Tile> getPossibleMoves(Tile startTile, int moves){
     ArrayList<ArrayList<Tile>> pastVisits = new ArrayList<ArrayList<Tile>>();
 	  	  

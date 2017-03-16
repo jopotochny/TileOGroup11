@@ -4,7 +4,8 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 221 "../../../../../TileO.ump"
+// line 2 "../../../../../TileOStates.ump"
+// line 224 "../../../../../TileO.ump"
 public class ActionTile extends Tile
 {
 
@@ -16,6 +17,10 @@ public class ActionTile extends Tile
   private int inactivityPeriod;
   private int turnsUntilActive;
 
+  //ActionTile State Machines
+  public enum ActionTileStatus { Active, Inactive }
+  private ActionTileStatus actionTileStatus;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -25,6 +30,7 @@ public class ActionTile extends Tile
     super(aX, aY, aGame);
     inactivityPeriod = aInactivityPeriod;
     turnsUntilActive = 0;
+    setActionTileStatus(ActionTileStatus.Active);
   }
 
   //------------------------
@@ -49,12 +55,84 @@ public class ActionTile extends Tile
     return turnsUntilActive;
   }
 
+  public String getActionTileStatusFullName()
+  {
+    String answer = actionTileStatus.toString();
+    return answer;
+  }
+
+  public ActionTileStatus getActionTileStatus()
+  {
+    return actionTileStatus;
+  }
+
+  public boolean deactivate()
+  {
+    boolean wasEventProcessed = false;
+    
+    ActionTileStatus aActionTileStatus = actionTileStatus;
+    switch (aActionTileStatus)
+    {
+      case Active:
+        if (getInactivityPeriod()>0)
+        {
+        // line 5 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(getInactivityPeriod() + 1 );
+          setActionTileStatus(ActionTileStatus.Inactive);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean takeTurn()
+  {
+    boolean wasEventProcessed = false;
+    
+    ActionTileStatus aActionTileStatus = actionTileStatus;
+    switch (aActionTileStatus)
+    {
+      case Inactive:
+        if (getTurnsUntilActive()>1)
+        {
+        // line 10 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(getTurnsUntilActive() - 1);
+          setActionTileStatus(ActionTileStatus.Inactive);
+          wasEventProcessed = true;
+          break;
+        }
+        if (getTurnsUntilActive()<=1)
+        {
+        // line 13 "../../../../../TileOStates.ump"
+          setTurnsUntilActive(0);
+          setActionTileStatus(ActionTileStatus.Active);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setActionTileStatus(ActionTileStatus aActionTileStatus)
+  {
+    actionTileStatus = aActionTileStatus;
+  }
+
   public void delete()
   {
     super.delete();
   }
 
-  // line 228 "../../../../../TileO.ump"
+  // line 231 "../../../../../TileO.ump"
    public void land(){
     //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();
@@ -165,9 +243,10 @@ public class ActionTile extends Tile
 					}
 				}
 			}
-
+			
 			//set the mode of game of GAME
 			currentGame.setMode(Game.Mode.GAME);
+			
 		}
   }
 

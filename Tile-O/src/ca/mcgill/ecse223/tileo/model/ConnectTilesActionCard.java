@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 489 "../../../../../TileO.ump"
+// line 492 "../../../../../TileO.ump"
 public class ConnectTilesActionCard extends ActionCard
 {
 
@@ -29,7 +29,7 @@ public class ConnectTilesActionCard extends ActionCard
     super.delete();
   }
 
-  // line 494 "../../../../../TileO.ump"
+  // line 497 "../../../../../TileO.ump"
    public void play(Tile tile1, Tile tile2){
     Game game = super.getDeck().getGame();
 	  
@@ -41,7 +41,7 @@ public class ConnectTilesActionCard extends ActionCard
 	  tile2.addConnection(connection);
   }
 
-  // line 506 "../../../../../TileO.ump"
+  // line 509 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_CONNECTTILESACTIONCARD;
   }

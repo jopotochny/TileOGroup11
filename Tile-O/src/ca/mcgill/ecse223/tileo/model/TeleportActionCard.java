@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 524 "../../../../../TileO.ump"
+// line 527 "../../../../../TileO.ump"
 public class TeleportActionCard extends ActionCard
 {
 
@@ -29,7 +29,7 @@ public class TeleportActionCard extends ActionCard
     super.delete();
   }
 
-  // line 529 "../../../../../TileO.ump"
+  // line 532 "../../../../../TileO.ump"
    public void play(Tile tile){
     Deck deck = super.getDeck();
 		 
@@ -62,7 +62,7 @@ public class TeleportActionCard extends ActionCard
 		}
   }
 
-  // line 565 "../../../../../TileO.ump"
+  // line 568 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_TELEPORTACTIONCARD;
   }

@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 439 "../../../../../TileO.ump"
+// line 442 "../../../../../TileO.ump"
 public class Connection
 {
 

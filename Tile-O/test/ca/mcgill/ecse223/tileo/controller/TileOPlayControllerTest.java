@@ -26,7 +26,8 @@ import ca.mcgill.ecse223.tileo.model.WinTile;
 public class TileOPlayControllerTest {
 
 	private TileO tileO;
-
+	private PlayController pc;
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -39,6 +40,7 @@ public class TileOPlayControllerTest {
 	public void setUp() throws Exception {
 		// clear all data
 		tileO = new TileO();
+		this.pc = new PlayController(tileO);
 		tileO.delete();
 	}
 
@@ -53,9 +55,6 @@ public class TileOPlayControllerTest {
 		String error = null;
 		//creating a tileO application
 		tileO = new TileO();
-
-		//setting the controller
-		PlayController pc = new PlayController(tileO);
 
 		int numberOfConnectionPieces = 32;
 		//creating a new game
@@ -93,9 +92,10 @@ public class TileOPlayControllerTest {
 		//setting the starting tile of the players
 		player1.setStartingTile(tile1);
 		player2.setStartingTile(tile2);
-
+		
+		
 		try{
-			pc.startGame(currentGame);
+			pc.doStartGame(currentGame);
 		}catch(InvalidInputException e){
 			error=e.getMessage();
 		}
@@ -109,9 +109,6 @@ public class TileOPlayControllerTest {
 		String error = null;
 		//creating a tileO application
 		tileO = new TileO();
-
-		//setting the controller
-		PlayController pc = new PlayController(tileO);
 
 		int numberOfConnectionPieces = 32;
 		//creating a new game
@@ -139,9 +136,10 @@ public class TileOPlayControllerTest {
 		//setting the starting tile of the players
 		player1.setStartingTile(tile1);
 		player2.setStartingTile(tile2);
-
+		
+		tileO.setCurrentGame(currentGame);
 		try{
-			pc.startGame(currentGame);
+			pc.doStartGame(currentGame);
 		}catch(InvalidInputException e){
 			error=e.getMessage();
 		}
@@ -155,9 +153,6 @@ public class TileOPlayControllerTest {
 		String error = null;
 		//creating a tileO application
 		tileO = new TileO();
-
-		//setting the controller
-		PlayController pc = new PlayController(tileO);
 
 		int numberOfConnectionPieces = 32;
 		//creating a new game
@@ -194,9 +189,11 @@ public class TileOPlayControllerTest {
 		//setting the starting tile of the players
 		player1.setStartingTile(tile1);
 		player2.setStartingTile(tile2);
+		
+		tileO.setCurrentGame(currentGame);
 
 		try{
-			pc.startGame(currentGame);
+			pc.doStartGame(currentGame);
 		}catch(InvalidInputException e){
 			error=e.getMessage();
 		}
@@ -210,8 +207,6 @@ public class TileOPlayControllerTest {
 		//creating a tileO application
 		tileO = new TileO();
 
-		//setting the controller
-		PlayController pc = new PlayController(tileO);
 
 		int numberOfConnectionPieces = 32;
 		//creating a new game
@@ -238,9 +233,9 @@ public class TileOPlayControllerTest {
 		currentGame.addPlayer(0);
 		currentGame.addPlayer(4885665);
 
-
+		tileO.setCurrentGame(currentGame);
 		try{
-			pc.startGame(currentGame);
+			pc.doStartGame(currentGame);
 		}catch(InvalidInputException e){
 			error=e.getMessage();
 		}
@@ -253,10 +248,7 @@ public class TileOPlayControllerTest {
 		String error = null;
 		//creating a tileO application
 		tileO = new TileO();
-
-		//setting the controller
 		PlayController pc = new PlayController(tileO);
-
 		int numberOfConnectionPieces = 32;
 		//creating a new game
 		Game currentGame = new Game(numberOfConnectionPieces, tileO);
@@ -287,9 +279,11 @@ public class TileOPlayControllerTest {
 		
 		player1.setCurrentTile(tile1);
 		player2.setCurrentTile(tile2);
-
+		
+		tileO.setCurrentGame(currentGame);
+		
 		try{
-			pc.land(tile4);
+			pc.doLandTile(tile4);
 		}catch(InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -300,16 +294,14 @@ public class TileOPlayControllerTest {
 		String error = null;
 		//creating a tileO application
 		tileO = new TileO();
-
-		//setting the controller
 		PlayController pc = new PlayController(tileO);
-
 		int numberOfConnectionPieces = 32;
 		//creating a new game
 		Game currentGame = new Game(numberOfConnectionPieces, tileO);
 		Game anotherGame = new Game(numberOfConnectionPieces, tileO);
 		//adding the game to tileO and setting it to the current game
 		tileO.addGame(currentGame);
+		tileO.addGame(anotherGame);
 		tileO.setCurrentGame(currentGame);
 
 		NormalTile tile1 = new NormalTile(1, 2, currentGame);
@@ -338,12 +330,12 @@ public class TileOPlayControllerTest {
 		player2.setCurrentTile(tile2);
 
 		try{
-			pc.land(tile5);
+			pc.doLandTile(tile5);
 		}catch(InvalidInputException e){
 			error = e.getMessage();
 		}
 		
-		assertEquals(error, "The given tile is not found in the current game.");
+		assertEquals("The given tile is not found in the current game.", error);
 	}
 	
 	@Test
@@ -376,11 +368,10 @@ public class TileOPlayControllerTest {
 		
 		// create a game
 		// test if the playRollDieActionCard passes the test
-		
-		PlayController pc = new PlayController(tileO);
+		tileO.setCurrentGame(game);
 		
 		try{
-			pc.playRollDieActionCard();
+			pc.doPlayRollDieActionCard();
 		}catch (InvalidInputException e){
 		    error = e.getMessage();
 
@@ -405,23 +396,16 @@ public class TileOPlayControllerTest {
 			// create a game
 			// test if the playRollDieActionCard passes the test
 			
-			PlayController pc = new PlayController(tileO);
 			
 			try{
-				pc.playRollDieActionCard();
+				pc.doPlayRollDieActionCard();
 			}catch (InvalidInputException e){
 			    error = e.getMessage();
 
 			}
-			
+			tileO.setCurrentGame(game);
 			// check error
-			  assertEquals("The Current Card is not a RollDieActionCard.", error);
-		
-			
-				
-			
-			
-		
+			  assertEquals("The Current Card is not a RollDieActionCard.", error);	
 		
 	}
 	
@@ -454,11 +438,10 @@ public class TileOPlayControllerTest {
 		
 		game.addPlayer(player1);
 		game.addPlayer(player2);
-		
-		PlayController pc = new PlayController(tileO);
+		tileO.setCurrentGame(game);
 		
 		try {
-			pc.playConnectTilesActionCard(tile1, tile2);
+			pc.doPlayConnectTilesActionCard(tile1, tile2);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -489,11 +472,9 @@ public class TileOPlayControllerTest {
 		NormalTile tile2 = new NormalTile ( 0 , 1 , game);
 		game.addTile(tile2);
 		
-		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playConnectTilesActionCard(tile1, tile2);
+			pc.doPlayConnectTilesActionCard(tile1, tile2);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -528,12 +509,10 @@ public class TileOPlayControllerTest {
 		game.addTile(tile1);
 		NormalTile tile2 = new NormalTile ( 0 , 1 , anotherGame);
 		//game.addTile(tile2);
-		
-		
-		PlayController pc = new PlayController(tileO);
+		tileO.setCurrentGame(game);
 		
 		try {
-			pc.playConnectTilesActionCard(tile1, tile2);
+			pc.doPlayConnectTilesActionCard(tile1, tile2);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -561,19 +540,16 @@ public class TileOPlayControllerTest {
 		game.addTile(tile1);
 		NormalTile tile2 = new NormalTile ( 1 , 1 , game);
 		game.addTile(tile2);
-		
-		PlayController pc = new PlayController(tileO);
-		
+
+		tileO.setCurrentGame(game);
 		try {
-			pc.playConnectTilesActionCard(tile1, tile2);
+			pc.doPlayConnectTilesActionCard(tile1, tile2);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
 		
 		// check error
 		  assertEquals("tile1 and tile2 are not adjacent.", error);
-	
-		
 		
 	}
 	
@@ -591,11 +567,9 @@ public class TileOPlayControllerTest {
 		game.addTile(tile1);
 		NormalTile tile2 = new NormalTile ( 40 , 0 , game);
 		game.addTile(tile2);
-		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playConnectTilesActionCard(tile1, tile2);
+			pc.doPlayConnectTilesActionCard(tile1, tile2);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -631,10 +605,9 @@ public class TileOPlayControllerTest {
 		NormalTile tile2 = new NormalTile ( 0 , 40 , game);
 		game.addTile(tile2);
 		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playConnectTilesActionCard(tile1, tile2);
+			pc.doPlayConnectTilesActionCard(tile1, tile2);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -676,10 +649,9 @@ public class TileOPlayControllerTest {
 		game.addPlayer(player1);
 		game.addPlayer(player2);
 		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playRemoveConnectionActionCard(connection);
+			pc.doPlayRemoveConnectionActionCard(connection);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -714,10 +686,9 @@ public class TileOPlayControllerTest {
 		game.addPlayer(player1);
 		game.addPlayer(player2);
 		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playRemoveConnectionActionCard(connection);
+			pc.doPlayRemoveConnectionActionCard(connection);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -753,11 +724,10 @@ public class TileOPlayControllerTest {
 		
 		game.addPlayer(player1);
 		game.addPlayer(player2);
-		
-		PlayController pc = new PlayController(tileO);
+		tileO.setCurrentGame(game);
 		
 		try {
-			pc.playRemoveConnectionActionCard(connection);
+			pc.doPlayRemoveConnectionActionCard(connection);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -798,9 +768,7 @@ public class TileOPlayControllerTest {
 		game.addPlayer(player2);
 		
 		game.setCurrentPlayer(player1);
-		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
 			pc.playTeleportActionCard(tile);
 		}catch (InvalidInputException e){
@@ -837,11 +805,9 @@ public class TileOPlayControllerTest {
 		
 		game.addPlayer(player1);
 		game.addPlayer(player2);
-		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playTeleportActionCard(tile);
+			pc.doPlayTeleportActionCard(tile);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -877,11 +843,9 @@ public class TileOPlayControllerTest {
 		
 		game.addPlayer(player1);
 		game.addPlayer(player2);
-		
-		PlayController pc = new PlayController(tileO);
-		
+		tileO.setCurrentGame(game);
 		try {
-			pc.playTeleportActionCard(tile);
+			pc.doPlayTeleportActionCard(tile);
 		}catch (InvalidInputException e){
 			error = e.getMessage();
 		}
@@ -894,10 +858,6 @@ public class TileOPlayControllerTest {
 		
 	}
 	
-	
-	
-	
-
 	
 	
 }

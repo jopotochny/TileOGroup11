@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 188 "../../../../../TileO.ump"
+// line 191 "../../../../../TileO.ump"
 public abstract class Tile
 {
 
@@ -252,7 +252,7 @@ public abstract class Tile
     placeholderGame.removeTile(this);
   }
 
-  // line 197 "../../../../../TileO.ump"
+  // line 200 "../../../../../TileO.ump"
    public List<Tile> getNeighbours(){
     List<Tile> neighbours = new ArrayList<Tile>();
 	  

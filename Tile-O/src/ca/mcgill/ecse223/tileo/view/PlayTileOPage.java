@@ -28,7 +28,8 @@ public class PlayTileOPage extends JFrame{
 
 	//UI elements
 	private JLabel errorMessage;
-	private Game.Mode mode;
+	private Game.Mode gameMode;
+	private PlayController.Mode controllerMode;
 
 	//save and load game
 	private JButton saveGame;
@@ -59,9 +60,11 @@ public class PlayTileOPage extends JFrame{
 	private String deckText = "";
 
 	private TileO tileO;
+	private PlayController pc;
 
-	public PlayTileOPage(TileO tileO) {
+	public PlayTileOPage(TileO tileO, PlayController pc) {
 		this.tileO = tileO;
+		this.pc = pc;
 		initComponents();
 		refreshData();
 	}
@@ -200,7 +203,6 @@ public class PlayTileOPage extends JFrame{
 		// saving the current game 
 		saveGame.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				PlayController pc = new PlayController(tileO);
 				pc.saveGame();
 			}
 		});
@@ -241,10 +243,10 @@ public class PlayTileOPage extends JFrame{
 				teleportTo();
 			}
 		});
-		
+
 		//get the mode of the game
-		PlayController pc = new PlayController(tileO);
-		mode = pc.getGameMode();
+		gameMode = pc.getGameMode();
+		controllerMode = pc.getMode();
 		setButtonActivity();
 
 		pack();
@@ -253,13 +255,12 @@ public class PlayTileOPage extends JFrame{
 	private void refreshData(){
 		//output the error in the console
 		console.setText(error);
-		PlayController pc = new PlayController(tileO);
 
 		if( error== null || error.length() == 0){
-			
+
 			//redraw the board 
 			boardVisualizer.redraw();
-			
+
 			//console
 			console.setText("");
 
@@ -267,87 +268,97 @@ public class PlayTileOPage extends JFrame{
 			int playerIndex = pc.getCurrentPlayerIndex() + 1;
 			String playerLabel = "Player " + playerIndex;
 			player.setText(playerLabel);
-			
+
 			//setting the remaining connection pieces
 			int nbOfConnections = pc.getNumberRemainingPieces();
 			String connectionPieces = "Remaining pieces: " + nbOfConnections;
 			remainingPieces.setText(connectionPieces);
-			
-			//update the mode of the game
-			mode = pc.getGameMode();
+
+			//update the mode of the game and the controller
+			gameMode = pc.getGameMode();
+			controllerMode = pc.getMode();			
 
 		}
-		
+
 		//set the inactivity of the button depending on the game mode
 		setButtonActivity();
-		
+
 		error = "";
 		deckText = "";
 	}
 
 	private void setButtonActivity(){
-		
-		PlayController pc = new PlayController(tileO);
-		
+
 		rollDie.setEnabled(false);
 		moveTo.setEnabled(false);
 		connectTiles.setEnabled(false);
 		removeConnection.setEnabled(false);
 		teleportTo.setEnabled(false);
 
-		if(mode.equals(Game.Mode.GAME)){
+		if(controllerMode.equals(PlayController.Mode.Roll)){
 			rollDie.setEnabled(true);
-			moveTo.setEnabled(true);
 			if(deckText.equals("")){
-				deckText = " Roll the die, and move to a tile";
+				deckText = " Roll the die";
 			}
 			deck.setText(deckText);
-		}else if(mode.equals(Game.Mode.GAME_CONNECTTILESACTIONCARD)){
+		}else if(controllerMode.equals(PlayController.Mode.Ready)){
+			rollDie.setEnabled(true);
+			if(deckText.equals("")){
+				deckText = " Roll the die";
+			}
+			deck.setText(deckText);
+		}else if(controllerMode.equals(PlayController.Mode.Move)){
+			moveTo.setEnabled(true);
+			deck.setText("Move to a highlighted tile");
+		}else if(gameMode.equals(Game.Mode.GAME_CONNECTTILESACTIONCARD)){
 			connectTiles.setEnabled(true);
 			deckText = "Connect Two Tiles";
 			deck.setText(deckText);
-		}else if(mode.equals(Game.Mode.GAME_LOSETURNACTIONCARD)){
+		}else if(gameMode.equals(Game.Mode.GAME_LOSETURNACTIONCARD)){
 			rollDie.setEnabled(true);
 			moveTo.setEnabled(true);
 			deckText = "Sorry, you lost your turn. Please next player roll a die.";
 			deck.setText(deckText);
 			loseTurn();
-		}else if(mode.equals(Game.Mode.GAME_REMOVECONNECTIONACTIONCARD)){
+		}else if(gameMode.equals(Game.Mode.GAME_REMOVECONNECTIONACTIONCARD)){
 			removeConnection.setEnabled(true);
 			deckText = "Please remove a connection from the board";
 			deck.setText(deckText);
-		}else if(mode.equals(Game.Mode.GAME_ROLLDIEACTIONCARD)){
+		}else if(gameMode.equals(Game.Mode.GAME_ROLLDIEACTIONCARD)){
 			rollDie.setEnabled(true);
-			moveTo.setEnabled(true);
 			deckText = "You got another turn! please roll the die";
 			deck.setText(deckText);
-		}else if(mode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
+		}else if(gameMode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
 			teleportTo.setEnabled(true);
 			deckText = "Teleport to any tile";
 			deck.setText(deckText);
-		}else if(mode.equals(Game.Mode.GAME_WON)){
+		}else if(gameMode.equals(Game.Mode.GAME_WON) || controllerMode.equals(PlayController.Mode.Won)){
 			rollDie.setEnabled(false);
 			moveTo.setEnabled(false);
 			teleportTo.setEnabled(false);
 			removeConnection.setEnabled(false);
 			connectTiles.setEnabled(false);
 			console.setText("Congratulation!!! Player " + (pc.getCurrentPlayerIndex()+1) + " won the game!");
+		}else if(gameMode.equals(Game.Mode.GAME) && controllerMode.equals(PlayController.Mode.ActionCard)){
+			rollDie.setEnabled(true);
 		}
 
 	}
 
-	private void rollDieGetPossibleMoves(){
+	private void rollDieGetPossibleMoves(){	
 
 		//update the mode of the game
-		mode = tileO.getCurrentGame().getMode();
-		PlayController pc = new PlayController(tileO);
+		gameMode = pc.getGameMode();
+		
 		List<Tile> possibleMoves = new ArrayList<Tile>();
 
-		if(mode.equals(Mode.GAME)){
-			possibleMoves = pc.rollDie();
-		}else if(mode.equals(Mode.GAME_ROLLDIEACTIONCARD)){
+		if(gameMode.equals(Mode.GAME)){
+			pc.rollDie();
+			possibleMoves = pc.getPossibleMoves();
+		}else if(gameMode.equals(Mode.GAME_ROLLDIEACTIONCARD)){
 			try {
-				possibleMoves = pc.playRollDieActionCard();
+				pc.playRollDieActionCard();
+				possibleMoves = pc.getPossibleMoves();
 			} catch (InvalidInputException e) {
 				error = e.getMessage();
 			}
@@ -356,21 +367,21 @@ public class PlayTileOPage extends JFrame{
 		boardVisualizer.setPossibleMoves(possibleMoves);
 		if(possibleMoves.size() == 0){
 			pc.noMoves();
-			refreshData();
 		}else{
+			// TODO remove it
 			//setting the roll die to inactive, so that the player can't roll die more than 1 time
 			rollDie.setEnabled(false);
 		}		
+		refreshData();
 	}
 
 
 	private void moveToTile(){
-		PlayController pc = new PlayController(tileO);
-		
+
 		Tile tile = boardVisualizer.getSelectedTile();
-		
+
 		List<Tile> possibleMoves = boardVisualizer.getPossibleMoves();
-		
+
 		/*
 		 * at first, we check if the list is empty, if so, the user didn't roll the die 
 		 * second, we check if the user chose a valid tile to move on
@@ -404,7 +415,6 @@ public class PlayTileOPage extends JFrame{
 			Tile tile1 = tilesToConnect.get(0);
 			Tile tile2 = tilesToConnect.get(1);
 
-			PlayController pc = new PlayController(tileO);
 			try{
 				pc.playConnectTilesActionCard(tile1, tile2);
 			} catch (InvalidInputException e){
@@ -417,17 +427,16 @@ public class PlayTileOPage extends JFrame{
 	}
 
 	private void loseTurn(){
-		PlayController pc = new PlayController(tileO);
 		try {
 			pc.playLoseTurnActionCard();
 		} catch (InvalidInputException e) {
-			
+
 			error = e.getMessage();
 		}
-		
+
 		refreshData();
 	}
-	
+
 	private void removeConnectionBetweenTiles(){
 
 		List<Tile> tilesToConnect = boardVisualizer.getSelectedTiles();
@@ -435,9 +444,9 @@ public class PlayTileOPage extends JFrame{
 		if(tilesToConnect != null){
 			Tile tile1 = tilesToConnect.get(0);
 			Tile tile2 = tilesToConnect.get(1);
-			
+
 			Connection connectionToBeRemoved = null;
-			
+
 			// remove the connection the two tiles share
 			for(Connection connection1 : tile1.getConnections()){
 				for(Tile tile : connection1.getTiles()){
@@ -446,13 +455,12 @@ public class PlayTileOPage extends JFrame{
 					}
 				}
 			}
-			
-			PlayController pc = new PlayController(tileO);
+
 			try{
-			pc.playRemoveConnectionActionCard(connectionToBeRemoved);
-		} catch (InvalidInputException e){
-			error = e.getMessage();
-		}
+				pc.playRemoveConnectionActionCard(connectionToBeRemoved);
+			} catch (InvalidInputException e){
+				error = e.getMessage();
+			}
 		}else{
 			error = "Please selected two tiles from the board";
 		}
@@ -465,7 +473,6 @@ public class PlayTileOPage extends JFrame{
 
 		Tile tile = boardVisualizer.getSelectedTile();
 		if(tile != null){
-			PlayController pc = new PlayController(tileO);
 			try{
 				pc.playTeleportActionCard(tile);
 			} catch (InvalidInputException e) {
@@ -474,7 +481,7 @@ public class PlayTileOPage extends JFrame{
 		}else{
 			error = "Please select 1 tile from the board";
 		}
-		
+
 		refreshData();
 	}
 

@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 8 "../../../../../TileO.ump"
+// line 11 "../../../../../TileO.ump"
 public class Game
 {
 
@@ -352,12 +352,12 @@ public class Game
   {
     return 0;
   }
-
-  /*public Tile addTile(int aX, int aY)
+/*
+  public Tile addTile(int aX, int aY)
   {
     return new Tile(aX, aY, this);
-  }*/
-
+  }
+*/
   public boolean addTile(Tile aTile)
   {
     boolean wasAdded = false;
@@ -566,7 +566,9 @@ public class Game
     winTile = null;
     TileO placeholderTileO = tileO;
     this.tileO = null;
+    if(placeholderTileO != null){
     placeholderTileO.removeGame(this);
+    }
   }
 
 
