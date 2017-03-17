@@ -69,11 +69,13 @@ public class DesignController {
 				}
 			}
 			NormalTile theTile = new NormalTile(X, Y, this.tileo.getCurrentGame());
+			//System.out.println("tile size is " + this.tileo.getCurrentGame().numberOfTiles());
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 			
 		}
 		public void removeConnectionDuringDesign(Tile tileOne, Tile tileTwo)throws InvalidInputException{
 			Connection theConnection = null;
+		
 			
 			for(Connection c : this.tileo.getCurrentGame().getConnections()){
 				if(c.getTiles().contains(tileOne) && c.getTiles().contains(tileTwo)){

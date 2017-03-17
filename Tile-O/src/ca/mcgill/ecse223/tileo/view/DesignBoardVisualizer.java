@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import ca.mcgill.ecse223.tileo.controller.DesignController;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.model.Game;
+import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 
@@ -240,7 +241,7 @@ public class DesignBoardVisualizer extends JPanel {
 					} catch (InvalidInputException e1) {
 						// TODO Auto-generated catch block
 						errorMsg = e1.getMessage();
-						e1.printStackTrace();
+						//e1.printStackTrace();
 					}
 					tiles.put(rect, game.getTile(game.getTiles().size() - 1));
 					break;
@@ -333,11 +334,11 @@ public class DesignBoardVisualizer extends JPanel {
 			
 			while(iter.hasNext() && counter < blackRectangles.size()){
 				
-				if(blackRectangles.get(counter).contains(x,y) && winTile == null){
+				if(blackRectangles.get(counter).contains(x,y) ){
 					rect = blackRectangles.get(counter);
-					winTile = rect;
 					
-					connectableList.add(winTile);
+					
+					
 				}
 				counter++;
 			}
@@ -347,7 +348,10 @@ public class DesignBoardVisualizer extends JPanel {
 				errorMsg = e1.getMessage();			
 			}
 			tiles.put(rect, game.getTile(game.getTiles().size()-1));
+			if(winTile == null)
+				winTile = rect;
 			
+			connectableList.add(winTile);
 			if(!errorMsg.trim().equals("")){
 				DesignTileOPage.console.setText(errorMsg);
 			}
@@ -432,9 +436,15 @@ public class DesignBoardVisualizer extends JPanel {
 			for(Tile[] connections : connectionList){
 				if((connections[0] == disconnectArray[0] && connections[1] == disconnectArray[1]) || (connections[0] == disconnectArray[1] && connections[1] == disconnectArray[0])){
 					remove = connections;
-				}
+				} 
 			}
+			if(remove == null){
+				remove = new Tile[2];
+				remove[0] = new NormalTile(-40,0, game);
 			
+				remove[1] = new NormalTile(-80,0, game);
+			}
+
 			try {
 				descont.removeConnectionDuringDesign(remove[0], remove[1]);;
 			} catch (InvalidInputException e2) {

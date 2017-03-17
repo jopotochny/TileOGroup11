@@ -282,18 +282,29 @@ public class DesignTileOPage extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				//create deck with numbers from field
-				int numRoll = Integer.parseInt(rollCard.getText());
-				int numTeleport = Integer.parseInt(teleportCard.getText());
-				int numLose = Integer.parseInt(loseTurnCard.getText());
-				int numConnect = Integer.parseInt(connectionCard.getText());
-				int numExtra = Integer.parseInt(removeConnectionCard.getText());
-
-				try {
-					cont.selectCards( numConnect, numRoll, numExtra, numTeleport, numLose);
-				} catch (InvalidInputException e) {
-					e.printStackTrace();
-					console.setText(e.getMessage().trim());
+				if((!rollCard.getText().isEmpty() && !teleportCard.getText().isEmpty() 
+						&& !loseTurnCard.getText().isEmpty() && 
+						!connectionCard.getText().isEmpty() && !removeConnectionCard.getText().isEmpty()) && (rollCard.getText().matches("[0-9]+") && teleportCard.getText().matches("[0-9]+") 
+								&& loseTurnCard.getText().matches("[0-9]+") && connectionCard.getText().matches("[0-9]+") && removeConnectionCard.getText().matches("[0-9]+"))){
+					//System.out.println("hello");
+					int numRoll = Integer.parseInt(rollCard.getText());
+					int numTeleport = Integer.parseInt(teleportCard.getText());
+					int numLose = Integer.parseInt(loseTurnCard.getText());
+					int numConnect = Integer.parseInt(connectionCard.getText());
+					int numExtra = Integer.parseInt(removeConnectionCard.getText());
+					
+					try {
+						cont.selectCards( numConnect, numRoll, numExtra, numTeleport, numLose);
+					} catch (InvalidInputException e) {
+						e.printStackTrace();
+						console.setText(e.getMessage().trim());
+					}
+				} else{
+				 console.setText("One of the cards has an invalid value");
 				}
+				
+
+				
 				refreshData();
 			}
 
@@ -601,7 +612,7 @@ public class DesignTileOPage extends JFrame{
 	}
 
 	private void refreshData(){
-		console.setText(error);
+		console.setText("");
 		// load game
 		Integer index = 0;
 		availableGames = new HashMap<Integer, Game>();
