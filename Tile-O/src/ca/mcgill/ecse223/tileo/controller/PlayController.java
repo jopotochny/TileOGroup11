@@ -29,7 +29,6 @@ public class PlayController
 	// MEMBER VARIABLES
 	//------------------------
 
-
 	// line 83 ../../../../../PlayControllerStatus.ump
 	private TileO tileO ;
 	//PlayController State Machines
@@ -663,15 +662,11 @@ public class PlayController
 		// connect both tiles
 		currentCard.play(tile1, tile2);
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
 		//determining the next player
 		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
-
+		currentGame.updateTileStatus();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -734,15 +729,12 @@ public class PlayController
 
 		currentCard.play(connection);
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
 		//determining the next player
 		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
-
+		currentGame.updateTileStatus();
+		
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
 		// if the current card is the last card of the deck
@@ -796,14 +788,11 @@ public class PlayController
 
 		currentCard.play(tile);
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
 		//determining the next player
 		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
+		currentGame.updateTileStatus();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -845,9 +834,6 @@ public class PlayController
 
 		// the player that drew the card loses his Next turn
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
 		currentCard.play();
 
 
@@ -855,7 +841,7 @@ public class PlayController
 		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
+		currentGame.updateTileStatus();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -921,30 +907,6 @@ public class PlayController
 		}
 		return false;
 	}
-
-
-	/**
-	 * decrement the inactivity of the inactive action tiles
-	 */
-	// line 754 "../../../../../PlayControllerStatus.ump"
-	private void decrementInactiveActionTiles(){
-		for( Tile tile : tileO.getCurrentGame().getTiles() ){
-			if( tile instanceof ActionTile){
-				ActionTile actionTile = (ActionTile) tile;
-
-				//decrement the inactivity period if it's bigger than 0
-				if(actionTile.getTurnsUntilActive() != 0){
-					actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
-				}
-			}
-		}
-	}
-
-	// line 768 "../../../../../PlayControllerStatus.ump"
-	private void updatePlayers(){
-
-	}
-
 
 	/**
 	 * get games from the model

@@ -572,7 +572,14 @@ public class Game
 		}
 	}
 
-
+	public void updateTileStatus(){
+		for( Tile tile : tileO.getCurrentGame().getTiles() ){
+			if( tile instanceof ActionTile){
+				((ActionTile) tile).takeTurn();
+			}
+		}
+	}
+	
 	public void determineNextPlayer(){
 		//getting the index of current player, and the number of total players
 		int indexOfPlayer = this.indexOfPlayer(currentPlayer);

@@ -48,16 +48,7 @@ public class NormalTile extends Tile
 		currentGame.determineNextPlayer();
 	
 		//decrement the inactivity of action tiles
-		for( Tile tile : currentGame.getTiles() ){
-			if( tile instanceof ActionTile){
-				ActionTile actionTile = (ActionTile) tile;
-
-				//decrement the inactivity period if it's bigger than 0
-				if(actionTile.getTurnsUntilActive() != 0){
-					actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
-				}
-			}
-		}
+		currentGame.updateTileStatus();
 
 		//set the mode of game of GAME
 		currentGame.setMode(Game.Mode.GAME);
