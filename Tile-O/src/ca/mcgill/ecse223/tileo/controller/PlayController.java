@@ -666,53 +666,8 @@ public class PlayController
 
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
-
-
-
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
 		decrementInactiveActionTiles();
@@ -782,50 +737,8 @@ public class PlayController
 
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
 		decrementInactiveActionTiles();
@@ -886,51 +799,8 @@ public class PlayController
 
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
-
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
 		decrementInactiveActionTiles();
@@ -981,50 +851,8 @@ public class PlayController
 		currentCard.play();
 
 
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
 		decrementInactiveActionTiles();

@@ -37,7 +37,7 @@ public class LoseTurnActionCard extends ActionCard
 		//getting the current player from the current game
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
-		currentPlayer.setTurnsUntilActive(1);
+		currentPlayer.loseTurns(1);
   }
 
   // line 588 "../../../../../TileO.ump"
