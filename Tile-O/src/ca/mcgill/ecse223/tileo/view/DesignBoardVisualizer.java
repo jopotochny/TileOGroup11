@@ -273,11 +273,28 @@ public class DesignBoardVisualizer extends JPanel {
 					startTiles.remove(rect);
 					connectableList.remove(rect);
 					tiles.remove(rect);
+					
 				}
 				
 				
 				counter++;
 			}
+			counter = 0;
+			List<Tile[]> tileConnections = new ArrayList<>();
+			
+			for(Tile[] t : connectionList){
+				if((t[0].getX() == Math.round(rect.getX()) && t[0].getY() == Math.round(rect.getY())) || (t[1].getX() == Math.round(rect.getX()) && t[1].getY() == Math.round(rect.getY()))){
+					tileConnections.add(t);
+									}
+			}
+			Iterator<Tile[]> iter1 = tileConnections.iterator();
+			
+			while(iter1.hasNext()){
+				connectionList.remove(tileConnections.get(0));
+				tileConnections.remove(0);
+				
+			}
+			
 			
 			if(winTile != null){
 				if(rect.getX() == winTile.getX() && rect.getY() == winTile.getY()){

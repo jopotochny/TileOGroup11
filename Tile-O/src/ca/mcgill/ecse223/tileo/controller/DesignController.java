@@ -1,4 +1,5 @@
 package ca.mcgill.ecse223.tileo.controller;
+import java.util.Iterator;
 import java.util.List;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
@@ -100,7 +101,17 @@ public class DesignController {
 					
 				} 
 			}
+			
+			
 			else {
+				int counter = 0;
+				
+				Iterator<Connection> iter = theTile.getConnections().iterator();
+				while(iter.hasNext() && counter<theTile.getConnections().size()){
+					removeConnectionDuringDesign(theTile, theTile.getConnection(counter).getTile(counter));
+					
+					
+				}
 				theTile.delete();
 
 			}
