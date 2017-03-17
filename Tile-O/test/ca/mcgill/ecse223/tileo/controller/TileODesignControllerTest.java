@@ -33,6 +33,7 @@ public class TileODesignControllerTest {
 	@After
 	public void tearDown() throws Exception {
 		//tileO.delete();
+		
 	}
 
 	@Test
@@ -69,6 +70,45 @@ public class TileODesignControllerTest {
 		assertEquals("tile1 and tile2 are not adjacent.", error);
 		
 	}
+	
+	@Test 
+	public void testAddTooManyConnections(){
+		String error = "";
+		Game theCurrentGame = new Game(32, tileO);
+		tileO.setCurrentGame(theCurrentGame);
+		DesignController tc = new DesignController(tileO);
+		
+		for(int i =0 ; i <=32; i++){
+			try {
+				tc.addConnectionDuringDesign(new NormalTile(0+i*40, 0, theCurrentGame), new NormalTile(0+i*40, 40, theCurrentGame));
+			} catch (InvalidInputException e) {
+				// TODO Auto-generated catch block
+				error += e.getMessage();
+			}
+		}
+		assertEquals("Cant create more than 32 connections", error);
+	}
+	
+	@Test 
+	public void testRemoveTileWithConnection(){
+		Game theCurrentGame = new Game(32, tileO);
+		tileO.setCurrentGame(theCurrentGame);
+		DesignController tc = new DesignController(tileO);
+		NormalTile theTile1 = new NormalTile( 0, 0, tileO.getCurrentGame());
+		NormalTile theTile2 = new NormalTile( 0, 40, tileO.getCurrentGame());
+		Connection connect = new Connection(theCurrentGame);
+		connect.addTile(theTile1);
+		connect.addTile(theTile2);
+		
+		try{
+			tc.removeTileFromBoard(theTile1);
+		}catch(InvalidInputException e){
+			fail();
+		}
+		assertEquals(theCurrentGame.getConnections().size(), 0);
+		
+	}
+	
 	@Test
 	public void testAddNullTileConnection(){
 		Game theCurrentGame = new Game(32, tileO);
@@ -240,14 +280,23 @@ public class TileODesignControllerTest {
 	@Test
 	public void testStartTile() {
 		DesignController controller = new DesignController(tileO);
+		tileO.setCurrentGame(null);
 		Game game = new Game(32, tileO);
+		tileO.setCurrentGame(game);
+	
+		
 
 		//Player player = new Player(0, game);
 
 		NormalTile tile = new NormalTile(0, 0, game);
 
 		tileO.addGame(game);
+		
 		tileO.setCurrentGame(game);
+		
+		for(Player p : tileO.getCurrentGame().getPlayers()){
+			game.removePlayer(p);
+		}
 		try {
 			controller.identifyStartTile(tile);
 		} catch (InvalidInputException e) {
@@ -289,16 +338,18 @@ public class TileODesignControllerTest {
 
 		String error = "";
 		NormalTile tile = new NormalTile(0, 0, game);
-		//Player player1 = new Player(123456774, game);
-		//player1.setStartingTile(tile);
+		NormalTile tile1 = new NormalTile(0, 0, game);
+		Player player1 = new Player(123456774, game);
+		player1.setStartingTile(tile);
 		try {
-			controller.identifyStartTile(tile);
-			controller.identifyStartTile(tile);
+			controller.identifyStartTile(tile1);
+			
 		} catch (InvalidInputException e) {
 			error += e.getMessage();
 		}
 		assertEquals("A player already exists at this tile", error);
 	}
+	
 	@Test
 	public void testConflictingActionTile() {
 		String error = "";

@@ -40,6 +40,7 @@ public class DesignTileOPage extends JFrame{
 
 	//counters for button press
 	//inactivity is number in jtextfield for actiontile
+	
 	private int counter = 0;
 	private int counter1 = 0;
 	protected int inactivity;
@@ -52,6 +53,7 @@ public class DesignTileOPage extends JFrame{
 	private JLabel loseLabel;
 	private JLabel rollLabel;
 	private JLabel inactivityLabel;
+	protected static JTextField connectionPiecesLeft;
 	private JTextField inactivityText;
 	private JTextField teleportCard ;
 	private JTextField removeConnectionCard;
@@ -123,6 +125,7 @@ public class DesignTileOPage extends JFrame{
 		boardVisualizer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		boardTitle.setText("Board:");
 
+		
 		//console
 		console = new JTextField();
 		consoleTitle = new JLabel();
@@ -155,6 +158,10 @@ public class DesignTileOPage extends JFrame{
 		connectionCard= new JTextField();
 		loseTurnCard= new JTextField();
 		removeConnectionCard= new JTextField();
+		
+		
+		connectionPiecesLeft = new JTextField("32 left");
+		connectionPiecesLeft.setEditable(false);
 
 		setStart = new JButton("Set Starting Tile");
 		addConnection = new JButton();
@@ -300,6 +307,7 @@ public class DesignTileOPage extends JFrame{
 					boardVisualizer.setEnable3(true);
 
 					addConnection.setText("Stop Connecting");
+					
 					removeTile.setEnabled(false);
 					addWinTile.setEnabled(false);
 					addTile.setEnabled(false);
@@ -310,7 +318,7 @@ public class DesignTileOPage extends JFrame{
 				}
 				else{
 					boardVisualizer.setEnable3(false);
-
+					//connectionPiecesLeft.setText(String.boardVisualizer.getConnections());
 					addConnection.setText("Connect Tiles");
 					removeTile.setEnabled(true);
 					addWinTile.setEnabled(true);
@@ -404,7 +412,7 @@ public class DesignTileOPage extends JFrame{
 				//check if its been clicked once or twice
 				//set boolean accordingly				
 				if(counter1%2 == 0){
-					if(!inactivityText.getText().isEmpty())
+					if(!inactivityText.getText().isEmpty() && inactivityText.getText().matches("[0-9]+"))
 						inactivity = Integer.parseInt(inactivityText.getText());
 						
 					else{
@@ -521,6 +529,7 @@ public class DesignTileOPage extends JFrame{
 										)
 								.addGroup(layout.createParallelGroup()
 										.addComponent(inactivityText)
+										.addComponent(connectionPiecesLeft)
 										.addComponent(addActionTile)
 										.addComponent(connectionCard)
 										.addComponent(removeConnectionCard)
@@ -534,7 +543,7 @@ public class DesignTileOPage extends JFrame{
 				);
 
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {saveGame, loadGame});
-		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {rollCard, removeConnectionCard,teleportCard,connectionCard,submitDeck,addActionTile,inactivityText,removeTile,loseTurnCard});
+		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {rollCard, removeConnectionCard,teleportCard,connectionCard,submitDeck,addActionTile,inactivityText,removeTile,loseTurnCard,connectionPiecesLeft});
 
 		layout.setVerticalGroup(
 				layout.createParallelGroup()
@@ -558,8 +567,12 @@ public class DesignTileOPage extends JFrame{
 						.addComponent(addTile)
 						.addComponent(removeTile)
 						.addComponent(removeConnection)
-						.addComponent(addConnection)
+						
 						.addComponent(setStart)
+						.addGroup(layout.createParallelGroup()
+								.addComponent(addConnection)
+								.addComponent(connectionPiecesLeft)
+								)
 						.addGroup(layout.createParallelGroup()
 								.addComponent(rollLabel)
 								.addComponent(rollCard)

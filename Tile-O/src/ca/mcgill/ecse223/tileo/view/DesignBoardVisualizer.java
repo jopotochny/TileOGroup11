@@ -274,6 +274,7 @@ public class DesignBoardVisualizer extends JPanel {
 					connectableList.remove(rect);
 					tiles.remove(rect);
 					
+					
 				}
 				
 				
@@ -306,8 +307,11 @@ public class DesignBoardVisualizer extends JPanel {
 				descont.removeTileFromBoard(tile);
 			}catch(InvalidInputException e1){
 				errorMsg = e1.getMessage();
-				e1.printStackTrace();
+				
 			}
+			DesignTileOPage.connectionPiecesLeft.setText((32-connectionList.size()) + " left");
+
+			
 			if(!errorMsg.trim().equals("")){
 				DesignTileOPage.console.setText(errorMsg);
 			}
@@ -385,8 +389,11 @@ public class DesignBoardVisualizer extends JPanel {
 				errorMsg = e2.getMessage();				
 			}
 			
+			
 			if(wasConnected == 0)
 				connectionList.add(connectArray);
+			
+			DesignTileOPage.connectionPiecesLeft.setText((32-connectionList.size()) + " left");
 			
 			connectArray = new Tile[2];
 			
@@ -440,6 +447,8 @@ public class DesignBoardVisualizer extends JPanel {
 			if(wasConnected == 0)
 				connectionList.remove(remove);
 			
+			DesignTileOPage.connectionPiecesLeft.setText((32-connectionList.size()) + " left");
+
 			disconnectArray = new Tile[2];
 			
 		}
@@ -554,6 +563,8 @@ public class DesignBoardVisualizer extends JPanel {
 	public String getError(){
 		return errorMsg;
 	}
+	
+	
 	
 	@Override
 	public void paintComponent(Graphics g){

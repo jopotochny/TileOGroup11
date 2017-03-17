@@ -37,7 +37,9 @@ public class DesignController {
 		}
 
 		public void addConnectionDuringDesign(Tile tileOne, Tile tileTwo) throws InvalidInputException{
-			
+			if(tileo.getCurrentGame().getConnections().size() == 32 ){
+				throw new InvalidInputException("Cant create more than 32 connections");
+			}
 			for(Connection c : tileo.getCurrentGame().getConnections()){
 			
 				if((c.getTile(0) == tileOne && c.getTile(1) == tileTwo) || (c.getTile(1) == tileOne && c.getTile(0) == tileTwo)){
@@ -131,6 +133,7 @@ public class DesignController {
 		
 
 
+		
 		public void identifyActionTile(int x, int y, int inactivityPeriod) throws InvalidInputException {
 			Game game = tileo.getCurrentGame();
 			
@@ -159,9 +162,6 @@ public class DesignController {
 				newPlayer.setColor(Color.values()[0]);
 				newPlayer.setStartingTile(aStart);
 			}else {
-				
-				
-			
 				for (int i = 0; i < game.getPlayers().size(); i++) { //changed from getplayers.size to getplayers.size -1
 					
 					
