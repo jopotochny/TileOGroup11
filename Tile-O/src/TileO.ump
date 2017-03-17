@@ -20,6 +20,63 @@ class Game {
   const Integer SpareConnectionPieces = 32;
   Integer currentConnectionPieces;
   const Integer NumberOfActionCards = 32;
+  public void updateTileStatus(){
+		for( Tile tile : tileO.getCurrentGame().getTiles() ){
+			if( tile instanceof ActionTile){
+				((ActionTile) tile).takeTurn();
+			}
+		}
+	}
+	
+	public void determineNextPlayer(){
+		//getting the index of current player, and the number of total players
+		int indexOfPlayer = this.indexOfPlayer(currentPlayer);
+		int numberOfPlayers = this.numberOfPlayers();
+
+		Player nextPlayer = null;
+
+		//if the current player is the last player
+		if(indexOfPlayer == numberOfPlayers - 1){
+			//getting the first player
+			nextPlayer = this.getPlayer(0);
+
+		}else{
+			//get the next player
+			nextPlayer = this.getPlayer(indexOfPlayer + 1);
+		}
+		
+		
+		
+		
+		// checking for player inactivity
+		if(nextPlayer.getPlayerStatus() == PlayerStatus.Inactive){
+			//getting the next player that is active (while loop to take care 
+			//of cases where more than two players are inactive)
+			while(nextPlayer.getPlayerStatus() == PlayerStatus.Inactive){
+
+				nextPlayer.takeTurn();
+				indexOfPlayer = this.indexOfPlayer(nextPlayer);
+
+				//if the current player is the last player
+				if(indexOfPlayer == numberOfPlayers - 1){
+					//getting the first player
+					nextPlayer = this.getPlayer(0);
+
+				}else{
+					//get the next player
+					nextPlayer = this.getPlayer(indexOfPlayer + 1);
+				}
+			}
+
+			//found the next active player
+			this.setCurrentPlayer(nextPlayer);
+
+		}else{
+			//if the next player is active, directly set it to the current one
+			this.setCurrentPlayer(nextPlayer);
+		}
+		
+	}
 }
 
 class Player {
@@ -227,8 +284,8 @@ class ActionTile {
   immutable Integer inactivityPeriod;
   Integer turnsUntilActive= 0;
   
-  public void land(){
-		//getting the current game for which the tile belongs to
+   public void land(){
+    //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();
 
 		//getting the current player
@@ -240,7 +297,7 @@ class ActionTile {
 		//set the current tile to has been visited
 		this.setHasBeenVisited(true);
 
-		if(this.getTurnsUntilActive() == 0){
+		if(this.getActionTileStatus() == ActionTileStatus.Active){
 
 			//get the current deck
 			Deck deck = currentGame.getDeck();
@@ -278,78 +335,27 @@ class ActionTile {
 				mode = loseTurnActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
 			}
-			
-			this.setTurnsUntilActive( this.getInactivityPeriod() + 1 );
+			this.deactivate();
 		}else{
-			//getting the index of current player, and the number of total players
-			int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-			int numberOfPlayers = currentGame.numberOfPlayers();
-
-			Player nextPlayer = null;
-
-			//if the current player is the last player
-			if(indexOfPlayer == numberOfPlayers - 1){
-				//getting the first player
-				nextPlayer = currentGame.getPlayer(0);
-
-			}else{
-				//get the next player
-				nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-			}
-
-			// checking for player inactivity
-			if(nextPlayer.getTurnsUntilActive() != 0){
-				//getting the next player that is active (while loop to take care 
-				//of cases where more than two players are inactive)
-				while(nextPlayer.getTurnsUntilActive() != 0){
-
-					nextPlayer.setTurnsUntilActive(0);
-					indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-					//if the current player is the last player
-					if(indexOfPlayer == numberOfPlayers - 1){
-						//getting the first player
-						nextPlayer = currentGame.getPlayer(0);
-
-					}else{
-						//get the next player
-						nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-					}
-				}
-
-				//found the next active player
-				currentGame.setCurrentPlayer(nextPlayer);
-
-			}else{
-				//if the next player is active, directly set it to the current one
-				currentGame.setCurrentPlayer(nextPlayer);
-			}
-			
+			//determining the next player
+			currentGame.determineNextPlayer();
 			
 			//decrement the inactivity of action tiles
-			for( Tile tile : currentGame.getTiles() ){
-				if( tile instanceof ActionTile){
-					ActionTile actionTile = (ActionTile) tile;
-
-					//decrement the inactivity period if it's bigger than 0
-					if(actionTile.getTurnsUntilActive() != 0){
-						actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
-					}
-				}
-			}
-
+			currentGame.updateTileStatus();
+			
 			//set the mode of game of GAME
 			currentGame.setMode(Game.Mode.GAME);
+			
 		}
-	}
+  }
   
 }
 
 class NormalTile {
   isA Tile;
   
-  public void land(){
-		//getting the current game for which the tile belongs to
+ public void land(){
+    //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();
 
 		//getting the current player
@@ -360,67 +366,16 @@ class NormalTile {
 		
 		//set the current tile to has been visited
 		this.setHasBeenVisited(true);
-
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
 		
-		
+		//determining the next player
+		currentGame.determineNextPlayer();
+	
 		//decrement the inactivity of action tiles
-		for( Tile tile : currentGame.getTiles() ){
-			if( tile instanceof ActionTile){
-				ActionTile actionTile = (ActionTile) tile;
-
-				//decrement the inactivity period if it's bigger than 0
-				if(actionTile.getTurnsUntilActive() != 0){
-					actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
-				}
-			}
-		}
+		currentGame.updateTileStatus();
 
 		//set the mode of game of GAME
-		currentGame.setMode(Game.Mode.GAME);	
-	}
+		currentGame.setMode(Game.Mode.GAME);
+  }
   
 }
 
@@ -460,6 +415,7 @@ class ActionCard {
 }
 
 class RollDieActionCard {
+  depend java.util.List;
   isA ActionCard;
   public List<Tile> play() {
 	  
@@ -580,7 +536,7 @@ class LoseTurnActionCard {
 		//getting the current player from the current game
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
-		currentPlayer.setTurnsUntilActive(1);
+		currentPlayer.loseTurns(1);
 
 	}
 	

@@ -21,8 +21,8 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 
 	mode {
 		Ready {
-			startGame / {
-				doStartGame();
+			startGame(Game selectedGame) / {
+				doStartGame(selectedGame);
 			}  -> Roll;
 	 		load(Game selectedGame) [isInGameMode(selectedGame)] / { 
 	 			doLoad(selectedGame);
@@ -55,7 +55,7 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 	   ActionCard {
 	   		playRollDieActionCard() [isRollDieActionCard()] / {  
 	   			possibleMoves = doPlayRollDieActionCard();
-	    	}  -> Roll;
+	    	}  -> Move;
 	     	playConnectTilesActionCard(Tile tile1, Tile tile2)  [isConnectTilesActionCard()] / {  
 	     		doPlayConnectTilesActionCard(tile1, tile2); 
 	     	}  -> Roll; 
@@ -83,7 +83,6 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 	private TileO tileO;
 	
 	public void doStartGame(Game selectedGame) throws InvalidInputException{
-
 		/*
 		 * validation check:
 		 * there need to be actionCards in the deck
@@ -148,10 +147,10 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		selectedGame.setCurrentConnectionPieces(selectedGame.SpareConnectionPieces);
 
 		//set the mode of the current game to GAME
-		selectedGame.setMode(Game.Mode.GAME);	
-
+		selectedGame.setMode(Game.Mode.GAME);
 	}
 
+	// line 156 "../../../../../PlayControllerStatus.ump"
 	public List<Tile> doRollDie(){
 		//get the current game from the TileO application
 		Game currentGame = tileO.getCurrentGame();
@@ -162,22 +161,21 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		//roll the die to generate a number
 
 		int number = die.roll();
-
 		//getting the current player from the current game
 		Player currentPlayer = currentGame.getCurrentPlayer();
 
 		//get the possible moves of the current player, depending on the generated number
 		List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), number);
+		
+		
 
 		return tiles;
 	}
 
-
-	//TODO check if it's necessary to set the mode here (already set in the model)
+	// line 178 "../../../../../PlayControllerStatus.ump"
 	public void doLandTile(Tile tile) throws InvalidInputException{
 		//getting the current game
 		Game currentGame = tileO.getCurrentGame();
-
 		/*
 		 * getting the list of tiles, followed by checking if the 
 		 * input tile is in the tiles of the current game
@@ -210,8 +208,8 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 	}
 
+	// line 215 "../../../../../PlayControllerStatus.ump"
 	public List<Tile> doPlayRollDieActionCard() throws InvalidInputException{
-
 		// get the current game
 
 		Game currentGame = tileO.getCurrentGame();
@@ -247,22 +245,17 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
-
-
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
 		}
-
-
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);		
 
 
 		return listOfTiles;
-
 	}
 
+	// line 266 "../../../../../PlayControllerStatus.ump"
 	public void doPlayConnectTilesActionCard(Tile tile1, Tile tile2) throws InvalidInputException{
-
 		// get the current game
 
 		Game currentGame = tileO.getCurrentGame();
@@ -317,60 +310,11 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		// connect both tiles
 		currentCard.play(tile1, tile2);
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
-
-
-
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
-
+		currentGame.updateTileStatus();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -390,13 +334,11 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 
 		// set the mode of the current game to GAME
-		currentGame.setMode(Game.Mode.GAME);		
-
+		currentGame.setMode(Game.Mode.GAME);
 	}
 
-
+	// line 400 "../../../../../PlayControllerStatus.ump"
 	public void doPlayRemoveConnectionActionCard(Connection connection) throws InvalidInputException{
-
 		// get the current game
 
 		Game currentGame = tileO.getCurrentGame();
@@ -435,57 +377,12 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 
 		currentCard.play(connection);
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
-
+		currentGame.updateTileStatus();
+		
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
 		// if the current card is the last card of the deck
@@ -500,12 +397,11 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 
 		// set the mode of the current game to GAME
-		currentGame.setMode(Game.Mode.GAME);		
-
+		currentGame.setMode(Game.Mode.GAME);
 	}
 
+	// line 509 "../../../../../PlayControllerStatus.ump"
 	public void doPlayTeleportActionCard(Tile tile) throws InvalidInputException{
-
 		// get the current game
 
 		Game currentGame = tileO.getCurrentGame();
@@ -540,57 +436,11 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 
 		currentCard.play(tile);
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
-
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
+		currentGame.updateTileStatus();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -607,12 +457,11 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 
 		// set the mode of the current game to GAME
-		currentGame.setMode(Game.Mode.GAME);		
+		currentGame.setMode(Game.Mode.GAME);
 	}
 
-
+	// line 616 "../../../../../PlayControllerStatus.ump"
 	public void doPlayLoseTurnActionCard() throws InvalidInputException{
-
 		// get the current game
 
 		Game currentGame = tileO.getCurrentGame();
@@ -633,59 +482,14 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 
 		// the player that drew the card loses his Next turn
 
-
-		Player currentPlayer = currentGame.getCurrentPlayer();
-
 		currentCard.play();
 
 
-		//getting the index of current player, and the number of total players
-		int indexOfPlayer = currentGame.indexOfPlayer(currentPlayer);
-		int numberOfPlayers = currentGame.numberOfPlayers();
-
-		Player nextPlayer = null;
-
-		//if the current player is the last player
-		if(indexOfPlayer == numberOfPlayers - 1){
-			//getting the first player
-			nextPlayer = currentGame.getPlayer(0);
-
-		}else{
-			//get the next player
-			nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-
-		}
-
-		// checking for player inactivity
-		if(nextPlayer.getTurnsUntilActive() != 0){
-			//getting the next player that is active (while loop to take care 
-			//of cases where more than two players are inactive)
-			while(nextPlayer.getTurnsUntilActive() != 0){
-
-				nextPlayer.setTurnsUntilActive(0);
-				indexOfPlayer = currentGame.indexOfPlayer(nextPlayer);
-
-				//if the current player is the last player
-				if(indexOfPlayer == numberOfPlayers - 1){
-					//getting the first player
-					nextPlayer = currentGame.getPlayer(0);
-
-				}else{
-					//get the next player
-					nextPlayer = currentGame.getPlayer(indexOfPlayer + 1);
-				}
-			}
-			
-			//found the next active player
-			currentGame.setCurrentPlayer(nextPlayer);
-
-		}else{
-			//if the next player is active, directly set it to the current one
-			currentGame.setCurrentPlayer(nextPlayer);
-		}
+		//determining the next player
+		currentGame.determineNextPlayer();
 
 		//decrement the inactivity period of inactive action tiles
-		decrementInactiveActionTiles();
+		currentGame.updateTileStatus();
 
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
@@ -702,16 +506,15 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 
 		// set the mode of the current game to GAME
-		currentGame.setMode(Game.Mode.GAME);	
-
+		currentGame.setMode(Game.Mode.GAME);
 	}
 
-	// TODO
 
-	/*
+	/**
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
 	 * he can move nowhere. We should not let him move
 	 */
+	// line 716 "../../../../../PlayControllerStatus.ump"
 	public void noMoves(){
 		Game currentGame = tileO.getCurrentGame();
 		//getting the current player
@@ -735,11 +538,14 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 
 		//set the mode of game of GAME
-		currentGame.setMode(Game.Mode.GAME);	
-
+		currentGame.setMode(Game.Mode.GAME);
 	}
 
-	//check if the chose is a valid move for the player
+
+	/**
+	 * check if the chose is a valid move for the player
+	 */
+	// line 744 "../../../../../PlayControllerStatus.ump"
 	public Boolean isValidMove(List<Tile> possibleMoves, Tile tile){
 		for(Tile acceptableTile : possibleMoves){
 			if( (acceptableTile.getX() == tile.getX()) && (acceptableTile.getY() == tile.getY()) ){
@@ -749,58 +555,147 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		return false;
 	}
 
-	//decrement the inactivity of the inactive action tiles
-	private void decrementInactiveActionTiles(){
-		for( Tile tile : tileO.getCurrentGame().getTiles() ){
-			if( tile instanceof ActionTile){
-				ActionTile actionTile = (ActionTile) tile;
-
-				//decrement the inactivity period if it's bigger than 0
-				if(actionTile.getTurnsUntilActive() != 0){
-					actionTile.setTurnsUntilActive(actionTile.getTurnsUntilActive() - 1);
-				}
-			}
-		}
-	}
-
-	private void updatePlayers(){
-
-	}
-
-
-	//get games from the model
+	/**
+	 * get games from the model
+	 */
+	// line 773 "../../../../../PlayControllerStatus.ump"
 	public List<Game> getGames(){
 		return tileO.getGames();
 	}
 
+	// line 777 "../../../../../PlayControllerStatus.ump"
 	public Game.Mode getGameMode(){
 		return tileO.getCurrentGame().getMode();
 	}
 
 
-	//get the current player from the current game
+	/**
+	 * get the current player from the current game
+	 */
+	// line 783 "../../../../../PlayControllerStatus.ump"
 	public Player getCurrentPlayer(){
 		return tileO.getCurrentGame().getCurrentPlayer();
 	}
 
+	// line 787 "../../../../../PlayControllerStatus.ump"
 	public int getCurrentPlayerIndex(){
 		return tileO.getCurrentGame().indexOfPlayer(tileO.getCurrentGame().getCurrentPlayer());
-
 	}
 
+	// line 792 "../../../../../PlayControllerStatus.ump"
 	public void saveGame(){
 		TileOApplication.save();
 	}
 
+	// line 796 "../../../../../PlayControllerStatus.ump"
 	public int getNumberRemainingPieces(){
 		return Game.SpareConnectionPieces - tileO.getCurrentGame().numberOfConnections();
 	}
 
-	// Load Game in Play Mode
-	public static Game doLoad(int index){
+
+	/**
+	 * Load Game in Play Mode
+	 */
+	// line 801 "../../../../../PlayControllerStatus.ump"
+	public static  Game doLoad(Game selectedGame){
 		TileO tileo = TileOApplication.load();
-		Game game = tileo.getGame(index);
-		return game;
+		return selectedGame;
+	}
+
+	
+	private boolean isNotInGameOrWonMode(Game selectedGame) {
+		if(selectedGame.getMode().equals(Game.Mode.GAME) || (selectedGame.getMode().equals(Game.Mode.GAME_WON)) ){
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isInWonMode(Game selectedGame) {
+		if(selectedGame.getMode().equals(Game.Mode.GAME_WON)){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isInGameMode(Game selectedGame) {
+		if(selectedGame.getMode().equals(Game.Mode.GAME)){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isActionTile(Tile tile) {
+		if(tile instanceof ActionTile){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isWinTile(Tile tile) {
+		if(tile instanceof WinTile){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isNormalTile(Tile tile) {
+		if(tile instanceof NormalTile){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isLoseTurnActionCard() {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof LoseTurnActionCard){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isTeleportAndActionTile(Tile tile) {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof TeleportActionCard){
+			if(tile instanceof ActionTile){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isTeleportAndWinTile(Tile tile) {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof TeleportActionCard){
+			if(tile instanceof WinTile){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isTeleportAndNormalTile(Tile tile) {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof TeleportActionCard){
+			if(tile instanceof NormalTile){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isRemoveConnectionActionCard() {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof RemoveConnectionActionCard){
+			return true;
+		}
+		return false;
+	}
+	private boolean isConnectTilesActionCard() {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof ConnectTilesActionCard){
+			return true;
+		}
+		return false;
+	}
+	private boolean isRollDieActionCard() {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof RollDieActionCard){
+			return true;
+		}
+		return false;
 	}
 
 	
