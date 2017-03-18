@@ -305,7 +305,7 @@ public class DesignTileOPage extends JFrame {
 					console.setText("One of the cards has an invalid value");
 				}
 
-				//refreshData();
+				refreshData();
 			}
 
 		});
@@ -422,6 +422,8 @@ public class DesignTileOPage extends JFrame {
 							inactivity = Integer.parseInt(inactivityText.getText());
 						} catch(NumberFormatException e){
 							e.getMessage();
+							console.setText(error);
+							return;
 						}
 
 					else {
