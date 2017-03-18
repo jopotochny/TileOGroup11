@@ -23,29 +23,29 @@ import ca.mcgill.ecse223.tileo.controller.PlayController;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.TileO;
 
-public class DesignTileOPage extends JFrame{
+public class DesignTileOPage extends JFrame {
 
 	private static final long serialVersionUID = -4426310869335015542L;
 
-	//UI elements
+	// UI elements
 	private JLabel errorMessage;
 	private Game.Mode mode;
 	private Game game;
 
-	//save and load game
+	// save and load game
 	private JButton saveGame;
 	private JComboBox<Integer> loadGame;
 	private JLabel player;
 	private Integer selectedGame;
 
-	//counters for button press
-	//inactivity is number in jtextfield for actiontile
-	
+	// counters for button press
+	// inactivity is number in jtextfield for actiontile
+
 	private int counter = 0;
 	private int counter1 = 0;
 	protected int inactivity;
 
-	//actions
+	// actions
 	private JButton createDeck;
 	private JLabel teleportLabel;
 	private JLabel removeConnectionLabel;
@@ -55,7 +55,7 @@ public class DesignTileOPage extends JFrame{
 	private JLabel inactivityLabel;
 	protected static JTextField connectionPiecesLeft;
 	private JTextField inactivityText;
-	private JTextField teleportCard ;
+	private JTextField teleportCard;
 	private JTextField removeConnectionCard;
 	private JTextField connectionCard;
 	private JTextField loseTurnCard;
@@ -70,27 +70,24 @@ public class DesignTileOPage extends JFrame{
 	private JButton addActionTile;
 	private JButton startGame;
 
-
 	private DesignController cont;
 	private TileO tileo;
 
-	//board
+	// board
 	private JLabel boardTitle;
 	private DesignBoardVisualizer boardVisualizer;
 	private static final int WIDTH_BOARD_VISUALIZATION = 800;
 	private static final int HEIGHT_BOARD_VISUALIZATION = 400;
 
-	//console
+	// console
 	private JLabel consoleTitle;
 	protected static JTextField console;
 
-	//data elements
+	// data elements
 	private String error = null;
 
-	//load game visualization
+	// load game visualization
 	private HashMap<Integer, Game> availableGames;
-
-
 
 	public DesignTileOPage(TileO tileO) {
 
@@ -101,51 +98,47 @@ public class DesignTileOPage extends JFrame{
 		refreshData();
 	}
 
-	public void initComponents(){		
-		//set the size of the applet
+	public void initComponents() {
+		// set the size of the applet
 		this.setPreferredSize(new Dimension(1400, 700));
 
-		//set the initial mode of the game
+		// set the initial mode of the game
 		mode = Game.Mode.GAME;
 
 		// elements for error message
 		errorMessage = new JLabel();
 		errorMessage.setForeground(Color.RED);
 
-		//save and load game
+		// save and load game
 		saveGame = new JButton();
 		loadGame = new JComboBox<Integer>();
 		player = new JLabel();
 		player.setText("Player 1");
 
-		//board TODO
+		// board TODO
 		boardVisualizer = new DesignBoardVisualizer(tileo);
 		boardTitle = new JLabel();
 		boardVisualizer.setMinimumSize(new Dimension(WIDTH_BOARD_VISUALIZATION, HEIGHT_BOARD_VISUALIZATION));
 		boardVisualizer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		boardTitle.setText("Board:");
 
-		
-		//console
+		// console
 		console = new JTextField();
 		consoleTitle = new JLabel();
 		console.setText("Player 1, please roll the die.");
 		console.setEditable(false);
 		consoleTitle.setText("Console:");
 
-
-
-		//global settings and listeners
+		// global settings and listeners
 		saveGame.setText("Save");
 
 		startGame = new JButton();
 		startGame.setText("Start Game");
 
-		//actions and initialize design ui elements
+		// actions and initialize design ui elements
 
 		createDeck = new JButton();
 		createDeck.setText("Create Deck");
-
 
 		rollLabel = new JLabel("Roll Again Card");
 		teleportLabel = new JLabel("Teleport Card");
@@ -154,12 +147,11 @@ public class DesignTileOPage extends JFrame{
 		removeConnectionLabel = new JLabel("Remove Connection Card");
 
 		rollCard = new JTextField();
-		teleportCard= new JTextField();
-		connectionCard= new JTextField();
-		loseTurnCard= new JTextField();
-		removeConnectionCard= new JTextField();
-		
-		
+		teleportCard = new JTextField();
+		connectionCard = new JTextField();
+		loseTurnCard = new JTextField();
+		removeConnectionCard = new JTextField();
+
 		connectionPiecesLeft = new JTextField("32 left");
 		connectionPiecesLeft.setEditable(false);
 
@@ -168,7 +160,7 @@ public class DesignTileOPage extends JFrame{
 		addConnection.setText("Add Connection");
 
 		addActionTile = new JButton("Add Action Tile");
-		addWinTile =  new JButton("Set Win Tile");
+		addWinTile = new JButton("Set Win Tile");
 
 		addTile = new JButton("Add Tile");
 		removeTile = new JButton("Remove Tile");
@@ -181,28 +173,27 @@ public class DesignTileOPage extends JFrame{
 		inactivityLabel = new JLabel("Amount of turns inactive");
 		inactivityText = new JTextField();
 
-
 		addTile.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly
-				if(counter%2 == 0){
-					//set boolean to true in board visualizer to run action when board is clicked
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter % 2 == 0) {
+					// set boolean to true in board visualizer to run action
+					// when board is clicked
 					boardVisualizer.setEnable(true);
 
-					//disable other buttons and change clicked button text
+					// disable other buttons and change clicked button text
 					addTile.setText("Stop Adding");
 					removeTile.setEnabled(false);
 					addWinTile.setEnabled(false);
 					addConnection.setEnabled(false);
-					setStart.setEnabled(false); 	
+					setStart.setEnabled(false);
 					addActionTile.setEnabled(false);
 					removeConnection.setEnabled(false);
 
 					counter++;
 
-				}
-				else{
+				} else {
 					boardVisualizer.setEnable(false);
 
 					addTile.setText("Add Tile");
@@ -215,39 +206,39 @@ public class DesignTileOPage extends JFrame{
 
 					counter++;
 					refreshData();
-				}   	
+				}
 			}
 		});
 
 		saveGame.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				cont.saveGame();
-				
+
 			}
 		});
-		
+
 		removeConnection.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly
-				if(counter%2 == 0){
-					//change boolean variable to allow action to occur in board visualizer
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter % 2 == 0) {
+					// change boolean variable to allow action to occur in board
+					// visualizer
 					boardVisualizer.setEnable4(true);
 
-					//disable buttons and change text
+					// disable buttons and change text
 					removeConnection.setText("Stop Removing");
 					removeTile.setEnabled(false);
 					addWinTile.setEnabled(false);
 					addConnection.setEnabled(false);
-					setStart.setEnabled(false);		        	
+					setStart.setEnabled(false);
 					addActionTile.setEnabled(false);
 					addTile.setEnabled(false);
 					counter++;
-				}
-				else{
+				} else {
 					boardVisualizer.setEnable4(false);
 					removeConnection.setText("Remove Connection");
 
@@ -263,7 +254,6 @@ public class DesignTileOPage extends JFrame{
 					refreshData();
 				}
 
-
 			}
 		});
 
@@ -277,48 +267,58 @@ public class DesignTileOPage extends JFrame{
 			}
 		});
 
-		submitDeck.addActionListener(new java.awt.event.ActionListener(){
+		submitDeck.addActionListener(new java.awt.event.ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				//create deck with numbers from field
-				if((!rollCard.getText().isEmpty() && !teleportCard.getText().isEmpty() 
-						&& !loseTurnCard.getText().isEmpty() && 
-						!connectionCard.getText().isEmpty() && !removeConnectionCard.getText().isEmpty()) && (rollCard.getText().matches("[0-9]+") && teleportCard.getText().matches("[0-9]+") 
-								&& loseTurnCard.getText().matches("[0-9]+") && connectionCard.getText().matches("[0-9]+") && removeConnectionCard.getText().matches("[0-9]+"))){
-					//System.out.println("hello");
-					int numRoll = Integer.parseInt(rollCard.getText());
-					int numTeleport = Integer.parseInt(teleportCard.getText());
-					int numLose = Integer.parseInt(loseTurnCard.getText());
-					int numConnect = Integer.parseInt(connectionCard.getText());
-					int numExtra = Integer.parseInt(removeConnectionCard.getText());
-					
+				// create deck with numbers from field
+				int numRoll=0;
+				int numTeleport=0;
+				int numLose=0;
+				int numConnect=0;
+				int numExtra=0;
+				if ((!rollCard.getText().isEmpty() && !teleportCard.getText().isEmpty()
+						&& !loseTurnCard.getText().isEmpty() && !connectionCard.getText().isEmpty()
+						&& !removeConnectionCard.getText().isEmpty())
+						&& (rollCard.getText().matches("[0-9]+") && teleportCard.getText().matches("[0-9]+")
+								&& loseTurnCard.getText().matches("[0-9]+")
+								&& connectionCard.getText().matches("[0-9]+")
+								&& removeConnectionCard.getText().matches("[0-9]+"))) {
+					// System.out.println("hello");
+					try{
+						numRoll = Integer.parseInt(rollCard.getText());
+						numTeleport = Integer.parseInt(teleportCard.getText());
+						numLose = Integer.parseInt(loseTurnCard.getText());
+						numConnect = Integer.parseInt(connectionCard.getText());
+						numExtra = Integer.parseInt(removeConnectionCard.getText());
+					}catch(NumberFormatException e){
+						console.setText(e.getMessage());
+					}
+
 					try {
-						cont.selectCards( numConnect, numRoll, numExtra, numTeleport, numLose);
+						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose);
 					} catch (InvalidInputException e) {
-						e.printStackTrace();
+						// e.printStackTrace();
 						console.setText(e.getMessage().trim());
 					}
-				} else{
-				 console.setText("One of the cards has an invalid value");
+				} else {
+					console.setText("One of the cards has an invalid value");
 				}
-				
 
-				
-				refreshData();
+				//refreshData();
 			}
 
 		});
 
 		addConnection.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly
-				if(counter%2 == 0){
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter % 2 == 0) {
 					boardVisualizer.setEnable3(true);
 
 					addConnection.setText("Stop Connecting");
-					
+
 					removeTile.setEnabled(false);
 					addWinTile.setEnabled(false);
 					addTile.setEnabled(false);
@@ -326,10 +326,9 @@ public class DesignTileOPage extends JFrame{
 					addActionTile.setEnabled(false);
 					removeConnection.setEnabled(false);
 					counter++;
-				}
-				else{
+				} else {
 					boardVisualizer.setEnable3(false);
-					//connectionPiecesLeft.setText(String.boardVisualizer.getConnections());
+					// connectionPiecesLeft.setText(String.boardVisualizer.getConnections());
 					addConnection.setText("Connect Tiles");
 					removeTile.setEnabled(true);
 					addWinTile.setEnabled(true);
@@ -345,9 +344,9 @@ public class DesignTileOPage extends JFrame{
 
 		removeTile.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly
-				if(counter1%2 == 0){
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter1 % 2 == 0) {
 					boardVisualizer.setEnable1(true);
 
 					addTile.setEnabled(false);
@@ -359,8 +358,7 @@ public class DesignTileOPage extends JFrame{
 					removeTile.setText("Stop Removing");
 					counter1++;
 
-				}
-				else{
+				} else {
 					boardVisualizer.setEnable1(false);
 
 					addTile.setEnabled(true);
@@ -371,22 +369,19 @@ public class DesignTileOPage extends JFrame{
 					addWinTile.setEnabled(true);
 					removeConnection.setEnabled(true);
 					removeTile.setText("Remove Tile");
-					counter1++;				
+					counter1++;
 					refreshData();
 
 				}
-
-
-
 
 			}
 		});
 
 		setStart.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly
-				if(counter1%2 == 0){
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter1 % 2 == 0) {
 					boardVisualizer.setEnable5(true);
 
 					addTile.setEnabled(false);
@@ -398,8 +393,7 @@ public class DesignTileOPage extends JFrame{
 					setStart.setText("Stop Setting");
 					counter1++;
 
-				}
-				else{
+				} else {
 					boardVisualizer.setEnable5(false);
 
 					addTile.setEnabled(true);
@@ -412,7 +406,7 @@ public class DesignTileOPage extends JFrame{
 					setStart.setText("Set Starting Tile");
 					counter1++;
 					refreshData();
-				}     	
+				}
 			}
 		});
 
@@ -420,13 +414,17 @@ public class DesignTileOPage extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly				
-				if(counter1%2 == 0){
-					if(!inactivityText.getText().isEmpty() && inactivityText.getText().matches("[0-9]+"))
-						inactivity = Integer.parseInt(inactivityText.getText());
-						
-					else{
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter1 % 2 == 0) {
+					if (!inactivityText.getText().isEmpty() && inactivityText.getText().matches("[0-9]+"))
+						try{
+							inactivity = Integer.parseInt(inactivityText.getText());
+						} catch(NumberFormatException e){
+							e.getMessage();
+						}
+
+					else {
 						console.setText("There is no inactivity value");
 						return;
 					}
@@ -468,9 +466,9 @@ public class DesignTileOPage extends JFrame{
 
 		addWinTile.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//check if its been clicked once or twice
-				//set boolean accordingly
-				if(counter1%2 == 0){
+				// check if its been clicked once or twice
+				// set boolean accordingly
+				if (counter1 % 2 == 0) {
 					boardVisualizer.setEnable2(true);
 
 					removeTile.setEnabled(false);
@@ -481,8 +479,7 @@ public class DesignTileOPage extends JFrame{
 					removeConnection.setEnabled(false);
 					counter1++;
 
-				}
-				else{
+				} else {
 					boardVisualizer.setEnable2(false);
 
 					addTile.setEnabled(true);
@@ -507,141 +504,71 @@ public class DesignTileOPage extends JFrame{
 		layout.setAutoCreateGaps(true);
 		layout.setAutoCreateContainerGaps(true);
 
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(saveGame)
-						.addComponent(loadGame)
-						.addComponent(player)
-						.addComponent(startGame)
-						)
-				.addGroup(layout.createParallelGroup()
-						.addComponent(boardTitle)
-						.addComponent(boardVisualizer)
-						.addComponent(consoleTitle)
-						.addComponent(console)
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup().addComponent(saveGame).addComponent(loadGame)
+						.addComponent(player).addComponent(startGame))
+				.addGroup(layout.createParallelGroup().addComponent(boardTitle).addComponent(boardVisualizer)
+						.addComponent(consoleTitle).addComponent(console)
 
-						)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addComponent(setStart)
-										.addComponent(addTile)
-										.addComponent(removeTile)
-										.addComponent(addConnection)
-										.addComponent(removeConnection)
-										.addComponent(addWinTile)
-										.addComponent(inactivityLabel)
-										.addComponent(connectionLabel)
-										.addComponent(removeConnectionLabel)
-										.addComponent(loseLabel)
-										.addComponent(teleportLabel)
-										.addComponent(rollLabel)
-										)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(inactivityText)
-										.addComponent(connectionPiecesLeft)
-										.addComponent(addActionTile)
-										.addComponent(connectionCard)
-										.addComponent(removeConnectionCard)
-										.addComponent(loseTurnCard)
-										.addComponent(teleportCard)
-										.addComponent(rollCard)
-										.addComponent(submitDeck)
-										)
-								)
-						)
-				);
+				).addGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup().addComponent(setStart).addComponent(addTile).addComponent(removeTile).addComponent(addConnection).addComponent(removeConnection).addComponent(addWinTile).addComponent(inactivityLabel).addComponent(connectionLabel).addComponent(removeConnectionLabel).addComponent(loseLabel).addComponent(teleportLabel).addComponent(rollLabel)).addGroup(layout.createParallelGroup().addComponent(inactivityText).addComponent(connectionPiecesLeft).addComponent(addActionTile).addComponent(connectionCard).addComponent(removeConnectionCard).addComponent(loseTurnCard).addComponent(teleportCard).addComponent(rollCard).addComponent(submitDeck)))));
 
-		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {saveGame, loadGame});
-		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {rollCard, removeConnectionCard,teleportCard,connectionCard,submitDeck,addActionTile,inactivityText,removeTile,loseTurnCard,connectionPiecesLeft});
+		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame, loadGame });
+		layout.linkSize(SwingConstants.VERTICAL,
+				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard, connectionCard, submitDeck,
+						addActionTile, inactivityText, removeTile, loseTurnCard, connectionPiecesLeft });
 
-		layout.setVerticalGroup(
-				layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(saveGame)
-						.addComponent(loadGame)
-						.addComponent(player)
-						.addComponent(startGame)
-						)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(boardTitle)
-						.addComponent(boardVisualizer)
-						.addComponent(consoleTitle)
-						.addComponent(console)
-						)
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(inactivityLabel)
-						.addComponent(inactivityText)
-						.addComponent(addActionTile)
-						.addComponent(addWinTile)
-						.addComponent(addTile)
-						.addComponent(removeTile)
-						.addComponent(removeConnection)
-						
+		layout.setVerticalGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame)
+						.addComponent(player).addComponent(startGame))
+				.addGroup(layout.createSequentialGroup().addComponent(boardTitle).addComponent(boardVisualizer)
+						.addComponent(consoleTitle).addComponent(console))
+				.addGroup(layout.createSequentialGroup().addComponent(inactivityLabel).addComponent(inactivityText)
+						.addComponent(addActionTile).addComponent(addWinTile).addComponent(addTile)
+						.addComponent(removeTile).addComponent(removeConnection)
+
 						.addComponent(setStart)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(addConnection)
-								.addComponent(connectionPiecesLeft)
-								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(rollLabel)
-								.addComponent(rollCard)
-								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(removeConnectionCard)
-								.addComponent(removeConnectionLabel)
-								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(loseLabel)
-								.addComponent(loseTurnCard)
+						.addGroup(layout.createParallelGroup().addComponent(addConnection)
+								.addComponent(connectionPiecesLeft))
+						.addGroup(layout.createParallelGroup().addComponent(rollLabel).addComponent(rollCard))
+						.addGroup(layout.createParallelGroup().addComponent(removeConnectionCard)
+								.addComponent(removeConnectionLabel))
+						.addGroup(layout.createParallelGroup().addComponent(loseLabel).addComponent(loseTurnCard)
 
-								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(teleportCard)
-								.addComponent(teleportLabel)
-								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(connectionLabel)
-								.addComponent(connectionCard)
-								)
-						.addComponent(submitDeck)
-						)
-				);
+						).addGroup(layout.createParallelGroup().addComponent(teleportCard).addComponent(teleportLabel)).addGroup(layout.createParallelGroup().addComponent(connectionLabel).addComponent(connectionCard)).addComponent(submitDeck)));
 		pack();
 	}
 
-	private void refreshData(){
+	private void refreshData() {
 		console.setText("");
 		// load game
 		Integer index = 0;
 		availableGames = new HashMap<Integer, Game>();
-		loadGame.removeAllItems();		
+		loadGame.removeAllItems();
 		selectedGame = -1;
 		loadGame.setSelectedIndex(selectedGame);
 
-		//console set text to null
-		//console.setText("");
+		// console set text to null
+		// console.setText("");
 
-		//set jtextfield to null
+		// set jtextfield to null
 		loseTurnCard.setText("");
 		rollCard.setText("");
 		removeConnectionCard.setText("");
 		connectionCard.setText("");
-		teleportCard.setText("");		
+		teleportCard.setText("");
 		inactivityText.setText("");
-		error="";
+		error = "";
 	}
 
-	public void startGame(){
+	public void startGame() {
 
 		PlayController pc = new PlayController(tileo);
 
-		try{
+		try {
 			pc.startGame();
 			dispose();
 			new PlayTileOPage(tileo, pc).setVisible(true);
-		} catch( InvalidInputException e){
+		} catch (InvalidInputException e) {
 			error = e.getMessage();
 		}
 		refreshData();
