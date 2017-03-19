@@ -366,6 +366,8 @@ public class PlayTileOPage extends JFrame{
 
 		boardVisualizer.setPossibleMoves(possibleMoves);
 		if(possibleMoves.size() == 0){
+			deckText = "Sorry, you don't have any possible moves! Next player please roll";
+			deck.setText(deckText);
 			pc.noMoves();
 		}else{
 			// TODO remove it
