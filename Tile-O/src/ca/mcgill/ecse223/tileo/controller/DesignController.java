@@ -19,6 +19,7 @@ import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.model.WinTile;
+import ca.mcgill.ecse223.tileo.model.WinTileHintActionCard;
 public class DesignController {
 		private TileO tileo;
 		private int maxPlayers = 4;
@@ -189,15 +190,23 @@ public class DesignController {
 			
 		}
 
-		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose)
+		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
 
 			Deck deck = game.getDeck(); 
+			if(deck != null){
+				
+			}
 
-			if (( connect + rollDie + remove + teleport + lose) != 32) {
+			if (( connect + rollDie + remove + teleport + lose + hint) != 32) {
 				throw new InvalidInputException("The amount of cards chosen is not 32");
+			}
+			
+			for(int j = 1; j<= hint; j++){
+				WinTileHintActionCard hintCard = new WinTileHintActionCard("Chose a tile", deck) ;
+					
 			}
 
 			for (int i = 1; i <= connect; i++) {

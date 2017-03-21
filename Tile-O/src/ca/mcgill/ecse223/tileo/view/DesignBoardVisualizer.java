@@ -20,6 +20,7 @@ import ca.mcgill.ecse223.tileo.controller.DesignController;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
+import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 
@@ -166,9 +167,20 @@ public class DesignBoardVisualizer extends JPanel {
 				
 				//set color of starting tiles to blue
 				if(startTiles.size() > 0){
-					for(Rectangle2D rec : startTiles){
+					Color color;
+					for(int j = 0; j<startTiles.size(); j++){
+						Rectangle2D rec = startTiles.get(j);
+						if(j == 0)
+							color = Color.RED;
+						else if(j == 1)
+							color = Color.BLUE;
+						else if (j == 2)
+							color = Color.ORANGE;
+						else
+							color = Color.PINK;
+						
 						g2d.setStroke(thinStroke);
-						g2d.setColor(Color.BLUE);
+						g2d.setColor(color);
 						Rectangle2D start = new Rectangle2D.Float((int)Math.round(rec.getX()),(int)Math.round(rec.getY()),RECTWIDTH, RECHEIGHT);
 						g2d.fill(start);
 						g2d.setColor(Color.BLACK);
@@ -227,13 +239,12 @@ public class DesignBoardVisualizer extends JPanel {
 		if(!enabled){
 			return;
 		}else if(enabled){
-			
+			errorMsg ="";
 			for(Rectangle2D rect : blackRectangles){
 				//check if clicked tile is in blackrectangles
 				//if so add it to whitetilelist
 				if(rect.contains(x, y)){
-					whiteTile = rect;
-					whiteTilesList.add(whiteTile);
+					whiteTilesList.add(rect);
 					connectableList.add(rect);
 					
 					try {
@@ -241,15 +252,13 @@ public class DesignBoardVisualizer extends JPanel {
 					} catch (InvalidInputException e1) {
 						// TODO Auto-generated catch block
 						errorMsg = e1.getMessage();
-						//e1.printStackTrace();
 					}
 					tiles.put(rect, game.getTile(game.getTiles().size() - 1));
 					break;
 				}
 			}
-			if(!errorMsg.trim().equals("")){
-				DesignTileOPage.console.setText(errorMsg);
-			}
+			DesignTileOPage.console.setText(errorMsg);
+
 		}
 	}
 	
@@ -261,46 +270,39 @@ public class DesignBoardVisualizer extends JPanel {
 		if(!enabled1){
 			return;
 		} else if(enabled1){
-			int counter = 0;
+			errorMsg = "";
 			Iterator<Rectangle2D> iter = connectableList.iterator();
 			
 			Rectangle2D rect = null;
-			while(iter.hasNext() && counter<connectableList.size()){
-				if(connectableList.get(counter).contains(x,y)){
-					rect = connectableList.get(counter);
+			while(iter.hasNext()){
+				Rectangle2D next = iter.next();
+				if(next.contains(x,y)){
+					rect = next;
 					tile = tiles.get(rect);
 					whiteTilesList.remove(rect);
 					actionTiles.remove(rect);
 					startTiles.remove(rect);
-					connectableList.remove(rect);
+					iter.remove();
 					tiles.remove(rect);
 					
 					
 				}
 				
-				
-				counter++;
 			}
-			counter = 0;
-			List<Tile[]> tileConnections = new ArrayList<>();
-			
-			for(Tile[] t : connectionList){
-				if((t[0].getX() == Math.round(rect.getX()) && t[0].getY() == Math.round(rect.getY())) || (t[1].getX() == Math.round(rect.getX()) && t[1].getY() == Math.round(rect.getY()))){
-					tileConnections.add(t);
-									}
-			}
-			Iterator<Tile[]> iter1 = tileConnections.iterator();
+
+			Iterator<Tile[]> iter1 = connectionList.iterator();
 			
 			while(iter1.hasNext()){
-				connectionList.remove(tileConnections.get(0));
-				tileConnections.remove(0);
-				
+				Tile[] t = iter1.next();
+				if((t[0].getX() == Math.round(rect.getX()) && t[0].getY() == Math.round(rect.getY())) || (t[1].getX() == Math.round(rect.getX()) && t[1].getY() == Math.round(rect.getY()))){
+					iter1.remove();
+				}
 			}
-			
-			
+				
 			if(winTile != null){
 				if(rect.getX() == winTile.getX() && rect.getY() == winTile.getY()){
 					winTile = null;
+					tile = game.getWinTile();
 				}
 			}
 			
@@ -312,10 +314,8 @@ public class DesignBoardVisualizer extends JPanel {
 			}
 			DesignTileOPage.connectionPiecesLeft.setText((32-connectionList.size()) + " left");
 
+			DesignTileOPage.console.setText(errorMsg);
 			
-			if(!errorMsg.trim().equals("")){
-				DesignTileOPage.console.setText(errorMsg);
-			}
 		}
 	}
 	
@@ -327,34 +327,32 @@ public class DesignBoardVisualizer extends JPanel {
 			return;
 			
 		} else if(enabled2){
-			int counter = 0;
+			errorMsg = "";
+			
 			Iterator<Rectangle2D> iter = blackRectangles.iterator();
 			Rectangle2D rect = null;
 
 			
-			while(iter.hasNext() && counter < blackRectangles.size()){
-				
-				if(blackRectangles.get(counter).contains(x,y) ){
-					rect = blackRectangles.get(counter);
-					
-					
-					
+			while(iter.hasNext()){
+				Rectangle2D next = iter.next();
+				if(next.contains(x,y) ){
+					rect = next;
 				}
-				counter++;
 			}
+			
 			try{
 				descont.identifyWinTile((int)Math.round(rect.getX()), (int)Math.round(rect.getY()));;
 			} catch(InvalidInputException e1){
 				errorMsg = e1.getMessage();			
 			}
+			
 			tiles.put(rect, game.getTile(game.getTiles().size()-1));
+			
 			if(winTile == null)
 				winTile = rect;
 			
 			connectableList.add(winTile);
-			if(!errorMsg.trim().equals("")){
-				DesignTileOPage.console.setText(errorMsg);
-			}
+			DesignTileOPage.console.setText(errorMsg);
 		}
 		
 	}
@@ -374,7 +372,7 @@ public class DesignBoardVisualizer extends JPanel {
 		if(!enabled3){
 			return;
 		} else if(enabled3){
-
+			errorMsg = "";
 			for(Rectangle2D r : connectableList){
 				if(r.contains(x,y)){
 					connectArray[count] = tiles.get(r);
@@ -402,9 +400,8 @@ public class DesignBoardVisualizer extends JPanel {
 			connectArray = new Tile[2];
 			
 		}
-		if(!errorMsg.trim().equals("")){
-			DesignTileOPage.console.setText(errorMsg);
-		}
+		DesignTileOPage.console.setText(errorMsg);
+		
 	}
 	
 	private void clickDisconnect(MouseEvent e){
@@ -422,7 +419,7 @@ public class DesignBoardVisualizer extends JPanel {
 		if(!enabled4){
 			return;
 		} else if(enabled4){
-
+			errorMsg="";
 			for(Rectangle2D r : whiteTilesList){
 				if(r.contains(x,y)){
 					disconnectArray[disCount] = tiles.get(r);
@@ -462,9 +459,9 @@ public class DesignBoardVisualizer extends JPanel {
 			disconnectArray = new Tile[2];
 			
 		}
-		if(!errorMsg.trim().equals("")){
-			DesignTileOPage.console.setText(errorMsg);
-		}
+		
+		DesignTileOPage.console.setText(errorMsg);
+		
 	}
 	
 	private void clickStartTile(MouseEvent e){
@@ -475,7 +472,7 @@ public class DesignBoardVisualizer extends JPanel {
 		if(!enabled5){
 			return;
 		}else if(enabled5){
-			
+			errorMsg = "";
 			for(Rectangle2D rect : whiteTilesList){
 				//check if clicked tile is in blackrectangles
 				//if so add it to whitetilelist
@@ -488,19 +485,18 @@ public class DesignBoardVisualizer extends JPanel {
 					} catch (InvalidInputException e1) {
 						// TODO Auto-generated catch block
 						errorMsg = e1.getMessage();
+						DesignTileOPage.console.setText(errorMsg);
 						break;
 					}
-					
+					for(Player p : game.getPlayers()){
+						System.out.println("player " + p.getNumber() + " has start tile "+ p.getStartingTile().getX() + " " + p.getStartingTile().getY());
+					}
 					startTiles.add(rect);
 					
 				}
 			}
 		}
 		
-		if(!errorMsg.trim().equals("")){
-			DesignTileOPage.console.setText(errorMsg);
-		}
-	
 	}
 	
 	private void clickActionTile(MouseEvent e){
@@ -510,6 +506,7 @@ public class DesignBoardVisualizer extends JPanel {
 		if(!enabled6){
 			return;
 		} else{
+			errorMsg = "";
 			for(Rectangle2D rect : blackRectangles){
 				//check if clicked tile is in blackrectangles
 				//if so add it to whitetilelist
@@ -531,9 +528,9 @@ public class DesignBoardVisualizer extends JPanel {
 				}
 			}
 		}
-		if(!errorMsg.trim().equals("")){
-			DesignTileOPage.console.setText(errorMsg);
-		}
+		
+		DesignTileOPage.console.setText(errorMsg);
+		
 	}
 	
 	
@@ -570,9 +567,7 @@ public class DesignBoardVisualizer extends JPanel {
 		return actionTile;
 	}
 	
-	public String getError(){
-		return errorMsg;
-	}
+
 	
 	
 	
