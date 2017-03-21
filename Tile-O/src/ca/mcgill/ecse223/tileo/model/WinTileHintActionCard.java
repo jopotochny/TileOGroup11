@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 474 "../../../../../TileO.ump"
-public class RemoveConnectionActionCard extends ActionCard
+// line 383 "../../../../../TileO.ump"
+public abstract class WinTileHintActionCard extends ActionCard
 {
 
   //------------------------
@@ -15,7 +15,7 @@ public class RemoveConnectionActionCard extends ActionCard
   // CONSTRUCTOR
   //------------------------
 
-  public RemoveConnectionActionCard(String aInstructions, Deck aDeck)
+  public WinTileHintActionCard(String aInstructions, Deck aDeck)
   {
     super(aInstructions, aDeck);
   }
@@ -27,16 +27,6 @@ public class RemoveConnectionActionCard extends ActionCard
   public void delete()
   {
     super.delete();
-  }
-
-  // line 479 "../../../../../TileO.ump"
-   public void play(Connection connection){
-    connection.delete();
-  }
-
-  // line 484 "../../../../../TileO.ump"
-   public Game.Mode getActionCardGameMode(){
-    return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
   }
 
 }

@@ -4,7 +4,10 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 6 "../../../../../TileO.ump"
+/**
+ * use WinTileHintActionCard.ump;
+ */
+// line 7 "../../../../../TileO.ump"
 public class TileO
 {
 

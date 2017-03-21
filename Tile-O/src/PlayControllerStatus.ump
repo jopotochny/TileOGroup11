@@ -73,9 +73,12 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		 	}  -> ActionCard;
 		  	playLoseTurnActionCard()[isLoseTurnActionCard()] / { 
 		  		doPlayLoseTurnActionCard();
-		  	}  -> Roll; 
-		} 
+		  	}  -> Roll;
+		  	playWinTileHintAction() [isWintTileHintActionCard()] / {
+		  		doPlayWintTileHintAction();
+		  	} -> Roll;
 	} 
+	}
 	
 	1  -> * Tile possibleMoves;
 	

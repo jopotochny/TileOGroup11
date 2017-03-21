@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
 // line 21 "../../../../../TileOStates.ump"
-// line 25 "../../../../../TileO.ump"
+// line 83 "../../../../../TileO.ump"
 public class Player
 {
 
@@ -285,7 +285,7 @@ public class Player
     placeholderGame.removePlayer(this);
   }
 
-  // line 34 "../../../../../TileO.ump"
+  // line 92 "../../../../../TileO.ump"
    public List<Tile> getPossibleMoves(Tile startTile, int moves){
     ArrayList<ArrayList<Tile>> pastVisits = new ArrayList<ArrayList<Tile>>();
 	  	  

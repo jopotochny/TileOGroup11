@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 427 "../../../../../TileO.ump"
+// line 387 "../../../../../TileO.ump"
 public class WinTile extends Tile
 {
 
@@ -30,7 +30,7 @@ public class WinTile extends Tile
     super.delete();
   }
 
-  // line 431 "../../../../../TileO.ump"
+  // line 391 "../../../../../TileO.ump"
    public void land(){
     //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();

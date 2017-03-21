@@ -2,6 +2,7 @@ namespace ca.mcgill.ecse223.tileo.model;
 
 use TileOStates.ump;
 use PlayControllerStatus.ump;
+//use WinTileHintActionCard.ump;
 
 class TileO {
   1 <@>- * Game games;
@@ -9,7 +10,7 @@ class TileO {
 }
 
 class Game {
-  mode { DESIGN{} GAME{} GAME_WON{} GAME_ROLLDIEACTIONCARD{} GAME_CONNECTTILESACTIONCARD{} GAME_REMOVECONNECTIONACTIONCARD{} GAME_TELEPORTACTIONCARD{} GAME_LOSETURNACTIONCARD{} }
+  mode { DESIGN{} GAME{} GAME_WON{} GAME_ROLLDIEACTIONCARD{} GAME_CONNECTTILESACTIONCARD{} GAME_REMOVECONNECTIONACTIONCARD{} GAME_TELEPORTACTIONCARD{} GAME_LOSETURNACTIONCARD{} GAME_WINTILEHINTACTIONCARD{} }
   1 <@>- 2..4 Player players;
   1 <@>- * Tile tiles;
   1 <@>- * Connection connections;
@@ -377,6 +378,10 @@ class NormalTile {
 		currentGame.setMode(Game.Mode.GAME);
   }
   
+}
+
+class WinTileHintActionCard {
+	isA ActionCard;
 }
 
 class WinTile {

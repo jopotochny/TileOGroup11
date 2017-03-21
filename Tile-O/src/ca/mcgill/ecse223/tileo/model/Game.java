@@ -1,587 +1,591 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ca.mcgill.ecse223.tileo.model.Player.PlayerStatus;
 
-// line 11 "../../../../../TileO.ump"
+// line 12 "../../../../../TileO.ump"
 public class Game
 {
-	//------------------------
-	// STATIC VARIABLES
-	//------------------------
 
-	public static final int SpareConnectionPieces = 32;
-	public static final int NumberOfActionCards = 32;
+  //------------------------
+  // STATIC VARIABLES
+  //------------------------
 
-	//------------------------
-	// MEMBER VARIABLES
-	//------------------------
+  public static final int SpareConnectionPieces = 32;
+  public static final int NumberOfActionCards = 32;
 
-	//Game Attributes
-	private int currentConnectionPieces;
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
 
-	//Game State Machines
-	public enum Mode { DESIGN, GAME, GAME_WON, GAME_ROLLDIEACTIONCARD, GAME_CONNECTTILESACTIONCARD, GAME_REMOVECONNECTIONACTIONCARD, GAME_TELEPORTACTIONCARD, GAME_LOSETURNACTIONCARD }
-	private Mode mode;
+  //Game Attributes
+  private int currentConnectionPieces;
 
-	//Game Associations
-	private List<Player> players;
-	private List<Tile> tiles;
-	private List<Connection> connections;
-	private Deck deck;
-	private Die die;
-	private Player currentPlayer;
-	private WinTile winTile;
-	private TileO tileO;
+  //Game State Machines
+  public enum Mode { DESIGN, GAME, GAME_WON, GAME_ROLLDIEACTIONCARD, GAME_CONNECTTILESACTIONCARD, GAME_REMOVECONNECTIONACTIONCARD, GAME_TELEPORTACTIONCARD, GAME_LOSETURNACTIONCARD, GAME_WINTILEHINTACTIONCARD }
+  private Mode mode;
 
-	//------------------------
-	// CONSTRUCTOR
-	//------------------------
+  //Game Associations
+  private List<Player> players;
+  private List<Tile> tiles;
+  private List<Connection> connections;
+  private Deck deck;
+  private Die die;
+  private Player currentPlayer;
+  private WinTile winTile;
+  private TileO tileO;
 
-	public Game(int aCurrentConnectionPieces, Deck aDeck, Die aDie, TileO aTileO)
-	{
-		currentConnectionPieces = aCurrentConnectionPieces;
-		players = new ArrayList<Player>();
-		tiles = new ArrayList<Tile>();
-		connections = new ArrayList<Connection>();
-		if (aDeck == null || aDeck.getGame() != null)
-		{
-			throw new RuntimeException("Unable to create Game due to aDeck");
-		}
-		deck = aDeck;
-		if (aDie == null || aDie.getGame() != null)
-		{
-			throw new RuntimeException("Unable to create Game due to aDie");
-		}
-		die = aDie;
-		boolean didAddTileO = setTileO(aTileO);
-		if (!didAddTileO)
-		{
-			throw new RuntimeException("Unable to create game due to tileO");
-		}
-		setMode(Mode.DESIGN);
-	}
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
 
-	public Game(int aCurrentConnectionPieces, TileO aTileO)
-	{
-		currentConnectionPieces = aCurrentConnectionPieces;
-		players = new ArrayList<Player>();
-		tiles = new ArrayList<Tile>();
-		connections = new ArrayList<Connection>();
-		deck = new Deck(this);
-		die = new Die(this);
-		boolean didAddTileO = setTileO(aTileO);
-		if (!didAddTileO)
-		{
-			throw new RuntimeException("Unable to create game due to tileO");
-		}
-	}
+  public Game(int aCurrentConnectionPieces, Deck aDeck, Die aDie, TileO aTileO)
+  {
+    currentConnectionPieces = aCurrentConnectionPieces;
+    players = new ArrayList<Player>();
+    tiles = new ArrayList<Tile>();
+    connections = new ArrayList<Connection>();
+    if (aDeck == null || aDeck.getGame() != null)
+    {
+      throw new RuntimeException("Unable to create Game due to aDeck");
+    }
+    deck = aDeck;
+    if (aDie == null || aDie.getGame() != null)
+    {
+      throw new RuntimeException("Unable to create Game due to aDie");
+    }
+    die = aDie;
+    boolean didAddTileO = setTileO(aTileO);
+    if (!didAddTileO)
+    {
+      throw new RuntimeException("Unable to create game due to tileO");
+    }
+    setMode(Mode.DESIGN);
+  }
 
-	//------------------------
-	// INTERFACE
-	//------------------------
+  public Game(int aCurrentConnectionPieces, TileO aTileO)
+  {
+    currentConnectionPieces = aCurrentConnectionPieces;
+    players = new ArrayList<Player>();
+    tiles = new ArrayList<Tile>();
+    connections = new ArrayList<Connection>();
+    deck = new Deck(this);
+    die = new Die(this);
+    boolean didAddTileO = setTileO(aTileO);
+    if (!didAddTileO)
+    {
+      throw new RuntimeException("Unable to create game due to tileO");
+    }
+  }
 
-	public boolean setCurrentConnectionPieces(int aCurrentConnectionPieces)
-	{
-		boolean wasSet = false;
-		currentConnectionPieces = aCurrentConnectionPieces;
-		wasSet = true;
-		return wasSet;
-	}
+  //------------------------
+  // INTERFACE
+  //------------------------
 
-	public int getCurrentConnectionPieces()
-	{
-		return currentConnectionPieces;
-	}
+  public boolean setCurrentConnectionPieces(int aCurrentConnectionPieces)
+  {
+    boolean wasSet = false;
+    currentConnectionPieces = aCurrentConnectionPieces;
+    wasSet = true;
+    return wasSet;
+  }
 
-	public String getModeFullName()
-	{
-		String answer = mode.toString();
-		return answer;
-	}
+  public int getCurrentConnectionPieces()
+  {
+    return currentConnectionPieces;
+  }
 
-	public Mode getMode()
-	{
-		return mode;
-	}
+  public String getModeFullName()
+  {
+    String answer = mode.toString();
+    return answer;
+  }
 
-	public boolean setMode(Mode aMode)
-	{
-		mode = aMode;
-		return true;
-	}
+  public Mode getMode()
+  {
+    return mode;
+  }
 
-	public Player getPlayer(int index)
-	{
-		Player aPlayer = players.get(index);
-		return aPlayer;
-	}
+  public boolean setMode(Mode aMode)
+  {
+    mode = aMode;
+    return true;
+  }
 
-	public List<Player> getPlayers()
-	{
-		List<Player> newPlayers = Collections.unmodifiableList(players);
-		return newPlayers;
-	}
+  public Player getPlayer(int index)
+  {
+    Player aPlayer = players.get(index);
+    return aPlayer;
+  }
 
-	public int numberOfPlayers()
-	{
-		int number = players.size();
-		return number;
-	}
+  public List<Player> getPlayers()
+  {
+    List<Player> newPlayers = Collections.unmodifiableList(players);
+    return newPlayers;
+  }
 
-	public boolean hasPlayers()
-	{
-		boolean has = players.size() > 0;
-		return has;
-	}
+  public int numberOfPlayers()
+  {
+    int number = players.size();
+    return number;
+  }
 
-	public int indexOfPlayer(Player aPlayer)
-	{
-		int index = players.indexOf(aPlayer);
-		return index;
-	}
+  public boolean hasPlayers()
+  {
+    boolean has = players.size() > 0;
+    return has;
+  }
 
-	public Tile getTile(int index)
-	{
-		Tile aTile = tiles.get(index);
-		return aTile;
-	}
+  public int indexOfPlayer(Player aPlayer)
+  {
+    int index = players.indexOf(aPlayer);
+    return index;
+  }
 
-	public List<Tile> getTiles()
-	{
-		List<Tile> newTiles = Collections.unmodifiableList(tiles);
-		return newTiles;
-	}
+  public Tile getTile(int index)
+  {
+    Tile aTile = tiles.get(index);
+    return aTile;
+  }
 
-	public int numberOfTiles()
-	{
-		int number = tiles.size();
-		return number;
-	}
+  public List<Tile> getTiles()
+  {
+    List<Tile> newTiles = Collections.unmodifiableList(tiles);
+    return newTiles;
+  }
 
-	public boolean hasTiles()
-	{
-		boolean has = tiles.size() > 0;
-		return has;
-	}
+  public int numberOfTiles()
+  {
+    int number = tiles.size();
+    return number;
+  }
 
-	public int indexOfTile(Tile aTile)
-	{
-		int index = tiles.indexOf(aTile);
-		return index;
-	}
+  public boolean hasTiles()
+  {
+    boolean has = tiles.size() > 0;
+    return has;
+  }
 
-	public Connection getConnection(int index)
-	{
-		Connection aConnection = connections.get(index);
-		return aConnection;
-	}
+  public int indexOfTile(Tile aTile)
+  {
+    int index = tiles.indexOf(aTile);
+    return index;
+  }
 
-	public List<Connection> getConnections()
-	{
-		List<Connection> newConnections = Collections.unmodifiableList(connections);
-		return newConnections;
-	}
+  public Connection getConnection(int index)
+  {
+    Connection aConnection = connections.get(index);
+    return aConnection;
+  }
 
-	public int numberOfConnections()
-	{
-		int number = connections.size();
-		return number;
-	}
+  public List<Connection> getConnections()
+  {
+    List<Connection> newConnections = Collections.unmodifiableList(connections);
+    return newConnections;
+  }
 
-	public boolean hasConnections()
-	{
-		boolean has = connections.size() > 0;
-		return has;
-	}
+  public int numberOfConnections()
+  {
+    int number = connections.size();
+    return number;
+  }
 
-	public int indexOfConnection(Connection aConnection)
-	{
-		int index = connections.indexOf(aConnection);
-		return index;
-	}
+  public boolean hasConnections()
+  {
+    boolean has = connections.size() > 0;
+    return has;
+  }
 
-	public Deck getDeck()
-	{
-		return deck;
-	}
+  public int indexOfConnection(Connection aConnection)
+  {
+    int index = connections.indexOf(aConnection);
+    return index;
+  }
 
-	public Die getDie()
-	{
-		return die;
-	}
+  public Deck getDeck()
+  {
+    return deck;
+  }
 
-	public Player getCurrentPlayer()
-	{
-		return currentPlayer;
-	}
+  public Die getDie()
+  {
+    return die;
+  }
 
-	public boolean hasCurrentPlayer()
-	{
-		boolean has = currentPlayer != null;
-		return has;
-	}
+  public Player getCurrentPlayer()
+  {
+    return currentPlayer;
+  }
 
-	public WinTile getWinTile()
-	{
-		return winTile;
-	}
+  public boolean hasCurrentPlayer()
+  {
+    boolean has = currentPlayer != null;
+    return has;
+  }
 
-	public boolean hasWinTile()
-	{
-		boolean has = winTile != null;
-		return has;
-	}
+  public WinTile getWinTile()
+  {
+    return winTile;
+  }
 
-	public TileO getTileO()
-	{
-		return tileO;
-	}
+  public boolean hasWinTile()
+  {
+    boolean has = winTile != null;
+    return has;
+  }
 
-	public boolean isNumberOfPlayersValid()
-	{
-		boolean isValid = numberOfPlayers() >= minimumNumberOfPlayers() && numberOfPlayers() <= maximumNumberOfPlayers();
-		return isValid;
-	}
+  public TileO getTileO()
+  {
+    return tileO;
+  }
 
-	public static int minimumNumberOfPlayers()
-	{
-		return 2;
-	}
+  public boolean isNumberOfPlayersValid()
+  {
+    boolean isValid = numberOfPlayers() >= minimumNumberOfPlayers() && numberOfPlayers() <= maximumNumberOfPlayers();
+    return isValid;
+  }
 
-	public static int maximumNumberOfPlayers()
-	{
-		return 4;
-	}
+  public static int minimumNumberOfPlayers()
+  {
+    return 2;
+  }
 
-	public Player addPlayer(int aNumber)
-	{
-		if (numberOfPlayers() >= maximumNumberOfPlayers())
-		{
-			return null;
-		}
-		else
-		{
-			return new Player(aNumber, this);
-		}
-	}
+  public static int maximumNumberOfPlayers()
+  {
+    return 4;
+  }
 
-	public boolean addPlayer(Player aPlayer)
-	{
-		boolean wasAdded = false;
-		if (players.contains(aPlayer)) { return false; }
-		if (numberOfPlayers() >= maximumNumberOfPlayers())
-		{
-			return wasAdded;
-		}
+  public Player addPlayer(int aNumber)
+  {
+    if (numberOfPlayers() >= maximumNumberOfPlayers())
+    {
+      return null;
+    }
+    else
+    {
+      return new Player(aNumber, this);
+    }
+  }
 
-		Game existingGame = aPlayer.getGame();
-		boolean isNewGame = existingGame != null && !this.equals(existingGame);
+  public boolean addPlayer(Player aPlayer)
+  {
+    boolean wasAdded = false;
+    if (players.contains(aPlayer)) { return false; }
+    if (numberOfPlayers() >= maximumNumberOfPlayers())
+    {
+      return wasAdded;
+    }
 
-		if (isNewGame && existingGame.numberOfPlayers() <= minimumNumberOfPlayers())
-		{
-			return wasAdded;
-		}
+    Game existingGame = aPlayer.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
 
-		if (isNewGame)
-		{
-			aPlayer.setGame(this);
-		}
-		else
-		{
-			players.add(aPlayer);
-		}
-		wasAdded = true;
-		return wasAdded;
-	}
+    if (isNewGame && existingGame.numberOfPlayers() <= minimumNumberOfPlayers())
+    {
+      return wasAdded;
+    }
 
-	public boolean removePlayer(Player aPlayer)
-	{
-		boolean wasRemoved = false;
-		//Unable to remove aPlayer, as it must always have a game
-		if (this.equals(aPlayer.getGame()))
-		{
-			return wasRemoved;
-		}
+    if (isNewGame)
+    {
+      aPlayer.setGame(this);
+    }
+    else
+    {
+      players.add(aPlayer);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
 
-		//game already at minimum (2)
-		if (numberOfPlayers() <= minimumNumberOfPlayers())
-		{
-			return wasRemoved;
-		}
-		players.remove(aPlayer);
-		wasRemoved = true;
-		return wasRemoved;
-	}
+  public boolean removePlayer(Player aPlayer)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aPlayer, as it must always have a game
+    if (this.equals(aPlayer.getGame()))
+    {
+      return wasRemoved;
+    }
 
-	public boolean addPlayerAt(Player aPlayer, int index)
-	{  
-		boolean wasAdded = false;
-		if(addPlayer(aPlayer))
-		{
-			if(index < 0 ) { index = 0; }
-			if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-			players.remove(aPlayer);
-			players.add(index, aPlayer);
-			wasAdded = true;
-		}
-		return wasAdded;
-	}
+    //game already at minimum (2)
+    if (numberOfPlayers() <= minimumNumberOfPlayers())
+    {
+      return wasRemoved;
+    }
+    players.remove(aPlayer);
+    wasRemoved = true;
+    return wasRemoved;
+  }
 
-	public boolean addOrMovePlayerAt(Player aPlayer, int index)
-	{
-		boolean wasAdded = false;
-		if(players.contains(aPlayer))
-		{
-			if(index < 0 ) { index = 0; }
-			if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-			players.remove(aPlayer);
-			players.add(index, aPlayer);
-			wasAdded = true;
-		} 
-		else 
-		{
-			wasAdded = addPlayerAt(aPlayer, index);
-		}
-		return wasAdded;
-	}
+  public boolean addPlayerAt(Player aPlayer, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayer(aPlayer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
 
-	public static int minimumNumberOfTiles()
-	{
-		return 0;
-	}
-	/*
-  public Tile addTile(int aX, int aY)
+  public boolean addOrMovePlayerAt(Player aPlayer, int index)
+  {
+    boolean wasAdded = false;
+    if(players.contains(aPlayer))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
+      players.remove(aPlayer);
+      players.add(index, aPlayer);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayerAt(aPlayer, index);
+    }
+    return wasAdded;
+  }
+
+  public static int minimumNumberOfTiles()
+  {
+    return 0;
+  }
+
+ /* public Tile addTile(int aX, int aY)
   {
     return new Tile(aX, aY, this);
+  }*/
+
+  public boolean addTile(Tile aTile)
+  {
+    boolean wasAdded = false;
+    if (tiles.contains(aTile)) { return false; }
+    Game existingGame = aTile.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aTile.setGame(this);
+    }
+    else
+    {
+      tiles.add(aTile);
+    }
+    wasAdded = true;
+    return wasAdded;
   }
-	 */
-	public boolean addTile(Tile aTile)
-	{
-		boolean wasAdded = false;
-		if (tiles.contains(aTile)) { return false; }
-		Game existingGame = aTile.getGame();
-		boolean isNewGame = existingGame != null && !this.equals(existingGame);
-		if (isNewGame)
-		{
-			aTile.setGame(this);
-		}
-		else
-		{
-			tiles.add(aTile);
-		}
-		wasAdded = true;
-		return wasAdded;
-	}
 
-	public boolean removeTile(Tile aTile)
-	{
-		boolean wasRemoved = false;
-		//Unable to remove aTile, as it must always have a game
-		if (!this.equals(aTile.getGame()))
-		{
-			tiles.remove(aTile);
-			wasRemoved = true;
-		}
-		return wasRemoved;
-	}
+  public boolean removeTile(Tile aTile)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aTile, as it must always have a game
+    if (!this.equals(aTile.getGame()))
+    {
+      tiles.remove(aTile);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
 
-	public boolean addTileAt(Tile aTile, int index)
-	{  
-		boolean wasAdded = false;
-		if(addTile(aTile))
-		{
-			if(index < 0 ) { index = 0; }
-			if(index > numberOfTiles()) { index = numberOfTiles() - 1; }
-			tiles.remove(aTile);
-			tiles.add(index, aTile);
-			wasAdded = true;
-		}
-		return wasAdded;
-	}
+  public boolean addTileAt(Tile aTile, int index)
+  {  
+    boolean wasAdded = false;
+    if(addTile(aTile))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTiles()) { index = numberOfTiles() - 1; }
+      tiles.remove(aTile);
+      tiles.add(index, aTile);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
 
-	public boolean addOrMoveTileAt(Tile aTile, int index)
-	{
-		boolean wasAdded = false;
-		if(tiles.contains(aTile))
-		{
-			if(index < 0 ) { index = 0; }
-			if(index > numberOfTiles()) { index = numberOfTiles() - 1; }
-			tiles.remove(aTile);
-			tiles.add(index, aTile);
-			wasAdded = true;
-		} 
-		else 
-		{
-			wasAdded = addTileAt(aTile, index);
-		}
-		return wasAdded;
-	}
+  public boolean addOrMoveTileAt(Tile aTile, int index)
+  {
+    boolean wasAdded = false;
+    if(tiles.contains(aTile))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTiles()) { index = numberOfTiles() - 1; }
+      tiles.remove(aTile);
+      tiles.add(index, aTile);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addTileAt(aTile, index);
+    }
+    return wasAdded;
+  }
 
-	public static int minimumNumberOfConnections()
-	{
-		return 0;
-	}
+  public static int minimumNumberOfConnections()
+  {
+    return 0;
+  }
 
-	public Connection addConnection()
-	{
-		return new Connection(this);
-	}
+  public Connection addConnection()
+  {
+    return new Connection(this);
+  }
 
-	public boolean addConnection(Connection aConnection)
-	{
-		boolean wasAdded = false;
-		if (connections.contains(aConnection)) { return false; }
-		Game existingGame = aConnection.getGame();
-		boolean isNewGame = existingGame != null && !this.equals(existingGame);
-		if (isNewGame)
-		{
-			aConnection.setGame(this);
-		}
-		else
-		{
-			connections.add(aConnection);
-		}
-		wasAdded = true;
-		return wasAdded;
-	}
+  public boolean addConnection(Connection aConnection)
+  {
+    boolean wasAdded = false;
+    if (connections.contains(aConnection)) { return false; }
+    Game existingGame = aConnection.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aConnection.setGame(this);
+    }
+    else
+    {
+      connections.add(aConnection);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
 
-	public boolean removeConnection(Connection aConnection)
-	{
-		boolean wasRemoved = false;
-		//Unable to remove aConnection, as it must always have a game
-		if (!this.equals(aConnection.getGame()))
-		{
-			connections.remove(aConnection);
-			wasRemoved = true;
-		}
-		return wasRemoved;
-	}
+  public boolean removeConnection(Connection aConnection)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aConnection, as it must always have a game
+    if (!this.equals(aConnection.getGame()))
+    {
+      connections.remove(aConnection);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
 
-	public boolean addConnectionAt(Connection aConnection, int index)
-	{  
-		boolean wasAdded = false;
-		if(addConnection(aConnection))
-		{
-			if(index < 0 ) { index = 0; }
-			if(index > numberOfConnections()) { index = numberOfConnections() - 1; }
-			connections.remove(aConnection);
-			connections.add(index, aConnection);
-			wasAdded = true;
-		}
-		return wasAdded;
-	}
+  public boolean addConnectionAt(Connection aConnection, int index)
+  {  
+    boolean wasAdded = false;
+    if(addConnection(aConnection))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfConnections()) { index = numberOfConnections() - 1; }
+      connections.remove(aConnection);
+      connections.add(index, aConnection);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
 
-	public boolean addOrMoveConnectionAt(Connection aConnection, int index)
-	{
-		boolean wasAdded = false;
-		if(connections.contains(aConnection))
-		{
-			if(index < 0 ) { index = 0; }
-			if(index > numberOfConnections()) { index = numberOfConnections() - 1; }
-			connections.remove(aConnection);
-			connections.add(index, aConnection);
-			wasAdded = true;
-		} 
-		else 
-		{
-			wasAdded = addConnectionAt(aConnection, index);
-		}
-		return wasAdded;
-	}
+  public boolean addOrMoveConnectionAt(Connection aConnection, int index)
+  {
+    boolean wasAdded = false;
+    if(connections.contains(aConnection))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfConnections()) { index = numberOfConnections() - 1; }
+      connections.remove(aConnection);
+      connections.add(index, aConnection);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addConnectionAt(aConnection, index);
+    }
+    return wasAdded;
+  }
 
-	public boolean setCurrentPlayer(Player aNewCurrentPlayer)
-	{
-		boolean wasSet = false;
-		currentPlayer = aNewCurrentPlayer;
-		wasSet = true;
-		return wasSet;
-	}
+  public boolean setCurrentPlayer(Player aNewCurrentPlayer)
+  {
+    boolean wasSet = false;
+    currentPlayer = aNewCurrentPlayer;
+    wasSet = true;
+    return wasSet;
+  }
 
-	public boolean setWinTile(WinTile aNewWinTile)
-	{
-		boolean wasSet = false;
-		winTile = aNewWinTile;
-		wasSet = true;
-		return wasSet;
-	}
+  public boolean setWinTile(WinTile aNewWinTile)
+  {
+    boolean wasSet = false;
+    winTile = aNewWinTile;
+    wasSet = true;
+    return wasSet;
+  }
 
-	public boolean setTileO(TileO aTileO)
-	{
-		boolean wasSet = false;
-		if (aTileO == null)
-		{
-			return wasSet;
-		}
+  public boolean setTileO(TileO aTileO)
+  {
+    boolean wasSet = false;
+    if (aTileO == null)
+    {
+      return wasSet;
+    }
 
-		TileO existingTileO = tileO;
-		tileO = aTileO;
-		if (existingTileO != null && !existingTileO.equals(aTileO))
-		{
-			existingTileO.removeGame(this);
-		}
-		tileO.addGame(this);
-		wasSet = true;
-		return wasSet;
-	}
+    TileO existingTileO = tileO;
+    tileO = aTileO;
+    if (existingTileO != null && !existingTileO.equals(aTileO))
+    {
+      existingTileO.removeGame(this);
+    }
+    tileO.addGame(this);
+    wasSet = true;
+    return wasSet;
+  }
 
-	public void delete()
-	{
-		while (players.size() > 0)
-		{
-			Player aPlayer = players.get(players.size() - 1);
-			aPlayer.delete();
-			players.remove(aPlayer);
-		}
+  public void delete()
+  {
+    while (players.size() > 0)
+    {
+      Player aPlayer = players.get(players.size() - 1);
+      aPlayer.delete();
+      players.remove(aPlayer);
+    }
+    
+    while (tiles.size() > 0)
+    {
+      Tile aTile = tiles.get(tiles.size() - 1);
+      aTile.delete();
+      tiles.remove(aTile);
+    }
+    
+    while (connections.size() > 0)
+    {
+      Connection aConnection = connections.get(connections.size() - 1);
+      aConnection.delete();
+      connections.remove(aConnection);
+    }
+    
+    Deck existingDeck = deck;
+    deck = null;
+    if (existingDeck != null)
+    {
+      existingDeck.delete();
+    }
+    Die existingDie = die;
+    die = null;
+    if (existingDie != null)
+    {
+      existingDie.delete();
+    }
+    currentPlayer = null;
+    winTile = null;
+    TileO placeholderTileO = tileO;
+    this.tileO = null;
+    if(placeholderTileO!=null){
+    placeholderTileO.removeGame(this);
+    }
+  }
 
-		while (tiles.size() > 0)
-		{
-			Tile aTile = tiles.get(tiles.size() - 1);
-			aTile.delete();
-			tiles.remove(aTile);
-		}
-
-		while (connections.size() > 0)
-		{
-			Connection aConnection = connections.get(connections.size() - 1);
-			aConnection.delete();
-			connections.remove(aConnection);
-		}
-
-		Deck existingDeck = deck;
-		deck = null;
-		if (existingDeck != null)
-		{
-			existingDeck.delete();
-		}
-		Die existingDie = die;
-		die = null;
-		if (existingDie != null)
-		{
-			existingDie.delete();
-		}
-		currentPlayer = null;
-		winTile = null;
-		TileO placeholderTileO = tileO;
-		this.tileO = null;
-		if(placeholderTileO != null){
-			placeholderTileO.removeGame(this);
-		}
-	}
-
-	public void updateTileStatus(){
-		for( Tile tile : tileO.getCurrentGame().getTiles() ){
+  // line 25 "../../../../../TileO.ump"
+   public void updateTileStatus(){
+    for( Tile tile : tileO.getCurrentGame().getTiles() ){
 			if( tile instanceof ActionTile){
 				((ActionTile) tile).takeTurn();
 			}
 		}
-	}
-	
-	public void determineNextPlayer(){
-		//getting the index of current player, and the number of total players
+  }
+
+  // line 33 "../../../../../TileO.ump"
+   public void determineNextPlayer(){
+    //getting the index of current player, and the number of total players
 		int indexOfPlayer = this.indexOfPlayer(currentPlayer);
 		int numberOfPlayers = this.numberOfPlayers();
 
@@ -627,20 +631,19 @@ public class Game
 			//if the next player is active, directly set it to the current one
 			this.setCurrentPlayer(nextPlayer);
 		}
-		
-	}
+  }
 
 
-	public String toString()
-	{
-		String outputString = "";
-		return super.toString() + "["+
-		"currentConnectionPieces" + ":" + getCurrentConnectionPieces()+ "]" + System.getProperties().getProperty("line.separator") +
-		"  " + "deck = "+(getDeck()!=null?Integer.toHexString(System.identityHashCode(getDeck())):"null") + System.getProperties().getProperty("line.separator") +
-		"  " + "die = "+(getDie()!=null?Integer.toHexString(System.identityHashCode(getDie())):"null") + System.getProperties().getProperty("line.separator") +
-		"  " + "currentPlayer = "+(getCurrentPlayer()!=null?Integer.toHexString(System.identityHashCode(getCurrentPlayer())):"null") + System.getProperties().getProperty("line.separator") +
-		"  " + "winTile = "+(getWinTile()!=null?Integer.toHexString(System.identityHashCode(getWinTile())):"null") + System.getProperties().getProperty("line.separator") +
-		"  " + "tileO = "+(getTileO()!=null?Integer.toHexString(System.identityHashCode(getTileO())):"null")
-		+ outputString;
-	}
+  public String toString()
+  {
+    String outputString = "";
+    return super.toString() + "["+
+            "currentConnectionPieces" + ":" + getCurrentConnectionPieces()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "deck = "+(getDeck()!=null?Integer.toHexString(System.identityHashCode(getDeck())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "die = "+(getDie()!=null?Integer.toHexString(System.identityHashCode(getDie())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "currentPlayer = "+(getCurrentPlayer()!=null?Integer.toHexString(System.identityHashCode(getCurrentPlayer())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "winTile = "+(getWinTile()!=null?Integer.toHexString(System.identityHashCode(getWinTile())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "tileO = "+(getTileO()!=null?Integer.toHexString(System.identityHashCode(getTileO())):"null")
+     + outputString;
+  }
 }

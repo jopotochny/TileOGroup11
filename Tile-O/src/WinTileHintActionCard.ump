@@ -1,0 +1,5 @@
+// a mode GAME_WINTILEHINTACTIONCARD is added to the game enum mode in the main umple gile
+
+class WinTileHintActionCard {
+	isA ActionCard;
+}

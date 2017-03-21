@@ -2,10 +2,9 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-
 import java.util.List;
 
-// line 462 "../../../../../TileO.ump"
+// line 422 "../../../../../TileO.ump"
 public class RollDieActionCard extends ActionCard
 {
 
@@ -31,7 +30,7 @@ public class RollDieActionCard extends ActionCard
     super.delete();
   }
 
-  // line 467 "../../../../../TileO.ump"
+  // line 428 "../../../../../TileO.ump"
    public List<Tile> play(){
     //get the current game from the TileO application
 		  Game currentGame = super.getDeck().getGame();
@@ -52,7 +51,7 @@ public class RollDieActionCard extends ActionCard
 			return tiles;
   }
 
-  // line 488 "../../../../../TileO.ump"
+  // line 449 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_ROLLDIEACTIONCARD;
   }

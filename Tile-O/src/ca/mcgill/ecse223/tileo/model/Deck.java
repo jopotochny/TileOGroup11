@@ -2,11 +2,9 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-// line 445 "../../../../../TileO.ump"
+// line 405 "../../../../../TileO.ump"
 public class Deck
 {
 
@@ -99,17 +97,17 @@ public class Deck
     return 32;
   }
 
- /* public ActionCard addCard(String aInstructions)
-  {
-    if (numberOfCards() >= maximumNumberOfCards())
-    {
-      return null;
-    }
-    else
-    {
-      return new ActionCard(aInstructions, this);
-    }
-  }*/
+//  public ActionCard addCard(String aInstructions)
+//  {
+//    if (numberOfCards() >= maximumNumberOfCards())
+//    {
+//      return null;
+//    }
+//    else
+//    {
+//      return new ActionCard(aInstructions, this);
+//    }
+//  }
 
   public boolean addCard(ActionCard aCard)
   {
@@ -204,7 +202,7 @@ public class Deck
     }
   }
 
-  // line 450 "../../../../../TileO.ump"
+  // line 410 "../../../../../TileO.ump"
    public void shuffle(){
     Collections.shuffle(cards);
   }
