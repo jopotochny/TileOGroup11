@@ -285,6 +285,7 @@ class ActionTile {
   immutable Integer inactivityPeriod;
   Integer turnsUntilActive= 0;
   
+   // line 289 "../../../../../TileO.ump"
    public void land(){
     //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();
@@ -335,6 +336,10 @@ class ActionTile {
 				TeleportActionCard loseTurnActionCard = (TeleportActionCard) currentCard;
 				mode = loseTurnActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof WinTileHintActionCard){
+				WinTileHintActionCard winTileHintActionCard = (WinTileHintActionCard) currentCard;
+				mode = winTileHintActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}
 			this.deactivate();
 		}else{
@@ -349,7 +354,6 @@ class ActionTile {
 			
 		}
   }
-  
 }
 
 class NormalTile {
@@ -382,6 +386,26 @@ class NormalTile {
 
 class WinTileHintActionCard {
 	isA ActionCard;
+	
+	public boolean play(Tile tile){
+	  List<Tile> neighbours = tile.getNeighbours();
+	  if(tile instanceof WinTile){
+		  return true;
+	  }
+	  if(neighbours == null || neighbours.size() == 0){
+		  return false;
+	  }
+	  for(Tile aTile : neighbours){
+		if(aTile instanceof WinTile){
+			return true;
+		}
+	  }
+	  return false;
+  }
+  
+  public Game.Mode getActionCardGameMode(){
+   return Game.Mode.GAME_WINTILEHINTACTIONCARD;
+ }
 }
 
 class WinTile {

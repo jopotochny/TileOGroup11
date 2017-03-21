@@ -74,7 +74,7 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		  	playLoseTurnActionCard()[isLoseTurnActionCard()] / { 
 		  		doPlayLoseTurnActionCard();
 		  	}  -> Roll;
-		  	playWinTileHintAction() [isWintTileHintActionCard()] / {
+		  	playWinTileHintAction(Tile tile) [isWintTileHintActionCard()] / {
 		  		doPlayWintTileHintAction();
 		  	} -> Roll;
 	} 
@@ -511,7 +511,56 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		// set the mode of the current game to GAME
 		currentGame.setMode(Game.Mode.GAME);
 	}
+	
+	public boolean doPlayWinTileHintActionCard(Tile tile) throws InvalidInputException{
+		// get the current game
 
+		Game currentGame = tileO.getCurrentGame();
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof WinTileHintActionCard)){
+			throw new InvalidInputException("The Current Card is not a WinTileHintActionCard.");
+		}
+
+		WinTileHintActionCard currentCard = (WinTileHintActionCard) currentDeck.getCurrentCard();
+
+		// the player that drew the card loses his Next turn
+
+		boolean result = currentCard.play(tile);
+
+		//determining the next player
+		currentGame.determineNextPlayer();
+
+		//decrement the inactivity period of inactive action tiles
+		currentGame.updateTileStatus();
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);
+
+		return result;
+	}
+	
+	
 
 	/**
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
@@ -700,6 +749,13 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 		return false;
 	}
-
+	
+	
+	private boolean isWinTileHintActionCard() {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof WinTileHintActionCard){
+			return true;
+		}
+		return false;
+	}
 	
 } 

@@ -128,13 +128,13 @@ public class PlayController
 	{
 		boolean wasEventProcessed = false;
 
-		
+
 		if(getGameMode().equals(Game.Mode.GAME) && getMode().equals(PlayController.Mode.ActionCard)){
 			setMode(Mode.Roll);
 		}
-		
+
 		Mode aMode = mode;
-		
+
 		switch (aMode)
 		{
 		case Roll:
@@ -238,7 +238,7 @@ public class PlayController
 		return wasEventProcessed;
 	}
 
-	
+
 
 	public boolean playRemoveConnectionActionCard(Connection c) throws InvalidInputException
 	{
@@ -305,7 +305,7 @@ public class PlayController
 		return wasEventProcessed;
 	}
 
-	
+
 
 	public boolean playLoseTurnActionCard() throws InvalidInputException
 	{
@@ -514,15 +514,15 @@ public class PlayController
 
 		//get the possible moves of the current player, depending on the generated number
 		List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), number);
-		
-		
+
+
 
 		return tiles;
 	}
 
 
 	/**
-	 * TODO check if it's necessary to set the mode here (already set in the model)
+	 * check if it's necessary to set the mode here (already set in the model)
 	 */
 	// line 178 "../../../../../PlayControllerStatus.ump"
 	public void doLandTile(Tile tile) throws InvalidInputException{
@@ -734,7 +734,7 @@ public class PlayController
 
 		//decrement the inactivity period of inactive action tiles
 		currentGame.updateTileStatus();
-		
+
 		// set the currentCard to be the next card so that the next
 		// time a player draws a card , he gets the next card
 		// if the current card is the last card of the deck
@@ -862,8 +862,56 @@ public class PlayController
 	}
 
 
+	public boolean doPlayWinTileHintActionCard(Tile tile) throws InvalidInputException{
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof WinTileHintActionCard)){
+			throw new InvalidInputException("The Current Card is not a WinTileHintActionCard.");
+		}
+
+		WinTileHintActionCard currentCard = (WinTileHintActionCard) currentDeck.getCurrentCard();
+
+		// the player that drew the card loses his Next turn
+
+		boolean result = currentCard.play(tile);
+
+		//determining the next player
+		currentGame.determineNextPlayer();
+
+		//decrement the inactivity period of inactive action tiles
+		currentGame.updateTileStatus();
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);
+
+		return result;
+	}
+
 	/**
-	 * TODO
+	 * 
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
 	 * he can move nowhere. We should not let him move
 	 */
@@ -892,7 +940,7 @@ public class PlayController
 
 		//set the mode of game of GAME
 		currentGame.setMode(Game.Mode.GAME);
-		
+
 		//set the controller mode to Roll
 		this.setMode(Mode.Roll);
 	}
@@ -958,7 +1006,7 @@ public class PlayController
 		return selectedGame;
 	}
 
-	
+
 	private boolean isNotInGameOrWonMode(Game selectedGame) {
 		if(selectedGame.getMode().equals(Game.Mode.GAME) || (selectedGame.getMode().equals(Game.Mode.GAME_WON)) ){
 			return false;
@@ -979,7 +1027,7 @@ public class PlayController
 		}
 		return false;
 	}
-	
+
 	private boolean isActionTile(Tile tile) {
 		if(tile instanceof ActionTile){
 			return true;
@@ -1000,14 +1048,22 @@ public class PlayController
 		}
 		return false;
 	}
-	
+
 	private boolean isLoseTurnActionCard() {
 		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof LoseTurnActionCard){
 			return true;
 		}
 		return false;
 	}
-	
+
+	//TODO add this to the umple file
+	private boolean isWinTileHintActionCard() {
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof WinTileHintActionCard){
+			return true;
+		}
+		return false;
+	}
+
 	private boolean isTeleportAndActionTile(Tile tile) {
 		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof TeleportActionCard){
 			if(tile instanceof ActionTile){
@@ -1034,7 +1090,7 @@ public class PlayController
 		}
 		return false;
 	}
-	
+
 	private boolean isRemoveConnectionActionCard() {
 		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof RemoveConnectionActionCard){
 			return true;
@@ -1053,6 +1109,6 @@ public class PlayController
 		}
 		return false;
 	}
-	
+
 
 }

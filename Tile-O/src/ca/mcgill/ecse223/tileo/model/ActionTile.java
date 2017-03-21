@@ -183,6 +183,10 @@ public class ActionTile extends Tile
 				TeleportActionCard loseTurnActionCard = (TeleportActionCard) currentCard;
 				mode = loseTurnActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof WinTileHintActionCard){
+				WinTileHintActionCard winTileHintActionCard = (WinTileHintActionCard) currentCard;
+				mode = winTileHintActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}
 			this.deactivate();
 		}else{
