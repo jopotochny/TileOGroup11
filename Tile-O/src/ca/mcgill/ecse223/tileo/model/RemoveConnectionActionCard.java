@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 474 "../../../../../TileO.ump"
+// line 498 "../../../../../TileO.ump"
 public class RemoveConnectionActionCard extends ActionCard
 {
 
@@ -29,12 +29,12 @@ public class RemoveConnectionActionCard extends ActionCard
     super.delete();
   }
 
-  // line 479 "../../../../../TileO.ump"
+  // line 503 "../../../../../TileO.ump"
    public void play(Connection connection){
     connection.delete();
   }
 
-  // line 484 "../../../../../TileO.ump"
+  // line 508 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
   }

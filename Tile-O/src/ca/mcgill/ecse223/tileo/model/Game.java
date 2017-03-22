@@ -1,3 +1,4 @@
+/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
@@ -356,10 +357,10 @@ public class Game
     return 0;
   }
 
- /* public Tile addTile(int aX, int aY)
-  {
-    return new Tile(aX, aY, this);
-  }*/
+//  public Tile addTile(int aX, int aY)
+//  {
+//    return new Tile(aX, aY, this);
+//  }
 
   public boolean addTile(Tile aTile)
   {
@@ -569,10 +570,9 @@ public class Game
     winTile = null;
     TileO placeholderTileO = tileO;
     this.tileO = null;
-    if(placeholderTileO!=null){
-    placeholderTileO.removeGame(this);
-    }
-  }
+    if(placeholderTileO != null)
+    	placeholderTileO.removeGame(this);
+  }	
 
   // line 25 "../../../../../TileO.ump"
    public void updateTileStatus(){

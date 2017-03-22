@@ -132,7 +132,11 @@ public class ActionTile extends Tile
     super.delete();
   }
 
-  // line 289 "../../../../../TileO.ump"
+
+  /**
+   * line 289 "../../../../../TileO.ump"
+   */
+  // line 290 "../../../../../TileO.ump"
    public void land(){
     //getting the current game for which the tile belongs to
 		Game currentGame = this.getGame();

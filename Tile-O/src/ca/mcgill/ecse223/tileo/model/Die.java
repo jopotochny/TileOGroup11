@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.tileo.model;
 
 import java.util.Random;
 
-// line 554 "../../../../../TileO.ump"
+// line 578 "../../../../../TileO.ump"
 public class Die
 {
 
@@ -53,7 +53,7 @@ public class Die
     }
   }
 
-  // line 557 "../../../../../TileO.ump"
+  // line 581 "../../../../../TileO.ump"
    public int roll(){
     Random random = new Random();
 		int generatedNumber = random.nextInt(6) + 1;

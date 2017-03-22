@@ -260,6 +260,11 @@ public class PlayBoardVisualizer extends JPanel {
 
 	}
 	
+	public void setSelectedTileToNull(){
+		selectedTile1 = null;
+		selectedTile2 = null;
+	}
+	
 	//return the two tiles selected by the player
 	public List<Tile> getSelectedTiles(){
 		if(selectedTile1 != null && selectedTile2 != null){

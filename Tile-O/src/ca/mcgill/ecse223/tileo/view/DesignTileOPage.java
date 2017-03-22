@@ -580,7 +580,7 @@ public class DesignTileOPage extends JFrame {
 		PlayController pc = new PlayController(tileo);
 
 		try {
-			pc.startGame();
+			pc.startGame(tileo.getCurrentGame());
 			dispose();
 			new PlayTileOPage(tileo, pc).setVisible(true);
 		} catch (InvalidInputException e) {

@@ -282,7 +282,8 @@ public class PlayTileOPage extends JFrame{
 
 		//set the inactivity of the button depending on the game mode
 		setButtonActivity();
-
+		System.out.println("Game mode: " + pc.getGameMode());
+		System.out.println("contorller mode: " + pc.getMode());
 		error = "";
 		deckText = "";
 	}
@@ -301,7 +302,28 @@ public class PlayTileOPage extends JFrame{
 				deckText = " Roll the die";
 			}
 			deck.setText(deckText);
-		}else if(controllerMode.equals(PlayController.Mode.Ready)){
+		}else if(gameMode.equals(Game.Mode.GAME_WINTILEHINTACTIONCARD)){
+			System.out.println("in the game mode wint..");
+			deck.setText("Pick a tile to get a hint");
+			boardVisualizer.setSelectedTileToNull();
+			while(boardVisualizer.getSelectedTile() == null){
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			Tile selectedTile = boardVisualizer.getSelectedTile();
+			try {
+				System.out.println("calling the controller method");
+				boolean result = pc.doPlayWinTileHintActionCard(selectedTile);
+				System.out.println("result: " + result);
+			} catch (InvalidInputException e) {
+				error = e.getMessage();
+			}
+			
+		}
+		else if(controllerMode.equals(PlayController.Mode.Ready)){
 			rollDie.setEnabled(true);
 			if(deckText.equals("")){
 				deckText = " Roll the die";

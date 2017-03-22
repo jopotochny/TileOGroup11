@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.*;
 
-// line 405 "../../../../../TileO.ump"
+// line 429 "../../../../../TileO.ump"
 public class Deck
 {
 
@@ -202,7 +202,7 @@ public class Deck
     }
   }
 
-  // line 410 "../../../../../TileO.ump"
+  // line 434 "../../../../../TileO.ump"
    public void shuffle(){
     Collections.shuffle(cards);
   }

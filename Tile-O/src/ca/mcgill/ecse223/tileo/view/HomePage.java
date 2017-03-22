@@ -168,7 +168,7 @@ public class HomePage extends JFrame {
 		Game game = TileOApplication.getGame(selectedGame);
 		tileO.setCurrentGame(game);
 		try {
-			pc.startGame();
+			pc.startGame(game);
 			dispose();
 			new PlayTileOPage(tileO, pc).setVisible(true);
 		} catch (InvalidInputException e) {
