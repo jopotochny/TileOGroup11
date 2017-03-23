@@ -188,7 +188,7 @@ public class DesignBoardVisualizer extends JPanel {
 					}
 				}
 				
-				if(!whiteTilesList.contains(rectangle))
+				if(!connectableList.contains(rectangle))
 					blackRectangles.add(rectangle);
 					
 				g2d.setStroke(thinStroke);
@@ -331,15 +331,19 @@ public class DesignBoardVisualizer extends JPanel {
 			
 			Iterator<Rectangle2D> iter = blackRectangles.iterator();
 			Rectangle2D rect = null;
-
 			
 			while(iter.hasNext()){
 				Rectangle2D next = iter.next();
-				if(next.contains(x,y) ){
-					rect = next;
+				if(next.contains(x,y)  ){
+					if(!connectableList.contains(next)){
+						rect = next;
+					} else {
+						DesignTileOPage.console.setText("Please select a black tile");
+						return;
+					}
 				}
 			}
-			
+		
 			try{
 				descont.identifyWinTile((int)Math.round(rect.getX()), (int)Math.round(rect.getY()));;
 			} catch(InvalidInputException e1){
@@ -491,7 +495,6 @@ public class DesignBoardVisualizer extends JPanel {
 						break;
 					}
 					for(Player p : game.getPlayers()){
-						System.out.println("player " + p.getNumber() + " has start tile "+ p.getStartingTile().getX() + " " + p.getStartingTile().getY());
 					}
 					startTiles.add(rect);
 					

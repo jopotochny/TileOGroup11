@@ -164,7 +164,7 @@ public class DesignTileOPage extends JFrame {
 		addConnection.setText("Add Connection");
 
 		addActionTile = new JButton("Add Action Tile");
-		addWinTile = new JButton("Set Win Tile");
+		addWinTile = new JButton("Add Win Tile");
 
 		addTile = new JButton("Add Tile");
 		removeTile = new JButton("Remove Tile");
@@ -283,15 +283,7 @@ public class DesignTileOPage extends JFrame {
 				int numConnect=0;
 				int numExtra=0;
 				int numHint = 0;
-				if ((!rollCard.getText().isEmpty() && !teleportCard.getText().isEmpty()
-						&& !loseTurnCard.getText().isEmpty() && !connectionCard.getText().isEmpty()
-						&& !removeConnectionCard.getText().isEmpty() && !winTileHintCard.getText().isEmpty())
-						&& (rollCard.getText().matches("[0-9]+") && teleportCard.getText().matches("[0-9]+")
-								&& loseTurnCard.getText().matches("[0-9]+")
-								&& connectionCard.getText().matches("[0-9]+")
-								&& winTileHintCard.getText().matches("[0-9]+")
-								&& removeConnectionCard.getText().matches("[0-9]+"))) {
-					// System.out.println("hello");
+
 					try{
 						numRoll = Integer.parseInt(rollCard.getText());
 						numTeleport = Integer.parseInt(teleportCard.getText());
@@ -302,6 +294,7 @@ public class DesignTileOPage extends JFrame {
 					}catch(NumberFormatException e){
 						console.setText("One of the cards has an invalid value");
 						error = false;
+						return;
 					}
 
 					try {
@@ -311,9 +304,9 @@ public class DesignTileOPage extends JFrame {
 						console.setText(e.getMessage().trim());
 						error = false;
 					}
-				} else {
-					console.setText("One of the cards has an invalid value");
-				}
+//				} else {
+//					console.setText("One of the cards has an invalid value");
+//				}
 				if(error)
 					refreshData();
 			}
@@ -580,13 +573,14 @@ public class DesignTileOPage extends JFrame {
 		PlayController pc = new PlayController(tileo);
 
 		try {
-			pc.startGame(tileo.getCurrentGame());
+			pc.startGame(game);
 			dispose();
 			new PlayTileOPage(tileo, pc).setVisible(true);
 		} catch (InvalidInputException e) {
 			error = e.getMessage();
+			console.setText(error);
 		}
-		refreshData();
+		
 	}
 
 }
