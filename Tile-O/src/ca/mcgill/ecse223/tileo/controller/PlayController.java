@@ -325,7 +325,7 @@ public class PlayController
   public boolean playWinTileHintAction(Tile tile) throws InvalidInputException
   {
     boolean wasEventProcessed = false;
-    
+    boolean result = false;
     Mode aMode = mode;
     switch (aMode)
     {
@@ -333,7 +333,7 @@ public class PlayController
         if (isWinTileHintActionCard())
         {
         // line 77 "../../../../../PlayControllerStatus.ump"
-          doPlayWinTileHintActionCard(tile);
+          result = doPlayWinTileHintActionCard(tile);
           setMode(Mode.Roll);
           wasEventProcessed = true;
           break;
@@ -343,7 +343,11 @@ public class PlayController
         // Other states do respond to this event
     }
 
-    return wasEventProcessed;
+    if(wasEventProcessed){
+    	return result;
+    }else{
+    	return false;
+    }
   }
 
   private void setMode(Mode aMode)

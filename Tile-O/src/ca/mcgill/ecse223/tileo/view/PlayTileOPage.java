@@ -2,6 +2,8 @@ package ca.mcgill.ecse223.tileo.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,40 +29,41 @@ public class PlayTileOPage extends JFrame{
 	private static final long serialVersionUID = -4426310869335015542L;
 
 	//UI elements
-	private JLabel errorMessage;
-	private Game.Mode gameMode;
-	private PlayController.Mode controllerMode;
+	private static JLabel errorMessage;
+	private static Game.Mode gameMode;
+	private static PlayController.Mode controllerMode;
 
 	//save and load game
-	private JButton saveGame;
-	private JLabel player;
+	private static JButton saveGame;
+	private static JLabel player;
 
 	//actions
-	private JTextField deck;
-	private JButton rollDie;
-	private JButton connectTiles;
-	private JButton moveTo;
-	private JButton removeConnection;
-	private JButton teleportTo;
+	private static JTextField deck;
+	private static JButton rollDie;
+	private static JButton connectTiles;
+	private static JButton moveTo;
+	private static JButton removeConnection;
+	private static JButton teleportTo;
 
-	private JLabel remainingPieces;
+	private static JLabel remainingPieces;
 
 	//board
-	private JLabel boardTitle;
-	private PlayBoardVisualizer boardVisualizer;
+	private static JLabel boardTitle;
+	private static PlayBoardVisualizer boardVisualizer;
 	private static final int WIDTH_BOARD_VISUALIZATION = 800;
 	private static final int HEIGHT_BOARD_VISUALIZATION = 400;
 
 	//console
-	private JLabel consoleTitle;
-	private JTextField console;
+	private static JLabel consoleTitle;
+	private static JTextField console;
 
 	//data elements
-	private String error = null;
-	private String deckText = "";
+	private static String error = null;
+	private static String deckText = "";
+	private static int flag=0;
 
 	private TileO tileO;
-	private PlayController pc;
+	private static PlayController pc;
 
 	public PlayTileOPage(TileO tileO, PlayController pc) {
 		this.tileO = tileO;
@@ -91,7 +94,6 @@ public class PlayTileOPage extends JFrame{
 		//console
 		console = new JTextField();
 		consoleTitle = new JLabel();
-		console.setText("Player 1, please roll the die.");
 		console.setEditable(false);
 		consoleTitle.setText("Console:");
 
@@ -248,13 +250,13 @@ public class PlayTileOPage extends JFrame{
 		gameMode = pc.getGameMode();
 		controllerMode = pc.getMode();
 		setButtonActivity();
-
-		pack();
+		
 	}
 
-	private void refreshData(){
+	private static void refreshData(){
 		//output the error in the console
-		console.setText(error);
+		
+		// TODO console.setText(error);
 
 		if( error== null || error.length() == 0){
 
@@ -262,7 +264,13 @@ public class PlayTileOPage extends JFrame{
 			boardVisualizer.redraw();
 
 			//console
-			console.setText("");
+			/*if(flag==0){
+				flag=1;
+			}else{
+				console.setText("");
+				flag=0;
+			}*/
+			
 
 			//get the player index in order to update the player JLabel
 			int playerIndex = pc.getCurrentPlayerIndex() + 1;
@@ -279,16 +287,15 @@ public class PlayTileOPage extends JFrame{
 			controllerMode = pc.getMode();			
 
 		}
-
+				
 		//set the inactivity of the button depending on the game mode
 		setButtonActivity();
-		System.out.println("Game mode: " + pc.getGameMode());
-		System.out.println("contorller mode: " + pc.getMode());
+		
 		error = "";
 		deckText = "";
 	}
 
-	private void setButtonActivity(){
+	private static void setButtonActivity(){
 
 		rollDie.setEnabled(false);
 		moveTo.setEnabled(false);
@@ -303,25 +310,8 @@ public class PlayTileOPage extends JFrame{
 			}
 			deck.setText(deckText);
 		}else if(gameMode.equals(Game.Mode.GAME_WINTILEHINTACTIONCARD)){
-			System.out.println("in the game mode wint..");
-			deck.setText("Pick a tile to get a hint");
+			deck.setText("Please select a tile from the board for a hint.");
 			boardVisualizer.setSelectedTileToNull();
-			while(boardVisualizer.getSelectedTile() == null){
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			Tile selectedTile = boardVisualizer.getSelectedTile();
-			try {
-				System.out.println("calling the controller method");
-				boolean result = pc.doPlayWinTileHintActionCard(selectedTile);
-				System.out.println("result: " + result);
-			} catch (InvalidInputException e) {
-				error = e.getMessage();
-			}
-			
 		}
 		else if(controllerMode.equals(PlayController.Mode.Ready)){
 			rollDie.setEnabled(true);
@@ -395,7 +385,8 @@ public class PlayTileOPage extends JFrame{
 			// TODO remove it
 			//setting the roll die to inactive, so that the player can't roll die more than 1 time
 			rollDie.setEnabled(false);
-		}		
+		}
+		
 		refreshData();
 	}
 
@@ -450,7 +441,7 @@ public class PlayTileOPage extends JFrame{
 		refreshData();
 	}
 
-	private void loseTurn(){
+	private static void loseTurn(){
 		try {
 			pc.playLoseTurnActionCard();
 		} catch (InvalidInputException e) {
@@ -508,6 +499,29 @@ public class PlayTileOPage extends JFrame{
 
 		refreshData();
 	}
+	
+	public static void playWinTileHintActionCard(Tile tile){
+		boolean result = false;
+		if(tile != null){
+			try {
+				result = pc.playWinTileHintAction(tile);
+			} catch (InvalidInputException e) {
+				error = e.getMessage();
+			}
+		}
+		if(result){
+			console.setText("Yes, the win tile is or is near the selected tile!!");
+		}else{
+			console.setText("Oups, the win tile isn't or isn't near the selected tile!!");
+		}
+		refreshData();
+	}
+	
+	public static Game.Mode getGameMode(){
+		return gameMode;
+	}
 
-
+	public static PlayController.Mode getControllerMode(){
+		return controllerMode;
+	}
 }

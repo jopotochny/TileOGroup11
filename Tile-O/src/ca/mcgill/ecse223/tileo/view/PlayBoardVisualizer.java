@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import ca.mcgill.ecse223.tileo.controller.PlayController;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.Player;
@@ -114,6 +115,9 @@ public class PlayBoardVisualizer extends JPanel {
 						break;
 					}
 				}
+				if(isWinTileHintMode()){
+					playWinTileHint();
+				}
 				repaint();
 			}
 
@@ -134,10 +138,10 @@ public class PlayBoardVisualizer extends JPanel {
 			numberOfTiles = game.getTiles().size();
 			List<Tile> currentTiles = game.getTiles();
 			List<Player> listOfPlayers = game.getPlayers();
-			
+
 			//loop through all the tiles, and for each one draw a rectangle with a specific color
 			for(Tile tile : currentTiles){
-				
+
 				g2d.setStroke(thinStroke);
 				Rectangle2D rectangle = new Rectangle2D.Float(tile.getX(), tile.getY(), RECTWIDTH, RECTHEIGHT);
 				rectangles.add(rectangle);
@@ -238,7 +242,7 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 	}
 
-	
+
 	public void setPossibleMoves(List<Tile> listOfTiles){
 		possibleMoves = listOfTiles;
 		repaint();
@@ -247,7 +251,7 @@ public class PlayBoardVisualizer extends JPanel {
 	public List<Tile> getPossibleMoves(){
 		return possibleMoves;
 	}
-	
+
 	//return the tile selected by the player
 	public Tile getSelectedTile(){
 		if(selectedTile1 != null && selectedTile2 != null){
@@ -259,12 +263,15 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 
 	}
-	
+
 	public void setSelectedTileToNull(){
 		selectedTile1 = null;
 		selectedTile2 = null;
+		previouslySelectedTile2 = null;
+		flag = 0;
+		redraw();
 	}
-	
+
 	//return the two tiles selected by the player
 	public List<Tile> getSelectedTiles(){
 		if(selectedTile1 != null && selectedTile2 != null){
@@ -283,7 +290,24 @@ public class PlayBoardVisualizer extends JPanel {
 		doDrawing(g);
 	}
 
+	private boolean isWinTileHintMode(){
 
+		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_WINTILEHINTACTIONCARD)){
+			return true;
+		}
+		return false;
+	}
+
+	private void playWinTileHint(){
+
+		if(selectedTile1 != null){
+			PlayTileOPage.playWinTileHintActionCard(selectedTile1);
+		}else if(selectedTile2 != null){
+			PlayTileOPage.playWinTileHintActionCard(selectedTile2);
+		}
+
+
+	}
 
 	public void redraw(){
 		repaint();
