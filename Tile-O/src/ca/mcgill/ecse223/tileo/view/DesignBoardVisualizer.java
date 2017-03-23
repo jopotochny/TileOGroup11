@@ -373,7 +373,9 @@ public class DesignBoardVisualizer extends JPanel {
 			return;
 		} else if(enabled3){
 			errorMsg = "";
-			for(Rectangle2D r : connectableList){
+			Iterator<Rectangle2D> iter = connectableList.iterator();
+			while(iter.hasNext()){
+				Rectangle2D r = iter.next();
 				if(r.contains(x,y)){
 					connectArray[count] = tiles.get(r);
 					count++;
