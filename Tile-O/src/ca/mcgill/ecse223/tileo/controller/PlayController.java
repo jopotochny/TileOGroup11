@@ -322,7 +322,7 @@ public class PlayController
     return wasEventProcessed;
   }
 
-  public boolean playWinTileHintAction(Tile tile) throws InvalidInputException
+  public boolean playWinTileHintActionCard(Tile tile) throws InvalidInputException
   {
     boolean wasEventProcessed = false;
     boolean result = false;
@@ -845,9 +845,9 @@ public class PlayController
 		else {
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
 		}
-
-		// set the mode of the current game to GAME
-		currentGame.setMode(Game.Mode.GAME);
+		
+//		// set the mode of the current game to GAME
+//		currentGame.setMode(Game.Mode.GAME);
   }
 
 

@@ -74,7 +74,6 @@ public class PlayBoardVisualizer extends JPanel {
 			public void mousePressed(MouseEvent e){
 				int x = e.getX();
 				int y = e.getY();
-
 				//check all the rectangles to determine if one was clicked; if yes
 				//save the corresponding tile in selectedTile
 				selectedTile = null;

@@ -172,8 +172,6 @@ public class PlayTileOPage extends JFrame{
 		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {moveTo, removeConnection});
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {saveGame});
 		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {rollDie, moveTo, teleportTo, remainingPieces});
-		layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {connectTiles, removeConnection});
-
 		layout.setVerticalGroup(
 				layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup()
@@ -245,7 +243,7 @@ public class PlayTileOPage extends JFrame{
 				teleportTo();
 			}
 		});
-
+		pack();
 		//get the mode of the game
 		gameMode = pc.getGameMode();
 		controllerMode = pc.getMode();
@@ -262,16 +260,10 @@ public class PlayTileOPage extends JFrame{
 
 			//redraw the board 
 			boardVisualizer.redraw();
-
-			//console
-			/*if(flag==0){
-				flag=1;
-			}else{
-				console.setText("");
-				flag=0;
-			}*/
 			
-
+			//console
+			//console.setText(error);
+			
 			//get the player index in order to update the player JLabel
 			int playerIndex = pc.getCurrentPlayerIndex() + 1;
 			String playerLabel = "Player " + playerIndex;
@@ -322,6 +314,13 @@ public class PlayTileOPage extends JFrame{
 		}else if(controllerMode.equals(PlayController.Mode.Move)){
 			moveTo.setEnabled(true);
 			deck.setText("Move to a highlighted tile");
+			//console
+			if(error==null || error.trim().length() == 0){
+				console.setText("");
+			}else{
+				console.setText(error);
+			}
+			
 		}else if(gameMode.equals(Game.Mode.GAME_CONNECTTILESACTIONCARD)){
 			connectTiles.setEnabled(true);
 			deckText = "Connect Two Tiles";
@@ -504,7 +503,7 @@ public class PlayTileOPage extends JFrame{
 		boolean result = false;
 		if(tile != null){
 			try {
-				result = pc.playWinTileHintAction(tile);
+				result = pc.playWinTileHintActionCard(tile);
 			} catch (InvalidInputException e) {
 				error = e.getMessage();
 			}
