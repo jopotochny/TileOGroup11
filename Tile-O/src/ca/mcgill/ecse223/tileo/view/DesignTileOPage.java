@@ -556,7 +556,7 @@ public class DesignTileOPage extends JFrame {
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame, loadGame });
 		layout.linkSize(SwingConstants.VERTICAL,
 				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard,winTileHintCard, connectionCard, submitDeck,
-						addActionTile, inactivityText, removeTile, loseTurnCard, connectionPiecesLeft });
+						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame)
