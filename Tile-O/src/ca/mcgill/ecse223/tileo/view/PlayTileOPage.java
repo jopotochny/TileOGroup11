@@ -362,6 +362,10 @@ public class PlayTileOPage extends JFrame{
 			console.setText("Congratulation!!! Player " + (pc.getCurrentPlayerIndex()+1) + " won the game!");
 		}else if(gameMode.equals(Game.Mode.GAME) && controllerMode.equals(PlayController.Mode.ActionCard)){
 			rollDie.setEnabled(true);
+		}else if(gameMode.equals(Game.Mode.GAME_SETACTIONTILESINACTIVEACTIONCARD) && controllerMode.equals(PlayController.Mode.ActionCard)){
+			deck.setText("Roll the die");
+			console.setText("You landed on an action tile which sets all the action tiles to inactive !");
+			playSetActionTilesInactiveActionCard();	
 		}
 
 	}
@@ -535,6 +539,23 @@ public class PlayTileOPage extends JFrame{
 			console.setText("Oups, the win tile isn't or isn't near the selected tile!!");
 		}
 		refreshData();
+	}
+	
+	private static void playSetActionTilesInactiveActionCard(){
+		try {
+			pc.playSetActionTilesInactiveActionCard();
+			
+		} catch (InvalidInputException e) {
+			error = e.getMessage();
+		}
+		controllerMode = pc.getMode();
+		rollDie.setEnabled(true);
+		boardVisualizer.redraw();
+		
+		//get the player index in order to update the player JLabel
+		int playerIndex = pc.getCurrentPlayerIndex() + 1;
+		String playerLabel = "Player " + playerIndex;
+		player.setText(playerLabel);
 	}
 	
 	public static Game.Mode getGameMode(){

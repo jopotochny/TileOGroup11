@@ -195,6 +195,10 @@ public class ActionTile extends Tile
 				NextPlayerRollsOneActionCard nextPlayerRollsOneActionCard = (NextPlayerRollsOneActionCard) currentCard;
 				mode = nextPlayerRollsOneActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof SetActionTilesInactiveActionCard){
+				SetActionTilesInactiveActionCard setActionTilesInactiveActionCard = (SetActionTilesInactiveActionCard) currentCard;
+				mode = setActionTilesInactiveActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}
 			
 			this.deactivate();

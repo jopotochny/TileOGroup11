@@ -3,21 +3,8 @@
 
 package ca.mcgill.ecse223.tileo.controller;
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
-import ca.mcgill.ecse223.tileo.model.ActionTile;
-import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
-import ca.mcgill.ecse223.tileo.model.Connection;
-import ca.mcgill.ecse223.tileo.model.Deck;
-import ca.mcgill.ecse223.tileo.model.Die;
-import ca.mcgill.ecse223.tileo.model.Game;
-import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
-import ca.mcgill.ecse223.tileo.model.NormalTile;
-import ca.mcgill.ecse223.tileo.model.Player;
-import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
-import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
-import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
-import ca.mcgill.ecse223.tileo.model.Tile;
-import ca.mcgill.ecse223.tileo.model.TileO;
-import ca.mcgill.ecse223.tileo.model.WinTile;
+import ca.mcgill.ecse223.tileo.controller.PlayController.Mode;
+
 import java.util.*;
 import ca.mcgill.ecse223.tileo.model.*;
 
@@ -376,6 +363,30 @@ public class PlayController
 
     return moves;
   }
+  
+  public boolean playSetActionTilesInactiveActionCard() throws InvalidInputException
+	{
+		boolean wasEventProcessed = false;
+
+		Mode aMode = mode;
+		switch (aMode)
+		{
+		case ActionCard:
+			if (isSetActionTilesInactiveActionCard())
+			{
+				// line 80 "../../../../../PlayControllerStatus.ump"
+				doPlaySetActionTilesInactiveActionCard();
+				setMode(Mode.Roll);
+				wasEventProcessed = true;
+				break;
+			}
+			break;
+		default:
+			// Other states do respond to this event
+		}
+
+		return wasEventProcessed;
+	}
 
 private void setMode(Mode aMode)
   {
@@ -1028,6 +1039,48 @@ private void setMode(Mode aMode)
 		return moves;
 		
 	}
+   
+   public void doPlaySetActionTilesInactiveActionCard() throws InvalidInputException {
+		// get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof SetActionTilesInactiveActionCard)){
+			throw new InvalidInputException("The Current Card is not a setActionTilesInactiveActionCard.");
+		}
+
+		SetActionTilesInactiveActionCard currentCard = (SetActionTilesInactiveActionCard) currentDeck.getCurrentCard();
+	
+		currentCard.play();
+
+		//determining the next player
+		currentGame.determineNextPlayer();
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);
+		setMode(PlayController.Mode.Roll);
+	}
 
   /**
    * 
@@ -1273,7 +1326,13 @@ private void setMode(Mode aMode)
 		}
  	return false;
  }
-
+   
+   private boolean isSetActionTilesInactiveActionCard(){
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof SetActionTilesInactiveActionCard){
+			return true;
+		}
+		return false;
+	}
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

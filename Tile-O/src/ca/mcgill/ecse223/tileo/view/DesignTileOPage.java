@@ -54,10 +54,12 @@ public class DesignTileOPage extends JFrame {
 	private JLabel rollLabel;
 	private JLabel inactivityLabel;
 	private JLabel wintTileHintLabel;
+	private JLabel setInactiveCardLabel;
 	private JLabel nextPlayerLabel;
 	protected static JTextField connectionPiecesLeft;
 	private JTextField inactivityText;
 	private JTextField winTileHintCard;
+	private JTextField setInactiveCard;
 	private JTextField nextPlayerCard;
 	private JTextField teleportCard;
 	private JTextField removeConnectionCard;
@@ -151,9 +153,11 @@ public class DesignTileOPage extends JFrame {
 		connectionLabel = new JLabel("Add Connection Card");
 		loseLabel = new JLabel("Lose Turn Card");
 		removeConnectionLabel = new JLabel("Remove Connection Card");
-
+		setInactiveCardLabel = new JLabel("Set inactivity Card");
+		
 		nextPlayerCard = new JTextField();
 		winTileHintCard = new JTextField();
+		setInactiveCard = new JTextField();
 		rollCard = new JTextField();
 		teleportCard = new JTextField();
 		connectionCard = new JTextField();
@@ -288,6 +292,7 @@ public class DesignTileOPage extends JFrame {
 				int numExtra=0;
 				int numHint = 0;
 				int numNext = 0;
+				int numInactive = 0;
 
 					try{
 						numRoll = Integer.parseInt(rollCard.getText());
@@ -297,7 +302,8 @@ public class DesignTileOPage extends JFrame {
 						numExtra = Integer.parseInt(removeConnectionCard.getText());
 						numHint = Integer.parseInt(winTileHintCard.getText());
 						numNext = Integer.parseInt(nextPlayerCard.getText());
-
+						numInactive = Integer.parseInt(setInactiveCard.getText());
+						
 					}catch(NumberFormatException e){
 						console.setText("One of the cards has an invalid value");
 						error = false;
@@ -305,7 +311,7 @@ public class DesignTileOPage extends JFrame {
 					}
 
 					try {
-						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext);
+						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive);
 					} catch (Exception e) {
 						// e.printStackTrace();
 						console.setText(e.getMessage().trim());
@@ -539,7 +545,8 @@ public class DesignTileOPage extends JFrame {
 				 .addComponent(teleportLabel)
 				 .addComponent(rollLabel)
 				 .addComponent(wintTileHintLabel)
-				 .addComponent(nextPlayerLabel))
+				 .addComponent(nextPlayerLabel)
+				 .addComponent(setInactiveCardLabel))
 				 .addGroup(layout.createParallelGroup()
 						 .addComponent(inactivityText)
 						 .addComponent(connectionPiecesLeft)
@@ -551,12 +558,13 @@ public class DesignTileOPage extends JFrame {
 						 .addComponent(rollCard)
 						 .addComponent(winTileHintCard)
 						 .addComponent(nextPlayerCard)
+						 .addComponent(setInactiveCard)
 						 .addComponent(submitDeck)))));
 
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame, loadGame });
 		layout.linkSize(SwingConstants.VERTICAL,
 				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard,winTileHintCard, connectionCard, submitDeck,
-						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft });
+						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame)
@@ -572,6 +580,7 @@ public class DesignTileOPage extends JFrame {
 								.addComponent(connectionPiecesLeft))
 						.addGroup(layout.createParallelGroup().addComponent(rollLabel).addComponent(rollCard))
 						.addGroup(layout.createParallelGroup().addComponent(wintTileHintLabel).addComponent(winTileHintCard))
+						.addGroup(layout.createParallelGroup().addComponent(setInactiveCardLabel).addComponent(setInactiveCard))
 						.addGroup(layout.createParallelGroup().addComponent(removeConnectionCard)
 								.addComponent(removeConnectionLabel))
 						.addGroup(layout.createParallelGroup().addComponent(loseLabel).addComponent(loseTurnCard)
@@ -609,6 +618,7 @@ public class DesignTileOPage extends JFrame {
 		removeConnectionCard.setText("");
 		connectionCard.setText("");
 		teleportCard.setText("");
+		setInactiveCard.setText("");
 		inactivityText.setText("");
 		error = "";
 	}
