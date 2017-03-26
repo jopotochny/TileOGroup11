@@ -1113,6 +1113,9 @@ private void setMode(Mode aMode)
 
 		//set the mode of game of GAME
 		currentGame.setMode(Game.Mode.GAME);
+		
+		//set the controller mode to Roll
+		 this.setMode(Mode.Roll);
   }
 
 
