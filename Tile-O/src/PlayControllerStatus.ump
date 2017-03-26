@@ -564,6 +564,53 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		return result;
 	}
 	
+	 private List<Tile> doPlayNextPlayerRollsOneActionCard() throws InvalidInputException {
+	   // get the current game
+
+	   	List<Tile> moves = new ArrayList<Tile>();
+		Game currentGame = tileO.getCurrentGame();
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof NextPlayerRollsOneActionCard)){
+			throw new InvalidInputException("The Current Card is not a NextPlayerRollsOneActionCard.");
+		}
+
+		NextPlayerRollsOneActionCard currentCard = (NextPlayerRollsOneActionCard) currentDeck.getCurrentCard();
+
+		// the player that drew the card loses his Next turn
+
+		moves = currentCard.play();
+
+		
+
+		//decrement the inactivity period of inactive action tiles
+		currentGame.updateTileStatus();
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		}
+
+		// set the mode of the current game to GAME
+		currentGame.setMode(Game.Mode.GAME);
+		return moves;
+		
+	}
 	
 
 	/**
@@ -761,5 +808,14 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		}
 		return false;
 	}
+	
+	
+	 private boolean isNextPlayerRollsOneActionCard() {
+	   if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof NextPlayerRollsOneActionCard){
+			return true;
+		}
+ 	return false;
+ }
+	
 	
 } 

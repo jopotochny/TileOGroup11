@@ -389,6 +389,20 @@ class NextPlayerRollsOneActionCard{
 isA ActionCard;
 
 
+ public List<Tile> play(){
+	    //get the current game from the TileO application
+			  Game currentGame = super.getDeck().getGame();
+			  	
+			  	currentGame.determineNextPlayer();
+
+				//getting the current player from the current game
+				Player currentPlayer = currentGame.getCurrentPlayer();
+
+				//get the possible moves of the current player, depending on the generated number
+				List<Tile> tiles = currentPlayer.getPossibleMoves(currentPlayer.getCurrentTile(), 1);
+
+				return tiles;
+	  }
 
 
 
