@@ -77,6 +77,10 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		  	playWinTileHintActionCard(Tile tile) [isWinTileHintActionCard()] / {
 		  		doPlayWinTileHintActionCard(tile);
 		  	} -> Roll;
+		  	
+		  	playNextPlayerRollsOneActionCard() [isNextPlayerRollsOneActionCard()] / {
+		  		doPlayNextPlayerRollsOneActionCard();
+		  	} -> Move;
 	} 
 	}
 	

@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.tileo.model;
 import java.util.List;
 
-// line 446 "../../../../../TileO.ump"
+// line 459 "../../../../../TileO.ump"
 public class RollDieActionCard extends ActionCard
 {
 
@@ -30,7 +30,7 @@ public class RollDieActionCard extends ActionCard
     super.delete();
   }
 
-  // line 452 "../../../../../TileO.ump"
+  // line 465 "../../../../../TileO.ump"
    public List<Tile> play(){
     //get the current game from the TileO application
 		  Game currentGame = super.getDeck().getGame();
@@ -51,7 +51,7 @@ public class RollDieActionCard extends ActionCard
 			return tiles;
   }
 
-  // line 473 "../../../../../TileO.ump"
+  // line 486 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_ROLLDIEACTIONCARD;
   }

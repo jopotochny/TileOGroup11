@@ -65,6 +65,8 @@ public class PlayTileOPage extends JFrame{
 	private TileO tileO;
 	private static PlayController pc;
 
+	private static int nextFlag = 0;
+
 	public PlayTileOPage(TileO tileO, PlayController pc) {
 		this.tileO = tileO;
 		this.pc = pc;
@@ -339,7 +341,15 @@ public class PlayTileOPage extends JFrame{
 			rollDie.setEnabled(true);
 			deckText = "You got another turn! please roll the die";
 			deck.setText(deckText);
-		}else if(gameMode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
+		}
+		
+		else if(gameMode.equals(Game.Mode.GAME_NEXTPLAYERROLLSONEACTIONCARD)){
+		rollDie.setEnabled(true);
+		deckText = "The next player will roll a 1!";
+		deck.setText(deckText);
+		nextFlag = 1;
+		}
+		else if(gameMode.equals(Game.Mode.GAME_TELEPORTACTIONCARD)){
 			teleportTo.setEnabled(true);
 			deckText = "Teleport to any tile";
 			deck.setText(deckText);
@@ -355,6 +365,8 @@ public class PlayTileOPage extends JFrame{
 		}
 
 	}
+	
+	//TODO zabre
 
 	private void rollDieGetPossibleMoves(){	
 
@@ -362,11 +374,20 @@ public class PlayTileOPage extends JFrame{
 		gameMode = pc.getGameMode();
 		
 		List<Tile> possibleMoves = new ArrayList<Tile>();
-
+		
 		if(gameMode.equals(Mode.GAME)){
+			
 			pc.rollDie();
 			possibleMoves = pc.getPossibleMoves();
-		}else if(gameMode.equals(Mode.GAME_ROLLDIEACTIONCARD)){
+			
+		}else if(gameMode.equals(Mode.GAME_NEXTPLAYERROLLSONEACTIONCARD)){
+			try {
+				possibleMoves = pc.playNextPlayerRollsOneActionCard();
+			} catch (InvalidInputException e) {
+				error = e.getMessage();
+			}
+		}
+		else if(gameMode.equals(Mode.GAME_ROLLDIEACTIONCARD)){
 			try {
 				pc.playRollDieActionCard();
 				possibleMoves = pc.getPossibleMoves();

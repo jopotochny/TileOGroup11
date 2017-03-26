@@ -262,7 +262,6 @@ public abstract class Tile
 	  for(Connection connection : currentTileConnections){
 		  
 		for(Tile connectedTiles : connection.getTiles()){
-			
 			if (connectedTiles != this){
 				neighbours.add(connectedTiles);
 			}

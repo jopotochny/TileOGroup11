@@ -191,7 +191,12 @@ public class ActionTile extends Tile
 				WinTileHintActionCard winTileHintActionCard = (WinTileHintActionCard) currentCard;
 				mode = winTileHintActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof NextPlayerRollsOneActionCard){
+				NextPlayerRollsOneActionCard nextPlayerRollsOneActionCard = (NextPlayerRollsOneActionCard) currentCard;
+				mode = nextPlayerRollsOneActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}
+			
 			this.deactivate();
 		}else{
 			//determining the next player

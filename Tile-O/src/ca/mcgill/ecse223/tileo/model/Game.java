@@ -27,7 +27,7 @@ public class Game
   private int currentConnectionPieces;
 
   //Game State Machines
-  public enum Mode { DESIGN, GAME, GAME_WON, GAME_ROLLDIEACTIONCARD, GAME_CONNECTTILESACTIONCARD, GAME_REMOVECONNECTIONACTIONCARD, GAME_TELEPORTACTIONCARD, GAME_LOSETURNACTIONCARD, GAME_WINTILEHINTACTIONCARD }
+  public enum Mode { DESIGN, GAME, GAME_WON, GAME_ROLLDIEACTIONCARD, GAME_CONNECTTILESACTIONCARD, GAME_REMOVECONNECTIONACTIONCARD, GAME_TELEPORTACTIONCARD, GAME_LOSETURNACTIONCARD, GAME_WINTILEHINTACTIONCARD, GAME_NEXTPLAYERROLLSONEACTIONCARD }
   private Mode mode;
 
   //Game Associations
@@ -570,9 +570,10 @@ public class Game
     winTile = null;
     TileO placeholderTileO = tileO;
     this.tileO = null;
-    if(placeholderTileO != null)
-    	placeholderTileO.removeGame(this);
-  }	
+    if(placeholderTileO != null ){
+    placeholderTileO.removeGame(this);
+  }
+  }
 
   // line 25 "../../../../../TileO.ump"
    public void updateTileStatus(){

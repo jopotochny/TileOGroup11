@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.tileo.model;
 
 import java.util.List;
 
-// line 387 "../../../../../TileO.ump"
+// line 400 "../../../../../TileO.ump"
 public class WinTileHintActionCard extends ActionCard
 {
 
@@ -31,7 +31,7 @@ public class WinTileHintActionCard extends ActionCard
     super.delete();
   }
 
-  // line 391 "../../../../../TileO.ump"
+  // line 404 "../../../../../TileO.ump"
    public boolean play(Tile tile){
     List<Tile> neighbours = tile.getNeighbours();
 	  if(tile instanceof WinTile){
@@ -48,7 +48,7 @@ public class WinTileHintActionCard extends ActionCard
 	  return false;
   }
 
-  // line 407 "../../../../../TileO.ump"
+  // line 420 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_WINTILEHINTACTIONCARD;
   }

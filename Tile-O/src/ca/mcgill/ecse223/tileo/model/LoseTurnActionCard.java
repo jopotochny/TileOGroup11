@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
-// line 557 "../../../../../TileO.ump"
+// line 570 "../../../../../TileO.ump"
 public class LoseTurnActionCard extends ActionCard
 {
 
@@ -29,7 +29,7 @@ public class LoseTurnActionCard extends ActionCard
     super.delete();
   }
 
-  // line 562 "../../../../../TileO.ump"
+  // line 575 "../../../../../TileO.ump"
    public void play(){
     //get the current game from the TileO application
 		Game currentGame = super.getDeck().getGame();
@@ -40,7 +40,7 @@ public class LoseTurnActionCard extends ActionCard
 		currentPlayer.loseTurns(1);
   }
 
-  // line 573 "../../../../../TileO.ump"
+  // line 586 "../../../../../TileO.ump"
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_LOSETURNACTIONCARD;
   }

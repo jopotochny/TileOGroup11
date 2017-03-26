@@ -10,6 +10,7 @@ import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
+import ca.mcgill.ecse223.tileo.model.NextPlayerRollsOneActionCard;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.Player.Color;
@@ -190,7 +191,7 @@ public class DesignController {
 			
 		}
 
-		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint)
+		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint , int next)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
@@ -200,7 +201,7 @@ public class DesignController {
 				
 			}
 
-			if (( connect + rollDie + remove + teleport + lose + hint) != 32) {
+			if (( connect + rollDie + remove + teleport + lose + hint + next) != 32) {
 				throw new InvalidInputException("The amount of cards chosen is not 32");
 			}
 			
@@ -227,6 +228,10 @@ public class DesignController {
 			
 			for (int i = 1; i <= lose; i++) {
 				LoseTurnActionCard loseTurnCard = new LoseTurnActionCard("Lose next turn", deck);
+			}
+			
+			for (int i = 1; i <= next; i++) {
+				NextPlayerRollsOneActionCard nextCard = new NextPlayerRollsOneActionCard("Next Player rolls one", deck);
 			}
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 		}
