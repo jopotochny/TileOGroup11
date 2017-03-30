@@ -19,6 +19,7 @@ import javax.swing.WindowConstants;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.controller.PlayController;
 import ca.mcgill.ecse223.tileo.model.Game;
+import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Game.Mode;
 import ca.mcgill.ecse223.tileo.model.Tile;
@@ -341,6 +342,10 @@ public class PlayTileOPage extends JFrame{
 			rollDie.setEnabled(true);
 			deckText = "You got another turn! please roll the die";
 			deck.setText(deckText);
+		}else if (gameMode.equals(Game.Mode.GAME_MOVEOTHERPLAYERACTIONCARD)){
+			deckText = "Select a player and a tile";
+			deck.setText(deckText);
+			boardVisualizer.setSelectedTileToNull();
 		}
 		
 		else if(gameMode.equals(Game.Mode.GAME_NEXTPLAYERROLLSONEACTIONCARD)){
@@ -540,7 +545,18 @@ public class PlayTileOPage extends JFrame{
 		}
 		refreshData();
 	}
-	
+	public static void playMoveOtherPlayerActionCard(Player player, Tile tile){
+		if(tile != null && player != null){
+			try {
+				pc.doPlayMoveOtherPlayerActionCard(player, tile);
+			} catch (InvalidInputException e) {
+				error = e.getMessage();
+			}
+		}
+		
+		refreshData();
+		
+	}
 	private static void playSetActionTilesInactiveActionCard(){
 		try {
 			pc.playSetActionTilesInactiveActionCard();

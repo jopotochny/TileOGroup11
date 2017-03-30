@@ -117,6 +117,9 @@ public class PlayBoardVisualizer extends JPanel {
 				if(isWinTileHintMode()){
 					playWinTileHint();
 				}
+				if(isMoveOtherPlayerMode()){
+					playMoveOtherPlayer();
+				}
 				repaint();
 			}
 
@@ -307,7 +310,38 @@ public class PlayBoardVisualizer extends JPanel {
 
 
 	}
-
+	private boolean isMoveOtherPlayerMode(){
+		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_MOVEOTHERPLAYERACTIONCARD)){
+			return true;
+		}
+		return false;
+	}
+	private void playMoveOtherPlayer(){
+		if(selectedTile1 != null){
+			for (Player p : this.tileO.getCurrentGame().getPlayers()){
+				if(p.getCurrentTile() == selectedTile1 && p != this.tileO.getCurrentGame().getCurrentPlayer()){
+					Player thePlayer = p;
+					if(selectedTile2 != null){
+						PlayTileOPage.playMoveOtherPlayerActionCard(thePlayer, selectedTile2);
+					}
+					break;
+				}
+			}
+			
+		}
+		else if(selectedTile2 != null){
+			for (Player p : this.tileO.getCurrentGame().getPlayers()){
+				if(p.getCurrentTile() == selectedTile2 && p != this.tileO.getCurrentGame().getCurrentPlayer()){
+					Player thePlayer = p;
+					if(selectedTile1 != null){
+						PlayTileOPage.playMoveOtherPlayerActionCard(thePlayer, selectedTile1);
+					}
+					break;
+				}
+			}
+			
+		}
+	}
 	public void redraw(){
 		repaint();
 	}

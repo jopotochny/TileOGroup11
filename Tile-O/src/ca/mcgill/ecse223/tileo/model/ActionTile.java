@@ -199,6 +199,10 @@ public class ActionTile extends Tile
 				SetActionTilesInactiveActionCard setActionTilesInactiveActionCard = (SetActionTilesInactiveActionCard) currentCard;
 				mode = setActionTilesInactiveActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof MoveOtherPlayerActionCard){
+				MoveOtherPlayerActionCard moveOtherPlayerActionCard = (MoveOtherPlayerActionCard) currentCard;
+				mode = moveOtherPlayerActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}
 			
 			this.deactivate();

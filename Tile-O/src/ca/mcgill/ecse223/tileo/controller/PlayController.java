@@ -172,7 +172,32 @@ public class PlayController
 
     return wasEventProcessed;
   }
+  public boolean playMoveOtherPlayerActionCard(Player player,Tile tile) throws InvalidInputException
+  {
+    boolean wasEventProcessed = false;
+    
+    Mode aMode = mode;
+    switch (aMode)
+    {
+      case ActionCard:
+        if (isMoveOtherPlayerActionCard())
+        {
+        // line 80 "../../../../../PlayControllerStatus.ump"
+          doPlayMoveOtherPlayerActionCard(player, tile);
+          
+          setMode(Mode.Roll);
 
+          
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
   public boolean playRollDieActionCard() throws InvalidInputException
   {
     boolean wasEventProcessed = false;
@@ -1039,7 +1064,52 @@ private void setMode(Mode aMode)
 		return moves;
 		
 	}
-   
+// line 567 "../../../../../PlayControllerStatus.ump"
+   public void doPlayMoveOtherPlayerActionCard(Player player, Tile tile) throws InvalidInputException{
+    // get the current game
+
+		Game currentGame = tileO.getCurrentGame();
+
+
+		// get the currentDeck
+
+		Deck currentDeck = currentGame.getDeck();
+
+
+		// check if the current card is a MoveOtherPlayerActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof MoveOtherPlayerActionCard)){
+			throw new InvalidInputException("The Current Card is not a MoveOtherPlayerActionCard.");
+		}
+		MoveOtherPlayerActionCard currentCard = (MoveOtherPlayerActionCard) currentDeck.getCurrentCard();
+		
+		currentCard.play(player, tile);
+		
+		//determining the next player
+		if(currentGame.getModeFullName() != "GAME_WON"){
+			currentGame.determineNextPlayer();
+		}
+		
+
+		//decrement the inactivity period of inactive action tiles
+		currentGame.updateTileStatus();
+
+		// set the currentCard to be the next card so that the next
+		// time a player draws a card , he gets the next card
+		// if the current card is the last card of the deck
+		// shuffle the deck
+
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		}
+
+		// set the mode of the current game to GAME
+		//currentGame.setMode(Game.Mode.GAME);
+  }
    public void doPlaySetActionTilesInactiveActionCard() throws InvalidInputException {
 		// get the current game
 
@@ -1336,7 +1406,13 @@ private void setMode(Mode aMode)
 		}
 		return false;
 	}
-  
+// line 807 "../../../../../PlayControllerStatus.ump"
+   private boolean isMoveOtherPlayerActionCard(){
+    if (tileO.getCurrentGame().getDeck().getCurrentCard() instanceof MoveOtherPlayerActionCard){
+			return true;
+		}
+		return false;
+  }
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

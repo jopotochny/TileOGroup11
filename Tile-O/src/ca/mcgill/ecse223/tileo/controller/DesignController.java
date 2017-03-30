@@ -10,6 +10,7 @@ import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
+import ca.mcgill.ecse223.tileo.model.MoveOtherPlayerActionCard;
 import ca.mcgill.ecse223.tileo.model.NextPlayerRollsOneActionCard;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
@@ -192,7 +193,7 @@ public class DesignController {
 			
 		}
 
-		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint , int next, int inactivity)
+		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint , int next, int inactivity, int moveotherplayer)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
@@ -202,7 +203,7 @@ public class DesignController {
 				
 			}
 
-			if (( connect + rollDie + remove + teleport + lose + hint + next + inactivity) != 32) {
+			if (( connect + rollDie + remove + teleport + lose + hint + next + inactivity + moveotherplayer) != 32) {
 				throw new InvalidInputException("The amount of cards chosen is not 32");
 			}
 			
@@ -237,6 +238,9 @@ public class DesignController {
 			
 			for (int i = 1; i <= inactivity; i++) {
 				SetActionTilesInactiveActionCard nextCard = new SetActionTilesInactiveActionCard("Setting all action card inactive", deck);
+			}
+			for (int i = 1; i <= moveotherplayer; i++) {
+				MoveOtherPlayerActionCard nextCard = new MoveOtherPlayerActionCard("Move other player", deck);
 			}
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 		}

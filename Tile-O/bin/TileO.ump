@@ -10,7 +10,7 @@ class TileO {
 }
 
 class Game {
-  mode { DESIGN{} GAME{} GAME_WON{} GAME_ROLLDIEACTIONCARD{} GAME_CONNECTTILESACTIONCARD{} GAME_REMOVECONNECTIONACTIONCARD{} GAME_TELEPORTACTIONCARD{} GAME_LOSETURNACTIONCARD{} GAME_WINTILEHINTACTIONCARD{} GAME_NEXTPLAYERROLLSONEACTIONCARD{}}
+  mode { DESIGN{} GAME{} GAME_WON{} GAME_ROLLDIEACTIONCARD{} GAME_CONNECTTILESACTIONCARD{} GAME_REMOVECONNECTIONACTIONCARD{} GAME_TELEPORTACTIONCARD{} GAME_LOSETURNACTIONCARD{} GAME_WINTILEHINTACTIONCARD{} GAME_NEXTPLAYERROLLSONEACTIONCARD{} GAME_MOVEOTHERPLAYERACTIONCARD{}}
   1 <@>- 2..4 Player players;
   1 <@>- * Tile tiles;
   1 <@>- * Connection connections;
@@ -604,7 +604,47 @@ class LoseTurnActionCard {
   }
 	
 }
-
+class MoveOtherPlayerActionCard {
+  isA ActionCard;
+  public void play(Player player, Tile tile){
+		
+	  
+		 Deck deck = super.getDeck();
+		 
+		 Game game = deck.getGame();
+		 
+		 Player currentPlayer = game.getCurrentPlayer();
+		 
+		 game.setCurrentPlayer(player);
+		 player.setCurrentTile(tile);
+		 
+		 
+			
+		if( tile instanceof ActionTile){
+			
+			ActionTile actionTile = (ActionTile) tile;
+			
+			actionTile.land();
+		
+			
+		}else if(tile instanceof WinTile){
+			
+			WinTile winTile = (WinTile) tile;
+			
+			winTile.land();
+			
+		}else if(tile instanceof NormalTile){
+			
+			NormalTile normalTile = (NormalTile) tile;		
+			
+			normalTile.land();
+		}
+		game.setCurrentPlayer(currentPlayer);  
+	}	  
+	public Game.Mode getActionCardGameMode(){
+	return Game.Mode.GAME_MOVEOTHERPLAYERACTIONCARD;
+  }
+	  }
 class Die {
 
 public int roll(){

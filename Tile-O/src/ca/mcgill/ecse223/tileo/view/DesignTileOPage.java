@@ -56,6 +56,7 @@ public class DesignTileOPage extends JFrame {
 	private JLabel wintTileHintLabel;
 	private JLabel setInactiveCardLabel;
 	private JLabel nextPlayerLabel;
+	private JLabel moveOtherPlayerLabel;
 	protected static JTextField connectionPiecesLeft;
 	private JTextField inactivityText;
 	private JTextField winTileHintCard;
@@ -66,6 +67,7 @@ public class DesignTileOPage extends JFrame {
 	private JTextField connectionCard;
 	private JTextField loseTurnCard;
 	private JTextField rollCard;
+	private JTextField moveOtherPlayerCard;
 	private JButton submitDeck;
 	private JButton addConnection;
 	private JButton addTile;
@@ -145,6 +147,9 @@ public class DesignTileOPage extends JFrame {
 
 		createDeck = new JButton();
 		createDeck.setText("Create Deck");
+		
+		moveOtherPlayerLabel = new JLabel("Move Other Player Card");
+		moveOtherPlayerCard = new JTextField();
 		
 		nextPlayerLabel = new JLabel("Next Player Rolls One Card");
 		wintTileHintLabel = new JLabel("Win Tile Hint Card");
@@ -293,6 +298,7 @@ public class DesignTileOPage extends JFrame {
 				int numHint = 0;
 				int numNext = 0;
 				int numInactive = 0;
+				int numMoveOtherPlayer=0;
 
 					try{
 						numRoll = Integer.parseInt(rollCard.getText());
@@ -303,6 +309,7 @@ public class DesignTileOPage extends JFrame {
 						numHint = Integer.parseInt(winTileHintCard.getText());
 						numNext = Integer.parseInt(nextPlayerCard.getText());
 						numInactive = Integer.parseInt(setInactiveCard.getText());
+						numMoveOtherPlayer = Integer.parseInt(moveOtherPlayerCard.getText());
 						
 					}catch(NumberFormatException e){
 						console.setText("One of the cards has an invalid value");
@@ -311,7 +318,7 @@ public class DesignTileOPage extends JFrame {
 					}
 
 					try {
-						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive);
+						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer);
 					} catch (Exception e) {
 						// e.printStackTrace();
 						console.setText(e.getMessage().trim());
@@ -545,6 +552,7 @@ public class DesignTileOPage extends JFrame {
 				 .addComponent(teleportLabel)
 				 .addComponent(rollLabel)
 				 .addComponent(wintTileHintLabel)
+				 .addComponent(moveOtherPlayerLabel)
 				 .addComponent(nextPlayerLabel)
 				 .addComponent(setInactiveCardLabel))
 				 .addGroup(layout.createParallelGroup()
@@ -557,6 +565,7 @@ public class DesignTileOPage extends JFrame {
 						 .addComponent(teleportCard)
 						 .addComponent(rollCard)
 						 .addComponent(winTileHintCard)
+						 .addComponent(moveOtherPlayerCard)
 						 .addComponent(nextPlayerCard)
 						 .addComponent(setInactiveCard)
 						 .addComponent(submitDeck)))));
@@ -564,7 +573,7 @@ public class DesignTileOPage extends JFrame {
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame, loadGame });
 		layout.linkSize(SwingConstants.VERTICAL,
 				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard,winTileHintCard, connectionCard, submitDeck,
-						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard });
+						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame)
@@ -594,6 +603,9 @@ public class DesignTileOPage extends JFrame {
 						.addGroup(layout.createParallelGroup()
 								.addComponent(connectionLabel)
 								.addComponent(connectionCard))
+						.addGroup(layout.createParallelGroup()
+								.addComponent(moveOtherPlayerLabel)
+								.addComponent(moveOtherPlayerCard))
 						.addComponent(submitDeck)));
 		pack();
 	}
@@ -611,6 +623,7 @@ public class DesignTileOPage extends JFrame {
 		// console.setText("");
 
 		// set jtextfield to null
+		moveOtherPlayerCard.setText("");
 		nextPlayerCard.setText("");
 		winTileHintCard.setText("");
 		loseTurnCard.setText("");
