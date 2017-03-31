@@ -10,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ca.mcgill.ecse223.tileo.application.TileOApplication;
+import ca.mcgill.ecse223.tileo.controller.PlayController.Mode;
 import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
@@ -281,7 +282,7 @@ public class TileOPlayControllerTest {
 		player2.setCurrentTile(tile2);
 		
 		tileO.setCurrentGame(currentGame);
-		
+		currentGame.setMode(Game.Mode.GAME);
 		try{
 			pc.doLandTile(tile4);
 		}catch(InvalidInputException e){
