@@ -2,11 +2,31 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.controller;
-import ca.mcgill.ecse223.tileo.application.TileOApplication;
-import ca.mcgill.ecse223.tileo.controller.PlayController.Mode;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import java.util.*;
-import ca.mcgill.ecse223.tileo.model.*;
+import ca.mcgill.ecse223.tileo.application.TileOApplication;
+import ca.mcgill.ecse223.tileo.model.ActionTile;
+import ca.mcgill.ecse223.tileo.model.ConnectTilesActionCard;
+import ca.mcgill.ecse223.tileo.model.Connection;
+import ca.mcgill.ecse223.tileo.model.Deck;
+import ca.mcgill.ecse223.tileo.model.Die;
+import ca.mcgill.ecse223.tileo.model.Game;
+import ca.mcgill.ecse223.tileo.model.LoseTurnActionCard;
+import ca.mcgill.ecse223.tileo.model.MoveOtherPlayerActionCard;
+import ca.mcgill.ecse223.tileo.model.NextPlayerRollsOneActionCard;
+import ca.mcgill.ecse223.tileo.model.NormalTile;
+import ca.mcgill.ecse223.tileo.model.Player;
+import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
+import ca.mcgill.ecse223.tileo.model.RevealTileActionCard;
+import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
+import ca.mcgill.ecse223.tileo.model.SetActionTilesInactiveActionCard;
+import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
+import ca.mcgill.ecse223.tileo.model.Tile;
+import ca.mcgill.ecse223.tileo.model.TileO;
+import ca.mcgill.ecse223.tileo.model.WinTile;
+import ca.mcgill.ecse223.tileo.model.WinTileHintActionCard;
 
 // line 3 "../../../../../PlayControllerStatus.ump"
 public class PlayController
@@ -362,6 +382,29 @@ public class PlayController
     }
   }
   
+  public boolean playRevealTileActionCard(Tile tile) throws InvalidInputException
+  {
+    boolean wasEventProcessed = false;
+    
+    Mode aMode = mode;
+    switch (aMode)
+    {
+      case ActionCard:
+        if (isRevealTileActionCard())
+        {
+        // line 84 "../../../../../PlayControllerStatus.ump"
+          doPlayRevealTileActionCard(tile);
+          setMode(Mode.Roll);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
   
   public List<Tile> playNextPlayerRollsOneActionCard() throws InvalidInputException
   {
@@ -652,7 +695,7 @@ private void setMode(Mode aMode)
   // line 216 "../../../../../PlayControllerStatus.ump"
    public List<Tile> doPlayRollDieActionCard() throws InvalidInputException{
     // get the current game
-
+	   System.out.println("hello");
 		Game currentGame = tileO.getCurrentGame();
 
 		// get the deck of the current game
@@ -1064,6 +1107,37 @@ private void setMode(Mode aMode)
 		return moves;
 		
 	}
+   
+   public String doPlayRevealTileActionCard(Tile tile) throws InvalidInputException{
+	    Game currentGame = tileO.getCurrentGame();
+			Deck currentDeck = currentGame.getDeck();
+			
+			if (!(currentDeck.getCurrentCard() instanceof RevealTileActionCard)){
+				throw new InvalidInputException("The Current Card is not a  RevealTileActionCard.");
+			}
+			
+			RevealTileActionCard currentCard = (RevealTileActionCard) currentDeck.getCurrentCard();
+			
+			String result = currentCard.play(tile);
+			
+			currentGame.determineNextPlayer();
+			
+			currentGame.updateTileStatus();
+			
+			if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+				currentDeck.shuffle();		
+				currentDeck.setCurrentCard(currentDeck.getCard(0));
+			}
+			else {
+				currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+			}
+
+			// set the mode of the current game to GAME
+			currentGame.setMode(Game.Mode.GAME);
+			
+			return result;
+	  }
+   
 // line 567 "../../../../../PlayControllerStatus.ump"
    public void doPlayMoveOtherPlayerActionCard(Player player, Tile tile) throws InvalidInputException{
     // get the current game
@@ -1289,6 +1363,13 @@ private void setMode(Mode aMode)
 		}
 		return false;
   }
+   
+   private boolean isRevealTileActionCard(){
+	    if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof RevealTileActionCard){
+				return true;
+			}
+			return false;
+	  }
 
   // line 673 "../../../../../PlayControllerStatus.ump"
    private boolean isInGameMode(Game selectedGame){

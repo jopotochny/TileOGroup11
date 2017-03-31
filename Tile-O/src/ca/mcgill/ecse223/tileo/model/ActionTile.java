@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-import java.util.*;
 
 // line 2 "../../../../../TileOStates.ump"
 // line 282 "../../../../../TileO.ump"
@@ -194,6 +193,10 @@ public class ActionTile extends Tile
 			}else if(currentCard instanceof NextPlayerRollsOneActionCard){
 				NextPlayerRollsOneActionCard nextPlayerRollsOneActionCard = (NextPlayerRollsOneActionCard) currentCard;
 				mode = nextPlayerRollsOneActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
+			}else if(currentCard instanceof RevealTileActionCard){
+				RevealTileActionCard revealTileActionCard = (RevealTileActionCard) currentCard;
+				mode = revealTileActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
 			}else if(currentCard instanceof SetActionTilesInactiveActionCard){
 				SetActionTilesInactiveActionCard setActionTilesInactiveActionCard = (SetActionTilesInactiveActionCard) currentCard;

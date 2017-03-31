@@ -57,7 +57,9 @@ public class DesignTileOPage extends JFrame {
 	private JLabel setInactiveCardLabel;
 	private JLabel nextPlayerLabel;
 	private JLabel moveOtherPlayerLabel;
+	private JLabel revealLabel;
 	protected static JTextField connectionPiecesLeft;
+	private JTextField revealCard;
 	private JTextField inactivityText;
 	private JTextField winTileHintCard;
 	private JTextField setInactiveCard;
@@ -151,6 +153,7 @@ public class DesignTileOPage extends JFrame {
 		moveOtherPlayerLabel = new JLabel("Move Other Player Card");
 		moveOtherPlayerCard = new JTextField();
 		
+		revealLabel = new JLabel("Reveal Tile Action Card");
 		nextPlayerLabel = new JLabel("Next Player Rolls One Card");
 		wintTileHintLabel = new JLabel("Win Tile Hint Card");
 		rollLabel = new JLabel("Roll Again Card");
@@ -160,6 +163,7 @@ public class DesignTileOPage extends JFrame {
 		removeConnectionLabel = new JLabel("Remove Connection Card");
 		setInactiveCardLabel = new JLabel("Set inactivity Card");
 		
+		revealCard = new JTextField();
 		nextPlayerCard = new JTextField();
 		winTileHintCard = new JTextField();
 		setInactiveCard = new JTextField();
@@ -299,8 +303,10 @@ public class DesignTileOPage extends JFrame {
 				int numNext = 0;
 				int numInactive = 0;
 				int numMoveOtherPlayer=0;
+				int numReveal = 0;
 
 					try{
+						numReveal = Integer.parseInt(revealCard.getText());
 						numRoll = Integer.parseInt(rollCard.getText());
 						numTeleport = Integer.parseInt(teleportCard.getText());
 						numLose = Integer.parseInt(loseTurnCard.getText());
@@ -311,6 +317,7 @@ public class DesignTileOPage extends JFrame {
 						numInactive = Integer.parseInt(setInactiveCard.getText());
 						numMoveOtherPlayer = Integer.parseInt(moveOtherPlayerCard.getText());
 						
+						
 					}catch(NumberFormatException e){
 						console.setText("One of the cards has an invalid value");
 						error = false;
@@ -318,7 +325,7 @@ public class DesignTileOPage extends JFrame {
 					}
 
 					try {
-						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer);
+						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer, numReveal);
 					} catch (Exception e) {
 						// e.printStackTrace();
 						console.setText(e.getMessage().trim());
@@ -553,6 +560,7 @@ public class DesignTileOPage extends JFrame {
 				 .addComponent(rollLabel)
 				 .addComponent(wintTileHintLabel)
 				 .addComponent(moveOtherPlayerLabel)
+				 .addComponent(revealLabel)
 				 .addComponent(nextPlayerLabel)
 				 .addComponent(setInactiveCardLabel))
 				 .addGroup(layout.createParallelGroup()
@@ -566,6 +574,7 @@ public class DesignTileOPage extends JFrame {
 						 .addComponent(rollCard)
 						 .addComponent(winTileHintCard)
 						 .addComponent(moveOtherPlayerCard)
+						 .addComponent(revealCard)
 						 .addComponent(nextPlayerCard)
 						 .addComponent(setInactiveCard)
 						 .addComponent(submitDeck)))));
@@ -573,7 +582,7 @@ public class DesignTileOPage extends JFrame {
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame, loadGame });
 		layout.linkSize(SwingConstants.VERTICAL,
 				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard,winTileHintCard, connectionCard, submitDeck,
-						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard });
+						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard, revealCard });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame)
@@ -606,6 +615,10 @@ public class DesignTileOPage extends JFrame {
 						.addGroup(layout.createParallelGroup()
 								.addComponent(moveOtherPlayerLabel)
 								.addComponent(moveOtherPlayerCard))
+						.addGroup(layout.createParallelGroup()
+								.addComponent(revealLabel)
+								.addComponent(revealCard)
+								)
 						.addComponent(submitDeck)));
 		pack();
 	}
@@ -624,6 +637,7 @@ public class DesignTileOPage extends JFrame {
 
 		// set jtextfield to null
 		moveOtherPlayerCard.setText("");
+		revealCard.setText("");
 		nextPlayerCard.setText("");
 		winTileHintCard.setText("");
 		loseTurnCard.setText("");

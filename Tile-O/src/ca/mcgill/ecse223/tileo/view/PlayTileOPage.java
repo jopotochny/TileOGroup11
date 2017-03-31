@@ -2,8 +2,6 @@ package ca.mcgill.ecse223.tileo.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +16,15 @@ import javax.swing.WindowConstants;
 
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.controller.PlayController;
-import ca.mcgill.ecse223.tileo.model.Game;
-import ca.mcgill.ecse223.tileo.model.Player;
+import ca.mcgill.ecse223.tileo.model.ActionTile;
 import ca.mcgill.ecse223.tileo.model.Connection;
+import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.Game.Mode;
+import ca.mcgill.ecse223.tileo.model.NormalTile;
+import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
+import ca.mcgill.ecse223.tileo.model.WinTile;
 
 public class PlayTileOPage extends JFrame{
 
@@ -307,6 +308,9 @@ public class PlayTileOPage extends JFrame{
 		}else if(gameMode.equals(Game.Mode.GAME_WINTILEHINTACTIONCARD)){
 			deck.setText("Please select a tile from the board for a hint.");
 			boardVisualizer.setSelectedTileToNull();
+		}else if(gameMode.equals(Game.Mode.GAME_REVEALTILEACTIONCARD)){
+			deck.setText("Please select a tile from the board to get its type");
+			boardVisualizer.setSelectedTileToNull();
 		}
 		else if(controllerMode.equals(PlayController.Mode.Ready)){
 			rollDie.setEnabled(true);
@@ -526,6 +530,25 @@ public class PlayTileOPage extends JFrame{
 			error = "Please select 1 tile from the board";
 		}
 
+		refreshData();
+	}
+	
+	public static void playRevealTileActionCard(Tile tile){
+		boolean result = false;
+		if(tile != null){
+			try{
+				result = pc.playRevealTileActionCard(tile);
+			} catch(InvalidInputException e){
+				error = e.getMessage();
+			}
+		}
+		if(tile instanceof WinTile){
+			console.setText("The tile selected is the win tile!");
+		} else if(tile instanceof ActionTile){
+			console.setText("The tile selected is an action tile!");
+		} else if(tile instanceof NormalTile){
+			console.setText("The tile selected is a normal tile!");
+		}
 		refreshData();
 	}
 	

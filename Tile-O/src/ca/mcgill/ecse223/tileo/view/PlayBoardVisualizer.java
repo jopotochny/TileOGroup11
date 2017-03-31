@@ -117,8 +117,11 @@ public class PlayBoardVisualizer extends JPanel {
 				if(isWinTileHintMode()){
 					playWinTileHint();
 				}
-				if(isMoveOtherPlayerMode()){
+				else if(isMoveOtherPlayerMode()){
 					playMoveOtherPlayer();
+				}
+				else if(isRevealTileMode()){
+					playRevealTile();
 				}
 				repaint();
 			}
@@ -299,7 +302,23 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 		return false;
 	}
+	
+	private boolean isRevealTileMode(){
 
+		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_REVEALTILEACTIONCARD)){
+			return true;
+		}
+		return false;
+	}
+
+	private void playRevealTile(){
+		if(selectedTile1 != null){
+			PlayTileOPage.playRevealTileActionCard(selectedTile1);
+		} else if (selectedTile2 != null){
+			PlayTileOPage.playRevealTileActionCard(selectedTile2);
+		}
+	}
+	
 	private void playWinTileHint(){
 
 		if(selectedTile1 != null){

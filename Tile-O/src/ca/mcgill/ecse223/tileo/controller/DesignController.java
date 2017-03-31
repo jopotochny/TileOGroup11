@@ -16,6 +16,7 @@ import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
 import ca.mcgill.ecse223.tileo.model.Player.Color;
 import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
+import ca.mcgill.ecse223.tileo.model.RevealTileActionCard;
 import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
 import ca.mcgill.ecse223.tileo.model.SetActionTilesInactiveActionCard;
 import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
@@ -193,7 +194,7 @@ public class DesignController {
 			
 		}
 
-		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint , int next, int inactivity, int moveotherplayer)
+		public void selectCards(int connect, int rollDie, int remove, int teleport, int lose, int hint , int next, int inactivity, int moveotherplayer, int reveal)
 				throws InvalidInputException {
 
 			Game game = tileo.getCurrentGame();
@@ -203,8 +204,11 @@ public class DesignController {
 				
 			}
 
-			if (( connect + rollDie + remove + teleport + lose + hint + next + inactivity + moveotherplayer) != 32) {
+			if (( reveal+connect + rollDie + remove + teleport + lose + hint + next + inactivity + moveotherplayer) != 32) {
 				throw new InvalidInputException("The amount of cards chosen is not 32");
+			}
+			for(int i = 1; i<=reveal; i++){
+				RevealTileActionCard revealCard = new RevealTileActionCard("Reveal a tile", deck);
 			}
 			
 			for(int j = 1; j<= hint; j++){
