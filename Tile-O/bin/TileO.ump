@@ -10,7 +10,7 @@ class TileO {
 }
 
 class Game {
-  mode { DESIGN{} GAME{} GAME_WON{} GAME_ROLLDIEACTIONCARD{} GAME_CONNECTTILESACTIONCARD{} GAME_REMOVECONNECTIONACTIONCARD{} GAME_TELEPORTACTIONCARD{} GAME_LOSETURNACTIONCARD{} GAME_WINTILEHINTACTIONCARD{} GAME_NEXTPLAYERROLLSONEACTIONCARD{} GAME_MOVEOTHERPLAYERACTIONCARD{}}
+  mode { DESIGN{} GAME{} GAME_WON{} GAME_ROLLDIEACTIONCARD{} GAME_CONNECTTILESACTIONCARD{} GAME_REMOVECONNECTIONACTIONCARD{} GAME_TELEPORTACTIONCARD{} GAME_LOSETURNACTIONCARD{} GAME_WINTILEHINTACTIONCARD{} GAME_NEXTPLAYERROLLSONEACTIONCARD{} GAME_MOVEOTHERPLAYERACTIONCARD{} GAME_REVEALTILEACTIONCARD{}}
   1 <@>- 2..4 Player players;
   1 <@>- * Tile tiles;
   1 <@>- * Connection connections;
@@ -336,6 +336,10 @@ class ActionTile {
 				TeleportActionCard loseTurnActionCard = (TeleportActionCard) currentCard;
 				mode = loseTurnActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof RevealTileActionCard){
+				RevealTileActionCard revealTileActionCard = (RevealTileActionCard) currentCard;
+				mode = revealTileActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}else if(currentCard instanceof WinTileHintActionCard){
 				WinTileHintActionCard winTileHintActionCard = (WinTileHintActionCard) currentCard;
 				mode = winTileHintActionCard.getActionCardGameMode();
@@ -385,6 +389,28 @@ class NormalTile {
 		currentGame.setMode(Game.Mode.GAME);
   }
   
+}
+
+class RevealTileActionCard{
+	isA ActionCard;
+	
+	public String play(Tile aTile){
+		String type = null;
+		if (aTile instanceof NormalTile) {
+				type = "Normal Tile";
+			}
+			else if (aTile instanceof ActionTile) {
+				type = "Action Tile";
+			}
+			else if (aTile instanceof WinTile) {
+				type = "Win Tile";
+			}
+			return type;
+	}
+	
+	public Game.Mode getActionCardGameMode() {
+		return Game.Mode.GAME_REVEALTILEACTIONCARD;
+	};
 }
 
 

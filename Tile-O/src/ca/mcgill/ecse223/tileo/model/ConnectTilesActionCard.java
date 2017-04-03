@@ -31,7 +31,7 @@ public class ConnectTilesActionCard extends ActionCard
 
   // line 495 "../../../../../TileO.ump"
    public void play(Tile tile1, Tile tile2){
-    Game game = super.getDeck().getGame();
+	   Game game = super.getDeck().getGame();
 	  
 	  Connection connection = new Connection (game);
 	  
@@ -39,6 +39,9 @@ public class ConnectTilesActionCard extends ActionCard
 	  
 	  tile1.addConnection(connection);
 	  tile2.addConnection(connection);
+	  
+	  //decrementing the number of connection pieces
+	  game.setCurrentConnectionPieces(game.getCurrentConnectionPieces() - 1);
   }
 
   // line 507 "../../../../../TileO.ump"

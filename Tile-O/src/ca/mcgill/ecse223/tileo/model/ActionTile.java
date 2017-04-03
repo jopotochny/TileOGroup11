@@ -210,11 +210,10 @@ public class ActionTile extends Tile
 			
 			this.deactivate();
 		}else{
-			if(!(currentGame.getMode().equals(Game.Mode.GAME_TELEPORTACTIONCARD))){	
+			//if(!(currentGame.getMode().equals(Game.Mode.GAME_TELEPORTACTIONCARD))){	
 				//determining the next player
 				currentGame.determineNextPlayer();
-			}
-			
+			//}
 			//decrement the inactivity of action tiles
 			currentGame.updateTileStatus();
 			
