@@ -283,7 +283,7 @@ public class PlayTileOPage extends JFrame{
 			controllerMode = pc.getMode();			
 
 		}
-				
+		
 		//set the inactivity of the button depending on the game mode
 		setButtonActivity();
 		
@@ -298,7 +298,6 @@ public class PlayTileOPage extends JFrame{
 		connectTiles.setEnabled(false);
 		removeConnection.setEnabled(false);
 		teleportTo.setEnabled(false);
-
 		if(controllerMode.equals(PlayController.Mode.Roll)){
 			rollDie.setEnabled(true);
 			if(deckText.equals("")){
@@ -467,6 +466,8 @@ public class PlayTileOPage extends JFrame{
 				pc.playConnectTilesActionCard(tile1, tile2);
 			} catch (InvalidInputException e){
 				error = e.getMessage();
+				console.setText(error);
+				error=null;
 			}
 		}else{
 			error = "Please select two tiles form the board";

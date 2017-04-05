@@ -71,6 +71,8 @@ public class DesignController {
 			Connection theConnection = new Connection(this.tileo.getCurrentGame());	
 			theConnection.addTile(tileOne);
 			theConnection.addTile(tileTwo);
+			//decrementing the number of connection pieces
+			//tileo.getCurrentGame().setCurrentConnectionPieces(tileo.getCurrentGame().getCurrentConnectionPieces() - 1);
 			//PersistenceXStream.saveToXMLwithXStream(tileo);
 		}
 		public void addTileToBoard(int X, int Y) throws InvalidInputException{

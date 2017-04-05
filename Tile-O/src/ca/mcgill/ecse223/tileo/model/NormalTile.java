@@ -45,13 +45,11 @@ public class NormalTile extends Tile implements Serializable
 		//set the current tile to has been visited
 		this.setHasBeenVisited(true);
 		
-		if(!(currentGame.getMode().equals(Game.Mode.GAME_TELEPORTACTIONCARD))){	
+		//if(!(currentGame.getMode().equals(Game.Mode.GAME_TELEPORTACTIONCARD))){	
 			//determining the next player
 			currentGame.determineNextPlayer();
-		}
-		
-		
-	
+		//}
+
 		//decrement the inactivity of action tiles
 		currentGame.updateTileStatus();
 
