@@ -4,12 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.ParseException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ca.mcgill.ecse223.tileo.application.TileOApplication;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Deck;
 import ca.mcgill.ecse223.tileo.model.Die;
@@ -25,10 +28,17 @@ import ca.mcgill.ecse223.tileo.model.WinTile;
 public class PersistenceTest {	
 	
 	private TileO tileo;
+	private static String filename = "test.tileo";
+	
+	@BeforeClass
+	public static void setUpOnce() {
+		TileOApplication.setFilename(filename);		
+	}
 	
 	@Before
 	public void setUp() throws Exception {
 		 tileo = new TileO();
+		
 		
 		//creating a number of connections
 		int numberOfConnectionPieces = 32;
@@ -86,11 +96,12 @@ public class PersistenceTest {
 		
 		
 		// initialize model file
-	    PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
+	   // PersistenceXStream.initializeModelManager("output"+File.separator+"data.xml");
 	    
 	    // save model that is loaded during test setup
-	    if (!PersistenceXStream.saveToXMLwithXStream(tileo))
-	        fail("Could not save file.");
+	   // if (!PersistenceXStream.saveToXMLwithXStream(tileo))
+	    //    fail("Could not save file.");
+	    PersistenceObjectStream.serialize(tileo);
 	    
 	    //clear model in memory
 	    tileo.delete();
@@ -99,7 +110,8 @@ public class PersistenceTest {
 	   
 	    
 	    //load model
-	    tileo = (TileO) PersistenceXStream.loadFromXMLwithXStream();
+	    //tileo = (TileO) PersistenceXStream.loadFromXMLwithXStream();
+	    tileo = (TileO) PersistenceObjectStream.deserialize();
 	    if (tileo == null)
 	    	fail("Could not load file.");
 	    

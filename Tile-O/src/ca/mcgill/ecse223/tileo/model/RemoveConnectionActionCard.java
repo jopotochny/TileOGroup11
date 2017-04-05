@@ -2,9 +2,10 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
 
 // line 511 "../../../../../TileO.ump"
-public class RemoveConnectionActionCard extends ActionCard
+public class RemoveConnectionActionCard extends ActionCard implements Serializable
 {
 
   //------------------------
@@ -38,5 +39,7 @@ public class RemoveConnectionActionCard extends ActionCard
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_REMOVECONNECTIONACTIONCARD;
   }
+
+   private static final long serialVersionUID = -4040404040404040404L;
 
 }

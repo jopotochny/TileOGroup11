@@ -3,10 +3,11 @@
 
 package ca.mcgill.ecse223.tileo.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 // line 388 "../../../../../TileO.ump"
-public class NextPlayerRollsOneActionCard extends ActionCard
+public class NextPlayerRollsOneActionCard extends ActionCard implements Serializable
 {
 
   //------------------------
@@ -50,5 +51,6 @@ public class NextPlayerRollsOneActionCard extends ActionCard
 
 				return tiles;
 	  }
+   private static final long serialVersionUID = -8080808080808080808L;
 
 }

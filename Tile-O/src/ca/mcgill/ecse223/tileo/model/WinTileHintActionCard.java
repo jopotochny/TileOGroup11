@@ -2,11 +2,13 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
+
 
 import java.util.List;
 
 // line 400 "../../../../../TileO.ump"
-public class WinTileHintActionCard extends ActionCard
+public class WinTileHintActionCard extends ActionCard implements Serializable
 {
 
   //------------------------
@@ -52,5 +54,7 @@ public class WinTileHintActionCard extends ActionCard
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_WINTILEHINTACTIONCARD;
   }
+	
+   private static final long serialVersionUID = -8765432123456789098L;
 
 }

@@ -24,9 +24,15 @@ import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
 import ca.mcgill.ecse223.tileo.model.WinTile;
 import ca.mcgill.ecse223.tileo.model.WinTileHintActionCard;
+
+
+
 public class DesignController {
 		private TileO tileo;
 		private int maxPlayers = 4;
+		
+		
+		
 		public DesignController(TileO tileo){
 			this.tileo = tileo;
 		}
@@ -290,9 +296,10 @@ public class DesignController {
 	}
 	
 	// Load Design mode
-	public static Game loadDesign(int index){
+	public Game loadDesign(int index){
 		TileO tileo = TileOApplication.load();
 		Game game = tileo.getGame(index);
 		return game;
 	}
+	
 }

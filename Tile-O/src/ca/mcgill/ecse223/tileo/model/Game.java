@@ -5,11 +5,11 @@ package ca.mcgill.ecse223.tileo.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.io.Serializable;
 import ca.mcgill.ecse223.tileo.model.Player.PlayerStatus;
 
 // line 12 "../../../../../TileO.ump"
-public class Game
+public class Game implements Serializable
 {
 
   //------------------------
@@ -647,4 +647,7 @@ public class Game
             "  " + "tileO = "+(getTileO()!=null?Integer.toHexString(System.identityHashCode(getTileO())):"null")
      + outputString;
   }
+  
+  private static final long serialVersionUID = -2222222222222222222L;
+
 }

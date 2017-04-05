@@ -2,13 +2,15 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
+
 import java.util.*;
 
 /**
  * use WinTileHintActionCard.ump;
  */
 // line 7 "../../../../../TileO.ump"
-public class TileO
+public class TileO implements Serializable
 {
 
   //------------------------
@@ -164,5 +166,7 @@ public class TileO
     
     currentGame = null;
   }
+	
+  private static final long serialVersionUID = -1111111111111111111L; 
 
 }

@@ -2,11 +2,11 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
-
+import java.io.Serializable;
 import java.util.Random;
 
 // line 591 "../../../../../TileO.ump"
-public class Die
+public class Die implements Serializable
 {
 
   //------------------------
@@ -59,5 +59,6 @@ public class Die
 		int generatedNumber = random.nextInt(6) + 1;
 		return generatedNumber;
   }
+   private static final long serialVersionUID = -7070707070707070707L;	
 
 }

@@ -2,9 +2,10 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
 
 // line 570 "../../../../../TileO.ump"
-public class LoseTurnActionCard extends ActionCard
+public class LoseTurnActionCard extends ActionCard implements Serializable
 {
 
   //------------------------
@@ -44,5 +45,6 @@ public class LoseTurnActionCard extends ActionCard
    public Game.Mode getActionCardGameMode(){
     return Game.Mode.GAME_LOSETURNACTIONCARD;
   }
+   private static final long serialVersionUID = -6060606060606060606L;
 
 }

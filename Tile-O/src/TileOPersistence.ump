@@ -1,0 +1,137 @@
+namespace ca.mcgill.ecse223.tileo.model;
+
+external interface Serializable {}
+
+class ActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -1010101010101010101L;
+}
+
+class ActionTile {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -5555555555555555555L;	
+}
+
+class Connection {
+	depend java.io.Serializable;
+	isA Serializable;
+    private static final long serialVersionUID = -8888888888888888888L;
+}
+
+class ConnectTilesActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -3030303030303030303L;
+}
+
+class Deck {
+	depend java.io.Serializable;
+	isA Serializable;
+ 	private static final long serialVersionUID = -1234567890123456789L;
+}
+
+class Die {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -7070707070707070707L;	
+}
+
+class Game {
+  	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -2222222222222222222L;
+	
+}
+
+class LoseTurnActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -6060606060606060606L;
+}
+
+class MoveOtherPlayerActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -8080808080808080809L;
+}
+
+class NextPlayerRollsOneActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -8080808080808080808L;
+}
+
+class NormalTile {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -6666666666666666666L;
+}
+
+class Player {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -3333333333333333333L;
+	
+	public static void reinitializeUniquePlayer(List<Player> players){
+	playersByNumber = new HashMap<Integer, Player>();
+	for(Player player : players) {
+		playersByNumber.put(player.getNumber(), player);
+		}
+	}
+}
+
+class RemoveConnectionActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -4040404040404040404L;
+}
+
+class RevealTileActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -0202020202020202020L;
+}
+
+class RollDieActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -2020202020202020202L;
+}
+
+class SetActionTilesInactiveActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -9090909090909090909L;
+}
+
+class TeleportActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -5050505050505050505L;
+}
+
+class Tile {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -4444444444444444444L;
+}
+
+class TileO {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -1111111111111111111L; 
+}
+
+class WinTile {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -7777777777777777777L;
+}
+
+class WinTileHintActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = -8765432123456789098L;
+}

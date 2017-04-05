@@ -2,10 +2,12 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
+
 import java.util.*;
 
 // line 249 "../../../../../TileO.ump"
-public abstract class Tile
+public abstract class Tile implements Serializable
 {
 
   //------------------------
@@ -285,4 +287,7 @@ public abstract class Tile
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null")
      + outputString;
   }
+	
+  private static final long serialVersionUID = -4444444444444444444L;
+
 }

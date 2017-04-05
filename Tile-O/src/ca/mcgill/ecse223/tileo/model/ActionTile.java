@@ -2,10 +2,11 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
 
 // line 2 "../../../../../TileOStates.ump"
 // line 282 "../../../../../TileO.ump"
-public class ActionTile extends Tile
+public class ActionTile extends Tile implements Serializable
 {
 
   //------------------------
@@ -233,4 +234,7 @@ public class ActionTile extends Tile
             "turnsUntilActive" + ":" + getTurnsUntilActive()+ "]"
      + outputString;
   }
+  
+  private static final long serialVersionUID = -5555555555555555555L;	
+
 }

@@ -2,9 +2,10 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
 
 // line 452 "../../../../../TileO.ump"
-public abstract class ActionCard
+public abstract class ActionCard implements Serializable
 {
 
   //------------------------
@@ -93,4 +94,7 @@ public abstract class ActionCard
             "  " + "deck = "+(getDeck()!=null?Integer.toHexString(System.identityHashCode(getDeck())):"null")
      + outputString;
   }
+  
+private static final long serialVersionUID = -1010101010101010101L;
+
 }

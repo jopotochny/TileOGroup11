@@ -35,6 +35,7 @@ public class DesignTileOPage extends JFrame {
 	// save and load game
 	private JButton saveGame;
 	private JComboBox<Integer> loadGame;
+	private JButton loadDesign;
 	private JLabel player;
 	private Integer selectedGame;
 
@@ -107,6 +108,18 @@ public class DesignTileOPage extends JFrame {
 		initComponents();
 		refreshData();
 	}
+	
+	public DesignTileOPage(Game aGame, TileO tileO){
+		this.tileo = tileO;
+		game = aGame;
+		//tileO.setCurrentGame(aGame);
+		initComponents();
+		refreshData();
+	}
+	
+	public static boolean LoadPageDesign(TileO tileo){
+		return true;
+	}
 
 	public void initComponents() {
 		// set the size of the applet
@@ -122,6 +135,7 @@ public class DesignTileOPage extends JFrame {
 		// save and load game
 		saveGame = new JButton();
 		loadGame = new JComboBox<Integer>();
+		loadDesign = new JButton();
 		player = new JLabel();
 		player.setText("Player 1");
 
@@ -141,6 +155,7 @@ public class DesignTileOPage extends JFrame {
 
 		// global settings and listeners
 		saveGame.setText("Save");
+		loadDesign.setText("Load");
 
 		startGame = new JButton();
 		startGame.setText("Start Game");
@@ -236,8 +251,23 @@ public class DesignTileOPage extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				//game = tileo.getCurrentGame();
+				//TileOApplication.setFilename(String.valueOf(selectedGame));
 				cont.saveGame();
 
+			}
+		});
+		
+		loadGame.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				JComboBox<Integer> cb = (JComboBox<Integer>) evt.getSource();
+				selectedGame = cb.getSelectedIndex();
+			}
+		});
+		
+		loadDesign.addActionListener(new java.awt.event.ActionListener(){
+			public void actionPerformed(java.awt.event.ActionEvent evt){
+				loadGame();
 			}
 		});
 
@@ -278,7 +308,7 @@ public class DesignTileOPage extends JFrame {
 			}
 		});
 
-		saveGame.addActionListener(new ActionListener() {
+		/*saveGame.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -286,7 +316,7 @@ public class DesignTileOPage extends JFrame {
 				TileOApplication.save();
 
 			}
-		});
+		});*/
 
 		submitDeck.addActionListener(new java.awt.event.ActionListener() {
 
@@ -538,7 +568,7 @@ public class DesignTileOPage extends JFrame {
 		layout.setAutoCreateContainerGaps(true);
 
 		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup().addComponent(saveGame).addComponent(loadGame)
+				.addGroup(layout.createParallelGroup().addComponent(saveGame).addComponent(loadGame).addComponent(loadDesign)
 						.addComponent(player).addComponent(startGame))
 				.addGroup(layout.createParallelGroup().addComponent(boardTitle).addComponent(boardVisualizer)
 						.addComponent(consoleTitle).addComponent(console)
@@ -585,7 +615,7 @@ public class DesignTileOPage extends JFrame {
 						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard, revealCard });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame)
+				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame).addComponent(loadDesign)
 						.addComponent(player).addComponent(startGame))
 				.addGroup(layout.createSequentialGroup().addComponent(boardTitle).addComponent(boardVisualizer)
 						.addComponent(consoleTitle).addComponent(console))
@@ -626,9 +656,16 @@ public class DesignTileOPage extends JFrame {
 	private void refreshData() {
 		console.setText("");
 		// load game
+		
+		DesignController dc = new DesignController(tileo);
 		Integer index = 0;
 		availableGames = new HashMap<Integer, Game>();
 		loadGame.removeAllItems();
+		for(Game game : tileo.getGames()){
+			availableGames.put(index, game);
+			loadGame.addItem(game.getTileO().indexOfGame(game));	//game.getTileO().indexOfGame(game)
+			index++;
+		}
 		selectedGame = -1;
 		loadGame.setSelectedIndex(selectedGame);
 
@@ -663,6 +700,45 @@ public class DesignTileOPage extends JFrame {
 			console.setText(error);
 		}
 		
+	}
+	
+	public void loadGame() {
+		/*DesignController cont = new DesignController(tileo);
+		cont.loadDesign(selectedGame);
+		//Game game = TileOApplication.getGame(selectedGame);
+		//tileo.setCurrentGame(game);
+		//cont.createGame();
+		dispose();
+		new DesignTileOPage(tileo).setVisible(true);*/
+		
+//		PlayController pc = new PlayController(tileo);
+//		
+//		if (loadGame.getItemCount() == 0) {
+//			error = "there are no games to play";
+//		}
+//		else if (loadGame.getItemCount()>0){
+//			try {
+//				int gameIndex = loadGame.getSelectedIndex();
+//				Game selectedGame = availableGames.get(gameIndex);
+//				TileOApplication.getTileO().setCurrentGame(selectedGame);
+//				pc.startGame(TileOApplication.getTileO().getCurrentGame());
+//				dispose();
+//				new DesignTileOPage(tileo).setVisible(true);
+//			}
+//			catch(InvalidInputException e) {
+//				error = e.getMessage();
+//			}
+//		}
+//		
+		//PlayController pc = new PlayController(tileo);
+		//Game game = TileOApplication.getGame(loadGame.getSelectedIndex()-1);
+		
+		
+		Game game = cont.loadDesign(loadGame.getSelectedIndex()-1);
+		tileo.setCurrentGame(game);
+		//LoadPageDesign(tileo);
+		dispose();
+		new DesignTileOPage(game,tileo).setVisible(true);
 	}
 
 }

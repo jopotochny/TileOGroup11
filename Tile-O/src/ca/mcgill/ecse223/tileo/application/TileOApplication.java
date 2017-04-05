@@ -3,18 +3,19 @@ package ca.mcgill.ecse223.tileo.application;
 
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.TileO;
-import ca.mcgill.ecse223.tileo.persistence.PersistenceXStream;
+import ca.mcgill.ecse223.tileo.persistence.PersistenceObjectStream;
 import ca.mcgill.ecse223.tileo.view.HomePage;
 
 public class TileOApplication {
 	
-	private static String filename = "output/tileO.xml";
+	private static String filename = "output.txt";
 	private static Game game;
 	private static TileO tileO;
 	
 	public static void main(String[] args) {
 		// load model
-		final TileO tileO = PersistenceXStream.initializeModelManager(filename);
+		//final TileO tileO = PersistenceXStream.initializeModelManager(filename);
+		final TileO tileO = load();
 		
 		// start UI
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -41,17 +42,20 @@ public class TileOApplication {
 		tileO.setCurrentGame(game);
  		return game;
 	}
-	// Save file
-	public static void save() {
-		setFilename(filename);
-	    PersistenceXStream.initializeModelManager(filename);
+	
+	public static void save(){
+		PersistenceObjectStream.serialize(tileO);
 	}
-	// Load file
-	public static TileO load() {
-		tileO = (TileO) PersistenceXStream.loadFromXMLwithXStream();
+	
+	public static TileO load(){
+		PersistenceObjectStream.setFilename(filename);
+		tileO = (TileO) PersistenceObjectStream.deserialize();
+		if (tileO == null) {
+			tileO = new TileO();
+		}
 		return tileO;
 	}
-	// Set Filename
+	
 	public static void setFilename(String newFilename) {
 		filename = newFilename;
 	}

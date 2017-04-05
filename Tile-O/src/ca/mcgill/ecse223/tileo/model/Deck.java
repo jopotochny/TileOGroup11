@@ -2,10 +2,11 @@
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
 package ca.mcgill.ecse223.tileo.model;
+import java.io.Serializable;
 import java.util.*;
 
 // line 442 "../../../../../TileO.ump"
-public class Deck
+public class Deck implements Serializable
 {
 
   //------------------------
@@ -206,5 +207,7 @@ public class Deck
    public void shuffle(){
     Collections.shuffle(cards);
   }
+
+   private static final long serialVersionUID = -1234567890123456789L;
 
 }
