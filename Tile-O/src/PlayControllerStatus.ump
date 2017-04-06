@@ -87,6 +87,9 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		  	playRevealTileActionCard(Tile tile) [isRevealTileActionCard()] / {
 	   			doPlayRevealTileActionCard(tile);
 	   		} -> Roll;
+	   		playSwapPlayerPositionActionCard() [isSwapPlayerPositionActionCard()] /{
+				doSwapPlayerPositionActionCard()
+			} -> Roll;
 	} 
 	}
 	
@@ -694,6 +697,34 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		
 	}
 	
+	public void doSwapPlayerPositionActionCard () {
+		//get the current game
+		
+		TileO tileO = TileOApplication.getTileO();
+		Game currentGame = tileO.getCurrentGame();
+		// get the currentDeck
+		
+		Deck deck = currentGame.getDeck();
+		
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof SwapPlayerPositionActionCard)){
+			throw new InvalidInputException("The Current Card is not a SwapPlayerActionCard.");
+		}
+
+		SwapPlayerPositionActionCard currentCard = (SwapPlayerPositionActionCard) deck.getCurrentCard();
+
+		currentCard.play();		
+		
+		currentGame.determineNextPlayer();
+		currentGame.updateTileStatus();
+
+		int nextCardNumber = deck.indexOfCard(deck.getCurrentCard()) + 1  % deck.numberOfCards();
+		deck.setCurrentCard(deck.getCard(nextCardNumber));
+
+		currentGame.setMode(Game.Mode.GAME);
+	}
+	
 
 	/**
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
@@ -916,5 +947,10 @@ depend ca.mcgill.ecse223.tileo.model.WinTile;
 		return false;
 	}
 	
-	
+	private static boolean isSwapPlayerPositionActionCard(){
+		if(tileO.getCurrentGame().getDeck().getCurrentCard() instanceof SwapPlayerPositionActionCard){
+			return true;
+		}
+		return false;
+	}
 } 

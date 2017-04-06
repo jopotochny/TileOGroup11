@@ -390,8 +390,8 @@ public class TileODesignControllerTest {
 		tileO.addGame(game);
 		tileO.setCurrentGame(game);
 
-		int remove, connect, teleport, roll, lose, hint, next, inactivity, moveotherplayer, reveal;
-		remove = 5;
+		int remove, connect, teleport, roll, lose, hint, next, inactivity, moveotherplayer, reveal, swap;
+		remove = 4;
 		connect = 10;
 		teleport = 10;
 		roll = 1;
@@ -401,8 +401,9 @@ public class TileODesignControllerTest {
 		inactivity = 1;
 		moveotherplayer = 1;
 		reveal = 1;
+		swap = 1;
 		try {
-			controller.selectCards( connect, teleport, roll, remove, lose, hint, next, inactivity, moveotherplayer,reveal);
+			controller.selectCards( connect, teleport, roll, remove, lose, hint, next, inactivity, moveotherplayer,reveal,swap);
 		} catch (InvalidInputException e) {
 			fail();
 		}
@@ -417,7 +418,7 @@ public class TileODesignControllerTest {
 		Game game = new Game(32, tileO);
 		tileO.addGame(game);
 		tileO.setCurrentGame(game);
-		int remove, connect, teleport, roll, lose, hint, next, inactivity, moveotherplayer,reveal;
+		int remove, connect, teleport, roll, lose, hint, next, inactivity, moveotherplayer,reveal,swap;
 		remove = 20;
 		connect = 5;
 		teleport = 5;
@@ -428,9 +429,10 @@ public class TileODesignControllerTest {
 		inactivity = 1;
 		moveotherplayer = 1;
 		reveal = 1;
+		swap = 1;
 		
 		try {
-			controller.selectCards(connect, teleport, roll, remove, lose, hint, next, inactivity, moveotherplayer, reveal);
+			controller.selectCards(connect, teleport, roll, remove, lose, hint, next, inactivity, moveotherplayer, reveal, swap);
 		} catch (InvalidInputException e) {
 			error += e.getMessage();
 

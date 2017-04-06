@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import ca.mcgill.ecse223.tileo.application.TileOApplication;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.controller.PlayController;
 import ca.mcgill.ecse223.tileo.model.ActionTile;
@@ -310,6 +311,9 @@ public class PlayTileOPage extends JFrame{
 		}else if(gameMode.equals(Game.Mode.GAME_REVEALTILEACTIONCARD)){
 			deck.setText("Please select a tile from the board to get its type");
 			boardVisualizer.setSelectedTileToNull();
+		}else if(gameMode.equals(Game.Mode.GAME_SWAPPLAYERPOSITIONACTIONCARD)){
+			deck.setText("Please select two Players to swap them");
+			boardVisualizer.setSelectedTileToNull();
 		}
 		else if(controllerMode.equals(PlayController.Mode.Ready)){
 			rollDie.setEnabled(true);
@@ -597,6 +601,27 @@ public class PlayTileOPage extends JFrame{
 		String playerLabel = "Player " + playerIndex;
 		player.setText(playerLabel);
 	}
+	
+	public static void playSwapPlayerPositionActionCard(Player swappedPlayer){
+		//List<Tile> playerSelectedTile = boardVisualizer.getSelectedTiles();
+		//if(playerSelectedTile != null){
+			//Tile tile1 = playerSelectedTile.get(0);
+		
+			try{
+				//swappedPlayer.setCurrentTile(tile1);
+				pc.playSwapPlayerPositionActionCard(swappedPlayer);
+			} catch(InvalidInputException e){
+				error = e.getMessage();
+		//	}
+		
+		controllerMode = pc.getMode();
+		rollDie.setEnabled(true);
+		boardVisualizer.redraw();
+			
+		}
+		refreshData();
+	}
+	
 	
 	public static Game.Mode getGameMode(){
 		return gameMode;

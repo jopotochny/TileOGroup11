@@ -22,6 +22,7 @@ import ca.mcgill.ecse223.tileo.model.RemoveConnectionActionCard;
 import ca.mcgill.ecse223.tileo.model.RevealTileActionCard;
 import ca.mcgill.ecse223.tileo.model.RollDieActionCard;
 import ca.mcgill.ecse223.tileo.model.SetActionTilesInactiveActionCard;
+import ca.mcgill.ecse223.tileo.model.SwapPlayerPositionActionCard;
 import ca.mcgill.ecse223.tileo.model.TeleportActionCard;
 import ca.mcgill.ecse223.tileo.model.Tile;
 import ca.mcgill.ecse223.tileo.model.TileO;
@@ -451,6 +452,30 @@ public class PlayController
 			{
 				// line 80 "../../../../../PlayControllerStatus.ump"
 				doPlaySetActionTilesInactiveActionCard();
+				setMode(Mode.Roll);
+				wasEventProcessed = true;
+				break;
+			}
+			break;
+		default:
+			// Other states do respond to this event
+		}
+
+		return wasEventProcessed;
+	}
+	
+	public boolean playSwapPlayerPositionActionCard(Player swappedPlayer) throws InvalidInputException
+	{
+		boolean wasEventProcessed = false;
+
+		Mode aMode = mode;
+		switch (aMode)
+		{
+		case ActionCard:
+			if (isSwapPlayerPositionActionCard())
+			{
+				
+				doSwapPlayerPositionActionCard(swappedPlayer);
 				setMode(Mode.Roll);
 				wasEventProcessed = true;
 				break;
@@ -1242,6 +1267,37 @@ public class PlayController
 		currentGame.setMode(Game.Mode.GAME);
 		setMode(PlayController.Mode.Roll);
 	}
+	
+	public void doSwapPlayerPositionActionCard(Player swappedPlayer) throws InvalidInputException{
+		//get the current game
+
+
+		Game currentGame = tileO.getCurrentGame();
+		// get the currentDeck
+		
+		Deck currentDeck = currentGame.getDeck();
+		
+		// check if the current card is a LoseTurnActionCard
+
+		if (!(currentDeck.getCurrentCard() instanceof SwapPlayerPositionActionCard)){
+			throw new InvalidInputException("The Current Card is not a SwapPlayerActionCard.");
+		}
+
+		SwapPlayerPositionActionCard currentCard = (SwapPlayerPositionActionCard) currentDeck.getCurrentCard();
+
+		currentCard.play(swappedPlayer);		
+		
+		currentGame.determineNextPlayer();
+		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
+			currentDeck.shuffle();		
+			currentDeck.setCurrentCard(currentDeck.getCard(0));
+		}
+		else {
+			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
+		};
+
+		currentGame.setMode(Game.Mode.GAME);
+	}
 
 	/**
 	 * 
@@ -1507,6 +1563,13 @@ public class PlayController
 	// line 807 "../../../../../PlayControllerStatus.ump"
 	private boolean isMoveOtherPlayerActionCard(){
 		if (tileO.getCurrentGame().getDeck().getCurrentCard() instanceof MoveOtherPlayerActionCard){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isSwapPlayerPositionActionCard(){
+		if (tileO.getCurrentGame().getDeck().getCurrentCard() instanceof SwapPlayerPositionActionCard){
 			return true;
 		}
 		return false;

@@ -123,6 +123,9 @@ public class PlayBoardVisualizer extends JPanel {
 				else if(isRevealTileMode()){
 					playRevealTile();
 				}
+				else if(isSwapPlayerPositionMode()){
+					playSwapPlayerPosition();
+				}
 				repaint();
 			}
 
@@ -310,6 +313,14 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 		return false;
 	}
+	
+	private boolean isSwapPlayerPositionMode(){
+
+		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_SWAPPLAYERPOSITIONACTIONCARD)){
+			return true;
+		}
+		return false;
+	}
 
 	private void playRevealTile(){
 		if(selectedTile1 != null){
@@ -326,9 +337,24 @@ public class PlayBoardVisualizer extends JPanel {
 		}else if(selectedTile2 != null){
 			PlayTileOPage.playWinTileHintActionCard(selectedTile2);
 		}
-
-
 	}
+		
+	private void playSwapPlayerPosition(){
+		
+		
+		if(selectedTile2 != null){
+			for (Player p : this.tileO.getCurrentGame().getPlayers()){
+				if(p.getCurrentTile() == selectedTile2 && p != this.tileO.getCurrentGame().getCurrentPlayer()){
+					Player thePlayer = p;
+					if(selectedTile1 != null){
+						PlayTileOPage.playSwapPlayerPositionActionCard(thePlayer);
+					break;
+					}
+				}
+			}
+		}
+	}
+
 	private boolean isMoveOtherPlayerMode(){
 		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_MOVEOTHERPLAYERACTIONCARD)){
 			return true;

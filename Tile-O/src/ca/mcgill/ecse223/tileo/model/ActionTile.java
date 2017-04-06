@@ -207,6 +207,10 @@ public class ActionTile extends Tile implements Serializable
 				MoveOtherPlayerActionCard moveOtherPlayerActionCard = (MoveOtherPlayerActionCard) currentCard;
 				mode = moveOtherPlayerActionCard.getActionCardGameMode();
 				currentGame.setMode(mode);
+			}else if(currentCard instanceof SwapPlayerPositionActionCard){
+				SwapPlayerPositionActionCard SwapPlayerPositionActionCard = (SwapPlayerPositionActionCard) currentCard;
+				mode = SwapPlayerPositionActionCard.getActionCardGameMode();
+				currentGame.setMode(mode);
 			}
 			
 			this.deactivate();
