@@ -107,6 +107,7 @@ public class DesignTileOPage extends JFrame {
 		this.tileo = tileO;
 		cont = new DesignController(tileo);
 		game = cont.createGame();
+		game.setMode(Game.Mode.DESIGN);
 		initComponents();
 		refreshData();
 	}

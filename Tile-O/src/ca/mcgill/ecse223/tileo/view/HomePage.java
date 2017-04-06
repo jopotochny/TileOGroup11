@@ -23,9 +23,13 @@ public class HomePage extends JFrame {
 	private JLabel welcomeMessage;
 	private JButton gotoCreateGame;
 	private JButton gotoLoadedGame;
+	private JButton gotoLoadedGameDesign;
 	private int selectedGame;
+	private int selectedGameDesign;
 	private JComboBox<Integer> listOfGames;
+	private JComboBox<Integer> listOfGamesDesign;
 	private HashMap<Integer, Game> availableGames;
+	private HashMap<Integer, Game> availableGamesDesign;
 	private JLabel errorLabel;	
 	private String error;
 	private TileO tileO;
@@ -57,11 +61,16 @@ public class HomePage extends JFrame {
 	gotoCreateGame.setText("Create a new game");
 	
 	gotoLoadedGame = new JButton();
-	gotoLoadedGame.setText("Load game");
+	gotoLoadedGame.setText("Load Playmode game");
+	
+	gotoLoadedGameDesign = new JButton();
+	gotoLoadedGameDesign.setText("Load Designmode game");
 	
 	listOfGames = new JComboBox<Integer>();
+	listOfGamesDesign = new JComboBox<Integer>();
 	
 	availableGames = new HashMap<Integer, Game>();
+	availableGamesDesign = new HashMap<Integer, Game>();
 	
 	errorLabel = new JLabel();
 	errorLabel.setText("");
@@ -78,10 +87,27 @@ public class HomePage extends JFrame {
 		}
 	});
 	
+	gotoLoadedGameDesign.addActionListener(new java.awt.event.ActionListener(){
+		public void actionPerformed(java.awt.event.ActionEvent evt){
+			loadGameDesign();
+		}
+	});
+	
 	listOfGames.addActionListener(new java.awt.event.ActionListener() {
 		public void actionPerformed(java.awt.event.ActionEvent evt) {
 			JComboBox<Integer> cb = (JComboBox<Integer>) evt.getSource();
-			selectedGame = cb.getSelectedIndex();
+			if(cb.getSelectedItem() != null){
+			selectedGame = (int) cb.getSelectedItem();
+			}
+		}
+	});
+	
+	listOfGamesDesign.addActionListener(new java.awt.event.ActionListener() {
+		public void actionPerformed(java.awt.event.ActionEvent evt) {
+			JComboBox<Integer> cb = (JComboBox<Integer>) evt.getSource();
+			if(cb.getSelectedItem() != null){
+			selectedGameDesign = (int) cb.getSelectedItem();
+			}
 		}
 	});
 
@@ -101,6 +127,11 @@ public class HomePage extends JFrame {
 								.addComponent(listOfGames)
 								.addComponent(gotoLoadedGame)
 								)
+						.addGroup(layout.createParallelGroup()
+								.addComponent(listOfGamesDesign)
+								.addComponent(gotoLoadedGameDesign)
+								)
+
 			
 	
 						)
@@ -108,9 +139,9 @@ public class HomePage extends JFrame {
 				);
 	 
 	
-	layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {gotoLoadedGame, listOfGames});
+	layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {gotoLoadedGame, listOfGames , listOfGamesDesign , gotoLoadedGameDesign});
 	//layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {MoveTo, removeConnection});
-	layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {gotoLoadedGame, listOfGames});
+	layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] {gotoLoadedGame, listOfGames , listOfGamesDesign , gotoLoadedGameDesign});
 	//layout.linkSize(SwingConstants.HORIZONTAL, new java.awt.Component[] {connectTiles, removeConnection});
 		
 	layout.setVerticalGroup(
@@ -122,6 +153,14 @@ public class HomePage extends JFrame {
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(listOfGames)
 								.addComponent(gotoLoadedGame)
+							
+								
+								
+								
+								)
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(listOfGamesDesign)
+								.addComponent(gotoLoadedGameDesign)
 							
 								
 								
@@ -144,15 +183,32 @@ public class HomePage extends JFrame {
 		
 		PlayController pc = new PlayController(tileO);
 		int index = 0;
+		int indextwo = 0;
 		listOfGames.removeAllItems();
 		for(Game game : pc.getGames()){
+			if(game.getMode()!= null){
+			if(!(game.getMode().equals(Game.Mode.DESIGN))){
 			availableGames.put(index, game);
 			listOfGames.addItem(game.getTileO().indexOfGame(game));
+			
+			}
+			}
 			index++;
 		}
-
+		
+		for(Game game : pc.getGames()){
+			if(game.getMode()!= null){
+			if((game.getMode().equals(Game.Mode.DESIGN))){
+			availableGamesDesign.put(indextwo, game);
+			listOfGamesDesign.addItem(game.getTileO().indexOfGame(game));
+			indextwo++;
+			}
+		}
+		}
 		selectedGame = -1;
+		selectedGameDesign =-1;
 		listOfGames.setSelectedIndex(selectedGame);
+		listOfGamesDesign.setSelectedIndex(selectedGameDesign);
 		error = "";
 	}
 	
@@ -164,6 +220,7 @@ public class HomePage extends JFrame {
 	
 	
 	public void loadGame(){
+		System.out.println(selectedGame);
 		PlayController pc = new PlayController(tileO);
 		Game game = TileOApplication.getGame(selectedGame);
 		tileO.setCurrentGame(game);
@@ -175,5 +232,14 @@ public class HomePage extends JFrame {
 			error=e.getMessage();
 		}
 	}
+	
+	public void loadGameDesign(){
+		Game game = TileOApplication.getGame(selectedGameDesign);
+		tileO.setCurrentGame(game);
+			dispose();
+			new DesignTileOPage(game , tileO).setVisible(true);
+		
+	}
+
 	
 }
