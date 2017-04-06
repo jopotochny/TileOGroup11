@@ -259,7 +259,7 @@ public class PlayController
 				}catch(InvalidInputException e){
 					setMode(Mode.Roll);
 					String error = e.getMessage();
-					
+
 					throw new InvalidInputException(error);
 				}
 				setMode(Mode.Roll);
@@ -463,7 +463,7 @@ public class PlayController
 
 		return wasEventProcessed;
 	}
-	
+
 	public boolean playSwapPlayerPositionActionCard(Player swappedPlayer) throws InvalidInputException
 	{
 		boolean wasEventProcessed = false;
@@ -474,7 +474,7 @@ public class PlayController
 		case ActionCard:
 			if (isSwapPlayerPositionActionCard())
 			{
-				
+
 				doSwapPlayerPositionActionCard(swappedPlayer);
 				setMode(Mode.Roll);
 				wasEventProcessed = true;
@@ -549,7 +549,7 @@ public class PlayController
 	}
 
 	public boolean addPossibleMoveAt(Tile aPossibleMove, int index)
-	{  
+	{
 		boolean wasAdded = false;
 		if(addPossibleMove(aPossibleMove))
 		{
@@ -572,8 +572,8 @@ public class PlayController
 			possibleMoves.remove(aPossibleMove);
 			possibleMoves.add(index, aPossibleMove);
 			wasAdded = true;
-		} 
-		else 
+		}
+		else
 		{
 			wasAdded = addPossibleMoveAt(aPossibleMove, index);
 		}
@@ -689,7 +689,7 @@ public class PlayController
 		//getting the current game
 		Game currentGame = tileO.getCurrentGame();
 		/*
-		 * getting the list of tiles, followed by checking if the 
+		 * getting the list of tiles, followed by checking if the
 		 * input tile is in the tiles of the current game
 		 */
 		List<Tile> tiles = currentGame.getTiles();
@@ -756,14 +756,14 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();			
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
 			currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
 		}
 		// set the mode of the current game to GAME
-		currentGame.setMode(Game.Mode.GAME);		
+		currentGame.setMode(Game.Mode.GAME);
 
 
 		return listOfTiles;
@@ -800,7 +800,7 @@ public class PlayController
 			throw new InvalidInputException("tile1 and tile2 are not adjacent.");
 
 		}
-		
+
 		// get the currentDeck
 		Deck currentDeck = currentGame.getDeck();
 
@@ -811,10 +811,10 @@ public class PlayController
 		}
 
 		ConnectTilesActionCard currentCard = (ConnectTilesActionCard) currentDeck.getCurrentCard();
-		
+
 		//we check here if we can still add connections to the board
 		if(currentGame.getConnections().size() == 32){
-			
+
 			//determining the next player
 			currentGame.determineNextPlayer();
 
@@ -839,35 +839,35 @@ public class PlayController
 			}
 			// set the mode of the current game to GAME
 			currentGame.setMode(Game.Mode.GAME);
-			
+
 			throw new InvalidInputException("Sorry, you can't add connection pieces anymore!");
 		}else{
 			// connect both tiles
 			currentCard.play(tile1, tile2);
-		
+
 			//determining the next player
 			currentGame.determineNextPlayer();
-	
+
 			//decrement the inactivity period of inactive action tiles
 			currentGame.updateTileStatus();
-	
+
 			// set the currentCard to be the next card so that the next
 			// time a player draws a card , he gets the next card
 			// if the current card is the last card of the deck
 			// shuffle the deck
-	
-	
+
+
 			if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-	
+
 				currentDeck.shuffle();
 				currentDeck.setCurrentCard(currentDeck.getCard(0));
 			}
 			else {
-	
+
 				currentDeck.setCurrentCard(currentDeck.getCard(currentDeck.indexOfCard(currentCard)+1 ));
-	
+
 			}
-	
+
 			// set the mode of the current game to GAME
 			currentGame.setMode(Game.Mode.GAME);
 		}
@@ -929,7 +929,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -972,7 +972,7 @@ public class PlayController
 
 		TeleportActionCard currentCard = (TeleportActionCard) currentDeck.getCurrentCard();
 
-		// teleport the player to the selected tile	
+		// teleport the player to the selected tile
 		currentCard.play(tile);
 
 		//currentGame.determineNextPlayer();
@@ -986,7 +986,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();	
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 
 		}
@@ -1039,7 +1039,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();	
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 
 		}
@@ -1087,7 +1087,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -1137,7 +1137,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -1167,7 +1167,7 @@ public class PlayController
 		currentGame.updateTileStatus();
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -1216,7 +1216,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -1256,7 +1256,7 @@ public class PlayController
 		// shuffle the deck
 
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -1267,16 +1267,16 @@ public class PlayController
 		currentGame.setMode(Game.Mode.GAME);
 		setMode(PlayController.Mode.Roll);
 	}
-	
+
 	public void doSwapPlayerPositionActionCard(Player swappedPlayer) throws InvalidInputException{
 		//get the current game
 
 
 		Game currentGame = tileO.getCurrentGame();
 		// get the currentDeck
-		
+
 		Deck currentDeck = currentGame.getDeck();
-		
+
 		// check if the current card is a LoseTurnActionCard
 
 		if (!(currentDeck.getCurrentCard() instanceof SwapPlayerPositionActionCard)){
@@ -1285,11 +1285,11 @@ public class PlayController
 
 		SwapPlayerPositionActionCard currentCard = (SwapPlayerPositionActionCard) currentDeck.getCurrentCard();
 
-		currentCard.play(swappedPlayer);		
-		
+		currentCard.play(swappedPlayer);
+
 		currentGame.determineNextPlayer();
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
-			currentDeck.shuffle();		
+			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
 		}
 		else {
@@ -1300,7 +1300,7 @@ public class PlayController
 	}
 
 	/**
-	 * 
+	 *
 	 * this method takes care of 1 case: when the player is stuck on a tile in which
 	 * he can move nowhere. We should not let him move
 	 * line 716 "../../../../../PlayControllerStatus.ump"
@@ -1337,7 +1337,7 @@ public class PlayController
 
 
 	/**
-	 * 
+	 *
 	 * check if the chose is a valid move for the player
 	 * line 744 "../../../../../PlayControllerStatus.ump"
 	 */
@@ -1353,7 +1353,7 @@ public class PlayController
 
 
 	/**
-	 * 
+	 *
 	 * get games from the model
 	 * line 773 "../../../../../PlayControllerStatus.ump"
 	 */
@@ -1373,7 +1373,7 @@ public class PlayController
 
 
 	/**
-	 * 
+	 *
 	 * get the current player from the current game
 	 * line 783 "../../../../../PlayControllerStatus.ump"
 	 */
@@ -1411,7 +1411,7 @@ public class PlayController
 
 
 	/**
-	 * 
+	 *
 	 * Load Game in Play Mode
 	 * line 801 "../../../../../PlayControllerStatus.ump"
 	 */
@@ -1567,7 +1567,7 @@ public class PlayController
 		}
 		return false;
 	}
-	
+
 	private boolean isSwapPlayerPositionActionCard(){
 		if (tileO.getCurrentGame().getDeck().getCurrentCard() instanceof SwapPlayerPositionActionCard){
 			return true;
@@ -1580,6 +1580,21 @@ public class PlayController
 
 	// line 86 ../../../../../PlayControllerStatus.ump
 	private TileO tileO ;
+
+	public List<Tile> getInactiveActionTiles() {
+		List<Tile> tiles = tileO.getCurrentGame().getTiles();
+		List<Tile> inactiveActionTiles = new ArrayList<Tile>();
+
+		for(Tile tile : tiles){
+			if(tile instanceof ActionTile){
+				ActionTile actionTile = (ActionTile) tile;
+				if(actionTile.getTurnsUntilActive() != 0){
+					inactiveActionTiles.add(actionTile);
+				}
+			}
+		}
+		return inactiveActionTiles;
+	}
 
 
 }

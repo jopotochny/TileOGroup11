@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import ca.mcgill.ecse223.tileo.controller.PlayController;
+import ca.mcgill.ecse223.tileo.model.ActionTile;
 import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.Player;
@@ -42,7 +43,7 @@ public class PlayBoardVisualizer extends JPanel {
 	private Tile previouslySelectedTile;
 	private Tile previouslySelectedTile1;
 	private Tile previouslySelectedTile2;
-
+    private PlayController controller;
 	private List<Tile> possibleMoves = null;
 	private int flag = 0;
 
@@ -57,6 +58,7 @@ public class PlayBoardVisualizer extends JPanel {
 
 	private void init(TileO tileO){
 		this.tileO = tileO;
+		controller = new PlayController(tileO);
 		tiles = new HashMap<Rectangle2D, Tile>();
 		selectedTile = null;
 		selectedTile1 = null;
@@ -146,6 +148,7 @@ public class PlayBoardVisualizer extends JPanel {
 			numberOfTiles = game.getTiles().size();
 			List<Tile> currentTiles = game.getTiles();
 			List<Player> listOfPlayers = game.getPlayers();
+            List<Tile> inactiveActionTiles = controller.getInactiveActionTiles();
 
 			//loop through all the tiles, and for each one draw a rectangle with a specific color
 			for(Tile tile : currentTiles){
@@ -159,7 +162,7 @@ public class PlayBoardVisualizer extends JPanel {
 				if(tile.isHasBeenVisited()){
 					g2d.setColor(Color.BLACK);
 					g2d.fill(rectangle);
-				}else{	
+				}else{
 					g2d.setColor(Color.WHITE);
 					g2d.fill(rectangle);
 				}
@@ -177,7 +180,7 @@ public class PlayBoardVisualizer extends JPanel {
 					}
 				}
 
-				//setting the position of each player				
+				//setting the position of each player
 				for(Player player : listOfPlayers){
 					Tile playerTile = player.getCurrentTile();
 					if(playerTile.getX() == tile.getX() && playerTile.getY() == tile.getY()){
@@ -218,6 +221,13 @@ public class PlayBoardVisualizer extends JPanel {
 
 				g2d.setColor(Color.BLACK);
 				g2d.draw(rectangle);
+
+				if(inactiveActionTiles.contains(tile)){
+                ActionTile actionTile = (ActionTile) tile;
+                String inactivity = Integer.toString(actionTile.getTurnsUntilActive());
+                g2d.setColor(Color.MAGENTA);
+                g2d.drawString(inactivity, tile.getX() + RECTWIDTH/2 , tile.getY() + RECTHEIGHT/2);
+                }
 			}
 
 
@@ -305,7 +315,7 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 		return false;
 	}
-	
+
 	private boolean isRevealTileMode(){
 
 		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_REVEALTILEACTIONCARD)){
@@ -313,7 +323,7 @@ public class PlayBoardVisualizer extends JPanel {
 		}
 		return false;
 	}
-	
+
 	private boolean isSwapPlayerPositionMode(){
 
 		if(PlayTileOPage.getControllerMode().equals(PlayController.Mode.ActionCard) && PlayTileOPage.getGameMode().equals(Game.Mode.GAME_SWAPPLAYERPOSITIONACTIONCARD)){
@@ -329,7 +339,7 @@ public class PlayBoardVisualizer extends JPanel {
 			PlayTileOPage.playRevealTileActionCard(selectedTile2);
 		}
 	}
-	
+
 	private void playWinTileHint(){
 
 		if(selectedTile1 != null){
@@ -338,10 +348,10 @@ public class PlayBoardVisualizer extends JPanel {
 			PlayTileOPage.playWinTileHintActionCard(selectedTile2);
 		}
 	}
-		
+
 	private void playSwapPlayerPosition(){
-		
-		
+
+
 		if(selectedTile2 != null){
 			for (Player p : this.tileO.getCurrentGame().getPlayers()){
 				if(p.getCurrentTile() == selectedTile2 && p != this.tileO.getCurrentGame().getCurrentPlayer()){
@@ -372,7 +382,7 @@ public class PlayBoardVisualizer extends JPanel {
 					break;
 				}
 			}
-			
+
 		}
 		else if(selectedTile2 != null){
 			for (Player p : this.tileO.getCurrentGame().getPlayers()){
@@ -384,7 +394,7 @@ public class PlayBoardVisualizer extends JPanel {
 					break;
 				}
 			}
-			
+
 		}
 	}
 	public void redraw(){
