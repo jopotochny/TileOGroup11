@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 
 import ca.mcgill.ecse223.tileo.controller.DesignController;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
+import ca.mcgill.ecse223.tileo.model.ActionTile;
+import ca.mcgill.ecse223.tileo.model.Connection;
 import ca.mcgill.ecse223.tileo.model.Game;
 import ca.mcgill.ecse223.tileo.model.NormalTile;
 import ca.mcgill.ecse223.tileo.model.Player;
@@ -31,7 +33,7 @@ public class DesignBoardVisualizer extends JPanel {
 	//UI elements
 	private List<Rectangle2D> blackRectangles = new ArrayList<Rectangle2D>();
 	private static final int RECTWIDTH = 30;
-	private static final int RECHEIGHT = 30;
+	private static final int RECTHEIGHT = 30;
 	private static final int SPACING = 10;
 	private static final int MAXIMUMNUMBEROFTILESSHOWN  = 196;
 	
@@ -49,7 +51,8 @@ public class DesignBoardVisualizer extends JPanel {
 	private Tile tile;
 	private Tile[] connectArray = new Tile[2];
 	private Tile[] disconnectArray = new Tile[2];
-	
+	private List<Rectangle2D> rectangles = new ArrayList<Rectangle2D>();
+
 	//game and controller
 	//private DesignTileOPage page;
 	private DesignController descont;
@@ -58,6 +61,7 @@ public class DesignBoardVisualizer extends JPanel {
 	protected volatile int inactivity;
 	protected volatile String errorMsg = "";
 
+	private int drawCounter = 0;
 	//mouse listener boolean controllers
 	private boolean enabled = false;
 	private boolean enabled1 = false;
@@ -70,7 +74,6 @@ public class DesignBoardVisualizer extends JPanel {
 	//count makes sure that connect has 2 elements
 	private int count = 0;
 	private int disCount = 0;
-	
 	private Point actionTile;
 	
 	//boad dimensions
@@ -116,7 +119,115 @@ public class DesignBoardVisualizer extends JPanel {
 			
 		});
 	}
+	private void doDrawing(Graphics g){
+		count = 0;
+		if(tileO != null){
+			Game game = tileO.getCurrentGame();
+			winTile = new Rectangle2D.Float(game.getWinTile().getX(), game.getWinTile().getY(), RECTWIDTH, RECTHEIGHT);
+			BasicStroke thinStroke = new BasicStroke(2);
+			BasicStroke thickStroke = new BasicStroke(3);
+			Graphics2D g2d = (Graphics2D) g.create();
 
+			numberOfTiles = game.getTiles().size();
+			List<Tile> currentTiles = game.getTiles();
+		//	System.out.println(currentTiles.size());
+			List<Player> listOfPlayers = game.getPlayers();
+
+			//loop through all the tiles, and for each one draw a rectangle with a specific color
+			for(Tile tile : currentTiles){
+				if(tile instanceof NormalTile){
+					whiteTilesList.add(new Rectangle2D.Float(tile.getX(), tile.getY(), RECTWIDTH, RECTHEIGHT));
+				} else if (tile instanceof ActionTile){
+					actionTiles.add(new Rectangle2D.Float(tile.getX(), tile.getY(), RECTWIDTH, RECTHEIGHT));
+				}
+				Rectangle2D rect = new Rectangle2D.Float(tile.getX(), tile.getY(), RECTWIDTH, RECTHEIGHT);
+				connectableList.add(rect);
+				tiles.put(rect, tile);
+				g2d.setStroke(thinStroke);
+				Rectangle2D rectangle = new Rectangle2D.Float(tile.getX(), tile.getY(), RECTWIDTH, RECTHEIGHT);
+				rectangles.add(rectangle);
+				tiles.put(rectangle, tile);
+
+				//setting the color of the tile to black if marked visited, otherwise to white
+				if(tile.isHasBeenVisited()){
+					g2d.setColor(Color.BLACK);
+					g2d.fill(rectangle);
+				}else{	
+					g2d.setColor(Color.WHITE);
+					g2d.fill(rectangle);
+				}
+
+
+
+
+				//setting the position of each player				
+				for(Player player : listOfPlayers){
+					//System.out.println(listOfPlayers.size());
+					System.out.println("size of players " + listOfPlayers.size());
+					Tile playerTile = player.getStartingTile();
+					System.out.println("hello");
+					startTiles.add(new Rectangle2D.Float(player.getStartingTile().getX(), player.getStartingTile().getY(), RECTWIDTH, RECTHEIGHT));
+					System.out.println("size of list " + startTiles.size());
+					if(playerTile.getX() == tile.getX() && playerTile.getY() == tile.getY()){
+						Player.Color playerColor = player.getColor();
+						if(playerColor.equals(Player.Color.BLUE)){
+							g2d.setColor(Color.BLUE);
+							g2d.fill(rectangle);
+						}else if(playerColor.equals(Player.Color.YELLOW)){
+							g2d.setColor(Color.YELLOW);
+							g2d.fill(rectangle);
+						}else if(playerColor.equals(Player.Color.RED)){
+							g2d.setColor(Color.RED);
+							g2d.fill(rectangle);
+						}else if(playerColor.equals(Player.Color.GREEN)){
+							g2d.setColor(Color.GREEN);
+							g2d.fill(rectangle);
+						}
+
+						break;
+					}
+				}
+
+
+				//if the player clicks on any tile, color it in Cyan
+				//first if, for a selection of 1 tile. and the else is for a selection of two tiles
+
+				g2d.setColor(Color.BLACK);
+				g2d.draw(rectangle);
+			}
+
+
+			//adding the connections to the board
+			for(Connection connection : game.getConnections()){
+				Tile tile1 = connection.getTiles().get(0);
+				Tile tile2 = connection.getTiles().get(1);
+				Tile[] tiles = new Tile[2];
+				tiles[0] = tile1;
+				tiles[1] = tile2;
+				connectionList.add(tiles);
+				if(tile1.getY() == tile2.getY()){
+					//tile1 and tile2 are adjacent and have a horizontal connection
+					if(tile1.getX() < tile2.getX()){
+						g2d.setStroke(thickStroke);
+						g2d.drawLine(tile1.getX() + RECTWIDTH, tile1.getY() + RECTHEIGHT/2, tile2.getX(), tile2.getY() + RECTHEIGHT/2);
+
+					}else{
+						g2d.setStroke(thickStroke);
+						g2d.drawLine(tile2.getX() + RECTWIDTH, tile2.getY() + RECTHEIGHT/2, tile1.getX(), tile2.getY() + RECTWIDTH/2);
+					}
+					//tile1 and tile2 are adjacent and have a vertical connection
+				}else{
+					if(tile1.getY() < tile2.getY()){
+						g2d.setStroke(thickStroke);
+						g2d.drawLine(tile1.getX() + RECTWIDTH/2, tile1.getY() + RECTHEIGHT, tile2.getX() + RECTWIDTH/2, tile2.getY());
+					}else{
+						g2d.setStroke(thickStroke);
+						g2d.drawLine(tile1.getX() + RECTWIDTH/2, tile1.getY(), tile2.getX() + RECTWIDTH/2, tile2.getY() + RECTHEIGHT);
+					}
+				}
+			}
+		}
+	}
 	
 	private void createTiles(Graphics g){
 		BasicStroke thinStroke = new BasicStroke(2);
@@ -132,7 +243,7 @@ public class DesignBoardVisualizer extends JPanel {
 		
 		while(tracker >=0 ){
 			for(x=0; x<WIDTH_BOARD_VISUALIZATION && tracker>=0; ){		
-				Rectangle2D rectangle = new Rectangle2D.Float(x, y, RECTWIDTH, RECHEIGHT);
+				Rectangle2D rectangle = new Rectangle2D.Float(x, y, RECTWIDTH, RECTHEIGHT);
 				for(Rectangle2D rect : whiteTilesList){
 					//check if rectangle is in list of white tiles; if so change color to white
 					if(rect.getX()== rectangle.getX() && rect.getY() == rectangle.getY()){
@@ -148,7 +259,7 @@ public class DesignBoardVisualizer extends JPanel {
 				if(winTile != null){
 					g2d.setStroke(thinStroke);
 					g2d.setColor(Color.YELLOW);
-					Rectangle2D win = new Rectangle2D.Float((int)Math.round(winTile.getX()),(int)Math.round(winTile.getY()),RECTWIDTH, RECHEIGHT);
+					Rectangle2D win = new Rectangle2D.Float((int)Math.round(winTile.getX()),(int)Math.round(winTile.getY()),RECTWIDTH, RECTHEIGHT);
 					g2d.fill(win);
 					g2d.setColor(Color.BLACK);
 					g2d.draw(win);
@@ -158,7 +269,7 @@ public class DesignBoardVisualizer extends JPanel {
 					for(Rectangle2D rec : actionTiles){
 						g2d.setStroke(thinStroke);
 						g2d.setColor(Color.GREEN);
-						Rectangle2D action = new Rectangle2D.Float((int)Math.round(rec.getX()),(int)Math.round(rec.getY()),RECTWIDTH, RECHEIGHT);
+						Rectangle2D action = new Rectangle2D.Float((int)Math.round(rec.getX()),(int)Math.round(rec.getY()),RECTWIDTH, RECTHEIGHT);
 						g2d.fill(action);
 						g2d.setColor(Color.BLACK);
 						g2d.draw(action);
@@ -168,8 +279,10 @@ public class DesignBoardVisualizer extends JPanel {
 				//set color of starting tiles to blue
 				if(startTiles.size() > 0){
 					Color color;
+					
 					for(int j = 0; j<startTiles.size(); j++){
 						Rectangle2D rec = startTiles.get(j);
+						//System.out.println("coords " + rec.getX() + " " + rec.getY());
 						if(j == 0)
 							color = Color.RED;
 						else if(j == 1)
@@ -181,16 +294,16 @@ public class DesignBoardVisualizer extends JPanel {
 						
 						g2d.setStroke(thinStroke);
 						g2d.setColor(color);
-						Rectangle2D start = new Rectangle2D.Float((int)Math.round(rec.getX()),(int)Math.round(rec.getY()),RECTWIDTH, RECHEIGHT);
+						Rectangle2D start = new Rectangle2D.Float((int)Math.round(rec.getX()),(int)Math.round(rec.getY()),RECTWIDTH, RECTHEIGHT);
 						g2d.fill(start);
 						g2d.setColor(Color.BLACK);
 						g2d.draw(start);
 					}
 				}
 				
-				if(!connectableList.contains(rectangle))
+				if(!connectableList.contains(rectangle) )
 					blackRectangles.add(rectangle);
-					
+				
 				g2d.setStroke(thinStroke);
 				g2d.setColor(c);
 				g2d.fill(rectangle);
@@ -200,8 +313,9 @@ public class DesignBoardVisualizer extends JPanel {
 				x+=RECTWIDTH + SPACING;
 				
 			}
-			y+=RECHEIGHT + SPACING;
-		}		
+			y+=RECTHEIGHT + SPACING;
+		}
+		
 	}
 	
 	private void drawConnection(Graphics g){
@@ -254,6 +368,7 @@ public class DesignBoardVisualizer extends JPanel {
 						errorMsg = e1.getMessage();
 					}
 					tiles.put(rect, game.getTile(game.getTiles().size() - 1));
+					blackRectangles.remove(rect);
 					break;
 				}
 			}
@@ -345,7 +460,7 @@ public class DesignBoardVisualizer extends JPanel {
 			}
 		
 			try{
-				descont.identifyWinTile((int)Math.round(rect.getX()), (int)Math.round(rect.getY()));;
+				descont.identifyWinTile((int)Math.round(rect.getX()), (int)Math.round(rect.getY()));
 			} catch(InvalidInputException e1){
 				errorMsg = e1.getMessage();			
 			}
@@ -364,14 +479,11 @@ public class DesignBoardVisualizer extends JPanel {
 	private void clickConnect(MouseEvent e){
 		int x = e.getX();
 		int y = e.getY();
-		
 		//wasConnected allows s to make sure that the games connectionpieces list 
 		//is equal to connectList
 		int wasConnected = 0;
-		
 		//check to see if button was clicked on and off
-		if(count == 2)
-			count = 0;
+		
 		
 		if(!enabled3){
 			return;
@@ -380,7 +492,11 @@ public class DesignBoardVisualizer extends JPanel {
 			Iterator<Rectangle2D> iter = connectableList.iterator();
 			while(iter.hasNext()){
 				Rectangle2D r = iter.next();
+				System.out.println("coords of stuff " + r.getX() + " " + r.getY());
 				if(r.contains(x,y)){
+					if(count == 2)
+						count = 0;
+					System.out.println(count);
 					connectArray[count] = tiles.get(r);
 					count++;
 				}
@@ -404,7 +520,7 @@ public class DesignBoardVisualizer extends JPanel {
 			DesignTileOPage.connectionPiecesLeft.setText((32-connectionList.size()) + " left");
 			
 			connectArray = new Tile[2];
-			
+				
 		}
 		DesignTileOPage.console.setText(errorMsg);
 		
@@ -494,8 +610,6 @@ public class DesignBoardVisualizer extends JPanel {
 						DesignTileOPage.console.setText(errorMsg);
 						break;
 					}
-					for(Player p : game.getPlayers()){
-					}
 					startTiles.add(rect);
 					
 				}
@@ -580,9 +694,19 @@ public class DesignBoardVisualizer extends JPanel {
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
-		createTiles(g);
 		
-		drawConnection(g);
+		if(game.getDeck().hasCards()){
+			if(drawCounter == 0){
+				doDrawing(g);
+				drawCounter++;
+			}
+			createTiles(g);
+			drawConnection(g);
+		}	
+		else{	
+			createTiles(g);
+			drawConnection(g);
+		}
 				
 		
 	}
