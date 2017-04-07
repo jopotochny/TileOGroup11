@@ -73,6 +73,7 @@ public class DesignBoardVisualizer extends JPanel {
 	
 	//count makes sure that connect has 2 elements
 	private int count = 0;
+	private int counter = 0;
 	private int disCount = 0;
 	private Point actionTile;
 	
@@ -120,7 +121,7 @@ public class DesignBoardVisualizer extends JPanel {
 		});
 	}
 	private void doDrawing(Graphics g){
-		count = 0;
+		
 		if(tileO != null){
 			Game game = tileO.getCurrentGame();
 			winTile = new Rectangle2D.Float(game.getWinTile().getX(), game.getWinTile().getY(), RECTWIDTH, RECTHEIGHT);
@@ -130,7 +131,6 @@ public class DesignBoardVisualizer extends JPanel {
 
 			numberOfTiles = game.getTiles().size();
 			List<Tile> currentTiles = game.getTiles();
-		//	System.out.println(currentTiles.size());
 			List<Player> listOfPlayers = game.getPlayers();
 
 			//loop through all the tiles, and for each one draw a rectangle with a specific color
@@ -159,34 +159,33 @@ public class DesignBoardVisualizer extends JPanel {
 
 
 
+				if(counter == 0){
+					for(Player player : listOfPlayers){
+						Tile playerTile = player.getStartingTile();
+						startTiles.add(new Rectangle2D.Float(player.getStartingTile().getX(), player.getStartingTile().getY(), RECTWIDTH, RECTHEIGHT));
+						
+						if(playerTile.getX() == tile.getX() && playerTile.getY() == tile.getY()){
+							Player.Color playerColor = player.getColor();
+							if(playerColor.equals(Player.Color.BLUE)){
+								g2d.setColor(Color.BLUE);
+								g2d.fill(rectangle);
+							}else if(playerColor.equals(Player.Color.YELLOW)){
+								g2d.setColor(Color.YELLOW);
+								g2d.fill(rectangle);
+							}else if(playerColor.equals(Player.Color.RED)){
+								g2d.setColor(Color.RED);
+								g2d.fill(rectangle);
+							}else if(playerColor.equals(Player.Color.GREEN)){
+								g2d.setColor(Color.GREEN);
+								g2d.fill(rectangle);
+							}
 
-				//setting the position of each player				
-				for(Player player : listOfPlayers){
-					//System.out.println(listOfPlayers.size());
-					System.out.println("size of players " + listOfPlayers.size());
-					Tile playerTile = player.getStartingTile();
-					System.out.println("hello");
-					startTiles.add(new Rectangle2D.Float(player.getStartingTile().getX(), player.getStartingTile().getY(), RECTWIDTH, RECTHEIGHT));
-					System.out.println("size of list " + startTiles.size());
-					if(playerTile.getX() == tile.getX() && playerTile.getY() == tile.getY()){
-						Player.Color playerColor = player.getColor();
-						if(playerColor.equals(Player.Color.BLUE)){
-							g2d.setColor(Color.BLUE);
-							g2d.fill(rectangle);
-						}else if(playerColor.equals(Player.Color.YELLOW)){
-							g2d.setColor(Color.YELLOW);
-							g2d.fill(rectangle);
-						}else if(playerColor.equals(Player.Color.RED)){
-							g2d.setColor(Color.RED);
-							g2d.fill(rectangle);
-						}else if(playerColor.equals(Player.Color.GREEN)){
-							g2d.setColor(Color.GREEN);
-							g2d.fill(rectangle);
+							break;
 						}
-
-						break;
 					}
 				}
+				//setting the position of each player				
+			
 
 
 				//if the player clicks on any tile, color it in Cyan
@@ -194,6 +193,7 @@ public class DesignBoardVisualizer extends JPanel {
 
 				g2d.setColor(Color.BLACK);
 				g2d.draw(rectangle);
+				counter++;
 			}
 
 
@@ -282,7 +282,6 @@ public class DesignBoardVisualizer extends JPanel {
 					
 					for(int j = 0; j<startTiles.size(); j++){
 						Rectangle2D rec = startTiles.get(j);
-						//System.out.println("coords " + rec.getX() + " " + rec.getY());
 						if(j == 0)
 							color = Color.RED;
 						else if(j == 1)
@@ -492,11 +491,9 @@ public class DesignBoardVisualizer extends JPanel {
 			Iterator<Rectangle2D> iter = connectableList.iterator();
 			while(iter.hasNext()){
 				Rectangle2D r = iter.next();
-				System.out.println("coords of stuff " + r.getX() + " " + r.getY());
 				if(r.contains(x,y)){
 					if(count == 2)
 						count = 0;
-					System.out.println(count);
 					connectArray[count] = tiles.get(r);
 					count++;
 				}

@@ -9,14 +9,12 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import ca.mcgill.ecse223.tileo.application.TileOApplication;
 import ca.mcgill.ecse223.tileo.controller.DesignController;
 import ca.mcgill.ecse223.tileo.controller.InvalidInputException;
 import ca.mcgill.ecse223.tileo.controller.PlayController;
@@ -34,8 +32,6 @@ public class DesignTileOPage extends JFrame {
 
 	// save and load game
 	private JButton saveGame;
-	private JComboBox<Integer> loadGame;
-	private JButton loadDesign;
 	private JLabel player;
 	private Integer selectedGame;
 
@@ -59,7 +55,6 @@ public class DesignTileOPage extends JFrame {
 	private JLabel nextPlayerLabel;
 	private JLabel moveOtherPlayerLabel;
 	private JLabel revealLabel;
-	private JLabel swapPlayerPositionLabel;
 	protected static JTextField connectionPiecesLeft;
 	private JTextField revealCard;
 	private JTextField inactivityText;
@@ -72,7 +67,6 @@ public class DesignTileOPage extends JFrame {
 	private JTextField loseTurnCard;
 	private JTextField rollCard;
 	private JTextField moveOtherPlayerCard;
-	private JTextField swapPlayerPositionCard;
 	private JButton submitDeck;
 	private JButton addConnection;
 	private JButton addTile;
@@ -137,8 +131,6 @@ public class DesignTileOPage extends JFrame {
 
 		// save and load game
 		saveGame = new JButton();
-		loadGame = new JComboBox<Integer>();
-		loadDesign = new JButton();
 		player = new JLabel();
 		player.setText("Player 1");
 
@@ -158,7 +150,6 @@ public class DesignTileOPage extends JFrame {
 
 		// global settings and listeners
 		saveGame.setText("Save");
-		loadDesign.setText("Load");
 
 		startGame = new JButton();
 		startGame.setText("Start Game");
@@ -171,7 +162,6 @@ public class DesignTileOPage extends JFrame {
 		moveOtherPlayerLabel = new JLabel("Move Other Player Card");
 		moveOtherPlayerCard = new JTextField();
 		
-		swapPlayerPositionLabel = new JLabel("Swap Player Position Card");
 		revealLabel = new JLabel("Reveal Tile Action Card");
 		nextPlayerLabel = new JLabel("Next Player Rolls One Card");
 		wintTileHintLabel = new JLabel("Win Tile Hint Card");
@@ -182,7 +172,6 @@ public class DesignTileOPage extends JFrame {
 		removeConnectionLabel = new JLabel("Remove Connection Card");
 		setInactiveCardLabel = new JLabel("Set inactivity Card");
 		
-		swapPlayerPositionCard = new JTextField();
 		revealCard = new JTextField();
 		nextPlayerCard = new JTextField();
 		winTileHintCard = new JTextField();
@@ -263,18 +252,6 @@ public class DesignTileOPage extends JFrame {
 			}
 		});
 		
-		loadGame.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				JComboBox<Integer> cb = (JComboBox<Integer>) evt.getSource();
-				selectedGame = cb.getSelectedIndex();
-			}
-		});
-		
-		loadDesign.addActionListener(new java.awt.event.ActionListener(){
-			public void actionPerformed(java.awt.event.ActionEvent evt){
-				loadGame();
-			}
-		});
 
 		removeConnection.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -339,10 +316,8 @@ public class DesignTileOPage extends JFrame {
 				int numInactive = 0;
 				int numMoveOtherPlayer=0;
 				int numReveal = 0;
-				int numSwap = 0;
 
 					try{
-						numSwap = Integer.parseInt(swapPlayerPositionCard.getText());
 						numReveal = Integer.parseInt(revealCard.getText());
 						numRoll = Integer.parseInt(rollCard.getText());
 						numTeleport = Integer.parseInt(teleportCard.getText());
@@ -362,7 +337,7 @@ public class DesignTileOPage extends JFrame {
 					}
 
 					try {
-						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer, numReveal, numSwap);
+						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer, numReveal);
 					} catch (Exception e) {
 						// e.printStackTrace();
 						console.setText(e.getMessage().trim());
@@ -575,7 +550,7 @@ public class DesignTileOPage extends JFrame {
 		layout.setAutoCreateContainerGaps(true);
 
 		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup().addComponent(saveGame).addComponent(loadGame).addComponent(loadDesign)
+				.addGroup(layout.createParallelGroup().addComponent(saveGame)
 						.addComponent(player).addComponent(startGame))
 				.addGroup(layout.createParallelGroup().addComponent(boardTitle).addComponent(boardVisualizer)
 						.addComponent(consoleTitle).addComponent(console)
@@ -599,8 +574,7 @@ public class DesignTileOPage extends JFrame {
 				 .addComponent(moveOtherPlayerLabel)
 				 .addComponent(revealLabel)
 				 .addComponent(nextPlayerLabel)
-				 .addComponent(setInactiveCardLabel)
-				 .addComponent(swapPlayerPositionLabel))
+				 .addComponent(setInactiveCardLabel))
 				 .addGroup(layout.createParallelGroup()
 						 .addComponent(inactivityText)
 						 .addComponent(connectionPiecesLeft)
@@ -615,16 +589,15 @@ public class DesignTileOPage extends JFrame {
 						 .addComponent(revealCard)
 						 .addComponent(nextPlayerCard)
 						 .addComponent(setInactiveCard)
-						 .addComponent(swapPlayerPositionCard)
 						 .addComponent(submitDeck)))));
 
-		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame, loadGame });
+		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame });
 		layout.linkSize(SwingConstants.VERTICAL,
 				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard,winTileHintCard, connectionCard, submitDeck,
-						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard, revealCard, swapPlayerPositionCard });
+						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard, revealCard });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addComponent(saveGame).addComponent(loadGame).addComponent(loadDesign)
+				.addGroup(layout.createSequentialGroup().addComponent(saveGame)
 						.addComponent(player).addComponent(startGame))
 				.addGroup(layout.createSequentialGroup().addComponent(boardTitle).addComponent(boardVisualizer)
 						.addComponent(consoleTitle).addComponent(console))
@@ -658,10 +631,6 @@ public class DesignTileOPage extends JFrame {
 								.addComponent(revealLabel)
 								.addComponent(revealCard)
 								)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(swapPlayerPositionLabel)
-								.addComponent(swapPlayerPositionCard)
-								)
 						.addComponent(submitDeck)));
 		pack();
 	}
@@ -673,20 +642,11 @@ public class DesignTileOPage extends JFrame {
 		DesignController dc = new DesignController(tileo);
 		Integer index = 0;
 		availableGames = new HashMap<Integer, Game>();
-		loadGame.removeAllItems();
-		for(Game game : tileo.getGames()){
-			availableGames.put(index, game);
-			loadGame.addItem(game.getTileO().indexOfGame(game));	//game.getTileO().indexOfGame(game)
-			index++;
-		}
-		selectedGame = -1;
-		loadGame.setSelectedIndex(selectedGame);
 
 		// console set text to null
 		// console.setText("");
 
 		// set jtextfield to null
-		swapPlayerPositionCard.setText("");
 		moveOtherPlayerCard.setText("");
 		revealCard.setText("");
 		nextPlayerCard.setText("");
@@ -748,7 +708,6 @@ public class DesignTileOPage extends JFrame {
 		//Game game = TileOApplication.getGame(loadGame.getSelectedIndex()-1);
 		
 		
-		Game game = cont.loadDesign(loadGame.getSelectedIndex()-1);
 		tileo.setCurrentGame(game);
 		//LoadPageDesign(tileo);
 		dispose();
