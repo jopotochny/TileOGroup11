@@ -124,8 +124,9 @@ public class DesignBoardVisualizer extends JPanel {
 		
 		if(tileO != null){
 			Game game = tileO.getCurrentGame();
-			if(game.hasWinTile())
+			if(game.hasWinTile()){
 				winTile = new Rectangle2D.Float(game.getWinTile().getX(), game.getWinTile().getY(), RECTWIDTH, RECTHEIGHT);
+			}
 			
 			BasicStroke thinStroke = new BasicStroke(2);
 			BasicStroke thickStroke = new BasicStroke(3);
@@ -161,7 +162,7 @@ public class DesignBoardVisualizer extends JPanel {
 
 
 
-				if(counter == 0){
+				if(counter == 0 && game.hasPlayers()){
 					for(Player player : listOfPlayers){
 						Tile playerTile = player.getStartingTile();
 						startTiles.add(new Rectangle2D.Float(player.getStartingTile().getX(), player.getStartingTile().getY(), RECTWIDTH, RECTHEIGHT));
@@ -200,6 +201,7 @@ public class DesignBoardVisualizer extends JPanel {
 
 
 			//adding the connections to the board
+			if(game.hasConnections()){
 			for(Connection connection : game.getConnections()){
 				Tile tile1 = connection.getTiles().get(0);
 				Tile tile2 = connection.getTiles().get(1);
@@ -227,6 +229,7 @@ public class DesignBoardVisualizer extends JPanel {
 						g2d.drawLine(tile1.getX() + RECTWIDTH/2, tile1.getY(), tile2.getX() + RECTWIDTH/2, tile2.getY() + RECTHEIGHT);
 					}
 				}
+			}
 			}
 		}
 	}
