@@ -124,7 +124,9 @@ public class DesignBoardVisualizer extends JPanel {
 		
 		if(tileO != null){
 			Game game = tileO.getCurrentGame();
-			winTile = new Rectangle2D.Float(game.getWinTile().getX(), game.getWinTile().getY(), RECTWIDTH, RECTHEIGHT);
+			if(game.hasWinTile())
+				winTile = new Rectangle2D.Float(game.getWinTile().getX(), game.getWinTile().getY(), RECTWIDTH, RECTHEIGHT);
+			
 			BasicStroke thinStroke = new BasicStroke(2);
 			BasicStroke thickStroke = new BasicStroke(3);
 			Graphics2D g2d = (Graphics2D) g.create();

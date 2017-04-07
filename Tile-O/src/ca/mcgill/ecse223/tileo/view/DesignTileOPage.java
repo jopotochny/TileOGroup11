@@ -175,7 +175,7 @@ public class DesignTileOPage extends JFrame {
 		connectionLabel = new JLabel("Add Connection Card");
 		loseLabel = new JLabel("Lose Turn Card");
 		removeConnectionLabel = new JLabel("Remove Connection Card");
-		setInactiveCardLabel = new JLabel("Set inactivity Card");
+		setInactiveCardLabel = new JLabel("Set Inactivity Card");
 		
 		revealCard = new JTextField();
 		nextPlayerCard = new JTextField();
@@ -603,7 +603,7 @@ public class DesignTileOPage extends JFrame {
 		layout.linkSize(SwingConstants.VERTICAL, new java.awt.Component[] { saveGame });
 		layout.linkSize(SwingConstants.VERTICAL,
 				new java.awt.Component[] { rollCard, removeConnectionCard, teleportCard,winTileHintCard, connectionCard, submitDeck,
-						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard, revealCard });
+						addActionTile, inactivityText, removeTile, loseTurnCard, nextPlayerCard ,  connectionPiecesLeft, setInactiveCard, moveOtherPlayerCard, revealCard, swapPlayer });
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createSequentialGroup().addComponent(saveGame)
@@ -666,6 +666,7 @@ public class DesignTileOPage extends JFrame {
 		winTileHintCard.setText("");
 		loseTurnCard.setText("");
 		rollCard.setText("");
+		swapPlayer.setText("");
 		removeConnectionCard.setText("");
 		connectionCard.setText("");
 		teleportCard.setText("");
