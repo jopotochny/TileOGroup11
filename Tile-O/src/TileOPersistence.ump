@@ -106,6 +106,12 @@ class SetActionTilesInactiveActionCard {
 	private static final long serialVersionUID = -9090909090909090909L;
 }
 
+class SwapPlayerPositionActionCard {
+	depend java.io.Serializable;
+	isA Serializable;
+	private static final long serialVersionUID = 8194616193887934963L;
+}
+
 class TeleportActionCard {
 	depend java.io.Serializable;
 	isA Serializable;

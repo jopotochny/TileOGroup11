@@ -1288,6 +1288,10 @@ public class PlayController
 		currentCard.play(swappedPlayer);
 
 		currentGame.determineNextPlayer();
+		//decrement the inactivity period of inactive action tiles
+		currentGame.updateTileStatus();
+		
+		
 		if ( (currentDeck.indexOfCard(currentCard) + 1 )   == currentDeck.numberOfCards()){
 			currentDeck.shuffle();
 			currentDeck.setCurrentCard(currentDeck.getCard(0));
