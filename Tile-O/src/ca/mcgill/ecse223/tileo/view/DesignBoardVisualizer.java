@@ -77,12 +77,15 @@ public class DesignBoardVisualizer extends JPanel {
 	private int disCount = 0;
 	private Point actionTile;
 	
+	private boolean save = false;
+	
 	//boad dimensions
 	private static final int WIDTH_BOARD_VISUALIZATION = 800;
 	private static final int HEIGHT_BOARD_VISUALIZATION = 400;
 	
-	public DesignBoardVisualizer(TileO tileO){
+	public DesignBoardVisualizer(TileO tileO, boolean fromSave){
 		super();
+		this.save = fromSave;
 		this.tileO=tileO;
 		inactivity = 0;
 		game = this.tileO.getCurrentGame();
@@ -697,7 +700,7 @@ public class DesignBoardVisualizer extends JPanel {
 		super.paintComponent(g);
 		
 		
-		if(game.getDeck().hasCards()){
+		if(save){
 			if(drawCounter == 0){
 				doDrawing(g);
 				drawCounter++;

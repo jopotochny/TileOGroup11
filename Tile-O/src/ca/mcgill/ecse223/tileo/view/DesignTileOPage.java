@@ -29,7 +29,7 @@ public class DesignTileOPage extends JFrame {
 	private JLabel errorMessage;
 	private Game.Mode mode;
 	private Game game;
-
+	private boolean fromSave = false;
 	// save and load game
 	private JButton saveGame;
 	private JLabel player;
@@ -98,8 +98,8 @@ public class DesignTileOPage extends JFrame {
 	// load game visualization
 	private HashMap<Integer, Game> availableGames;
 
-	public DesignTileOPage(TileO tileO) {
-
+	public DesignTileOPage(TileO tileO, boolean save) {
+		this.fromSave = save;
 		this.tileo = tileO;
 		cont = new DesignController(tileo);
 		game = cont.createGame();
@@ -108,7 +108,8 @@ public class DesignTileOPage extends JFrame {
 		refreshData();
 	}
 	
-	public DesignTileOPage(Game aGame, TileO tileO){
+	public DesignTileOPage(Game aGame, TileO tileO, boolean save){
+		this.fromSave = save;
 		this.tileo = tileO;
 		game = aGame;
 		//tileO.setCurrentGame(aGame);
@@ -137,7 +138,7 @@ public class DesignTileOPage extends JFrame {
 		player.setText("Player 1");
 
 		// board TODO
-		boardVisualizer = new DesignBoardVisualizer(tileo);
+		boardVisualizer = new DesignBoardVisualizer(tileo, fromSave);
 		boardTitle = new JLabel();
 		boardVisualizer.setMinimumSize(new Dimension(WIDTH_BOARD_VISUALIZATION, HEIGHT_BOARD_VISUALIZATION));
 		boardVisualizer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -725,7 +726,7 @@ public class DesignTileOPage extends JFrame {
 		tileo.setCurrentGame(game);
 		//LoadPageDesign(tileo);
 		dispose();
-		new DesignTileOPage(game,tileo).setVisible(true);
+		new DesignTileOPage(game,tileo,fromSave).setVisible(true);
 	}
 
 }

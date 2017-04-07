@@ -215,7 +215,7 @@ public class HomePage extends JFrame {
 	public void creatNewGame(){
 		//redirect to the create game page
 		dispose();
-		new DesignTileOPage(tileO).setVisible(true);
+		new DesignTileOPage(tileO,false).setVisible(true);
 	}
 	
 	
@@ -237,7 +237,7 @@ public class HomePage extends JFrame {
 		Game game = TileOApplication.getGame(selectedGameDesign);
 		tileO.setCurrentGame(game);
 			dispose();
-			new DesignTileOPage(game , tileO).setVisible(true);
+			new DesignTileOPage(game , tileO, true).setVisible(true);
 		
 	}
 
