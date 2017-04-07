@@ -76,6 +76,8 @@ public class DesignTileOPage extends JFrame {
 	private JButton addWinTile;
 	private JButton addActionTile;
 	private JButton startGame;
+	private JLabel swapPlayerLabel;
+	private JTextField swapPlayer;
 
 	private DesignController cont;
 	private TileO tileo;
@@ -156,6 +158,9 @@ public class DesignTileOPage extends JFrame {
 
 		// actions and initialize design ui elements
 
+		swapPlayerLabel = new JLabel("Swap Player Action Card");
+		swapPlayer = new JTextField();
+		
 		createDeck = new JButton();
 		createDeck.setText("Create Deck");
 		
@@ -316,6 +321,7 @@ public class DesignTileOPage extends JFrame {
 				int numInactive = 0;
 				int numMoveOtherPlayer=0;
 				int numReveal = 0;
+				int numSwap = 0;
 
 					try{
 						numReveal = Integer.parseInt(revealCard.getText());
@@ -328,6 +334,7 @@ public class DesignTileOPage extends JFrame {
 						numNext = Integer.parseInt(nextPlayerCard.getText());
 						numInactive = Integer.parseInt(setInactiveCard.getText());
 						numMoveOtherPlayer = Integer.parseInt(moveOtherPlayerCard.getText());
+						numSwap = Integer.parseInt(swapPlayer.getText());
 						
 						
 					}catch(NumberFormatException e){
@@ -337,7 +344,7 @@ public class DesignTileOPage extends JFrame {
 					}
 
 					try {
-						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer, numReveal);
+						cont.selectCards(numConnect, numRoll, numExtra, numTeleport, numLose, numHint , numNext, numInactive, numMoveOtherPlayer, numReveal, numSwap);
 					} catch (Exception e) {
 						// e.printStackTrace();
 						console.setText(e.getMessage().trim());
@@ -572,6 +579,7 @@ public class DesignTileOPage extends JFrame {
 				 .addComponent(rollLabel)
 				 .addComponent(wintTileHintLabel)
 				 .addComponent(moveOtherPlayerLabel)
+				 .addComponent(swapPlayerLabel)
 				 .addComponent(revealLabel)
 				 .addComponent(nextPlayerLabel)
 				 .addComponent(setInactiveCardLabel))
@@ -586,6 +594,7 @@ public class DesignTileOPage extends JFrame {
 						 .addComponent(rollCard)
 						 .addComponent(winTileHintCard)
 						 .addComponent(moveOtherPlayerCard)
+						 .addComponent(swapPlayer)
 						 .addComponent(revealCard)
 						 .addComponent(nextPlayerCard)
 						 .addComponent(setInactiveCard)
@@ -627,6 +636,10 @@ public class DesignTileOPage extends JFrame {
 						.addGroup(layout.createParallelGroup()
 								.addComponent(moveOtherPlayerLabel)
 								.addComponent(moveOtherPlayerCard))
+						.addGroup(layout.createParallelGroup()
+								.addComponent(swapPlayerLabel)
+								.addComponent(swapPlayer)
+								)
 						.addGroup(layout.createParallelGroup()
 								.addComponent(revealLabel)
 								.addComponent(revealCard)
